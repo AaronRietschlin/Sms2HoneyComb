@@ -7,12 +7,20 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application android:icon="@drawable/icon" android:label="@string/app_name">
+        <activity android:name=".SMS2HoneycombLauncher">
+ 			<intent-filter>
+ 				<action android:name="android.intent.action.MAIN" />
+ 				<category android:name="android.intent.category.LAUNCHER" />
+ 			</intent-filter>
+ 		</activity>
         <activity android:name=".SMS2HoneycombActivity"
                   android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity android:name=".MainHoneycombActivity"
+                  android:label="@string/app_name">
+        </activity>
+        <activity android:name=".MainPhoneActivity"
+                  android:label="@string/app_name">
         </activity>
         
         <receiver android:name=".LifeformDetectedBroadcastReceiver">

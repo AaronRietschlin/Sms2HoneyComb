@@ -28,7 +28,7 @@ public class IncomingSmsReceiver extends BroadcastReceiver {
 				for(SmsMessage message : smsMessages){
 					String body = message.getMessageBody();
 					String from = message.getOriginatingAddress();
-					Log.i("BroadCastReceiver", body);
+					Log.i("BroadCastReceiver", from + " ~ " + body);
 				}
 			}
 		}

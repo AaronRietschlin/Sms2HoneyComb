@@ -1,6 +1,8 @@
 SMS2Honeycomb
 Developer(s):
 	Aaron Rietschlin
+	Parker Williams
+	William Aponte
 	
 About: 
-	This application forwards text messages from your phone to your Honeycomb-based tablet. 
+	This application forwards text messages from your phone to your Honeycomb-based tablet. It uses a single application that can be installed on both the phone and the tablet.
