@@ -1,0 +1,4 @@
+7-5-11
+	-Using two emulators as well as DDMS, the application receives a text from DDMS and forwards it to the other emulator. 
+	-TODO: IncomingSmsReceiver needs to forward the message to the server
+	-TODO: Need to implement a receiver/intent (?) that listens for a message from server and forwads SMS on
