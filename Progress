@@ -2,3 +2,12 @@
 	-Using two emulators as well as DDMS, the application receives a text from DDMS and forwards it to the other emulator. 
 	-TODO: IncomingSmsReceiver needs to forward the message to the server
 	-TODO: Need to implement a receiver/intent (?) that listens for a message from server and forwads SMS on
+	
+8-5-11
+	-Came across Parse (http://www.parse.com) and other services that help with backend development. 
+		-Kinvey, StackMob, Fukime
+		-TODO: Look into which one would be best to use (StackMob looks really good).
+	-Added in forwarding of messages to the Parse Server. 
+	-Trying to send push notifications out when a the message is sent to the server.
+		-ERROR: Tablet not receiving push notification.
+		
