@@ -6,6 +6,10 @@
     <uses-sdk android:minSdkVersion="8" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.VIBRATE" />
 
     <application android:icon="@drawable/icon" android:label="@string/app_name">
         <activity android:name=".SMS2HoneycombLauncher">
@@ -17,10 +21,10 @@
         <activity android:name=".SMS2HoneycombActivity"
                   android:label="@string/app_name">
         </activity>
-        <activity android:name=".MainHoneycombActivity"
+        <activity android:name=".tablet.MainHoneycombActivity"
                   android:label="@string/app_name">
         </activity>
-        <activity android:name=".MainPhoneActivity"
+        <activity android:name="phone.MainPhoneActivity"
                   android:label="@string/app_name">
         </activity>
         
@@ -28,6 +32,14 @@
 			<intent-filter>
 				<action android:name="android.provider.Telephony.SMS_RECEIVED"/>
 			</intent-filter>
+		</receiver>
+
+		<service android:name="com.parse.PushService" />
+		<receiver android:name="com.parse.ParseBroadcastReceiver">
+		  <intent-filter>
+		    <action android:name="android.intent.action.BOOT_COMPLETED" />
+		    <action android:name="android.intent.action.USER_PRESENT" />
+		  </intent-filter>
 		</receiver>
 
     </application>
