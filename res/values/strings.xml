@@ -2,4 +2,12 @@
 <resources>
     <string name="hello">Hello World, SMS2HoneycombActivity!</string>
     <string name="app_name">SMS2Honeycomb</string>
+    <string name="send_msg_btn_text">Send</string>
+    <string name="launcher_register_btn_text">Register</string>
+    <string name="launcher_login_btn_text">Login</string>
+    <string name="login_cancel_btn">Cancel</string>
+    <string name="login_username_text">Username:</string>
+    <string name="login_password_text">Password:</string>
+    <string name="login_username_hint">Enter your username...</string>
+    <string name="login_password_hint">Enter your password...</string>
 </resources>

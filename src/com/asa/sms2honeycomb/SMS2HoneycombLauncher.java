@@ -1,6 +1,6 @@
 package com.asa.sms2honeycomb;
 
-import phone.MainPhoneActivity;
+import phone.LauncherActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +26,7 @@ public class SMS2HoneycombLauncher extends Activity {
 		if (DEVICE_IS_HONEYCOMB) {
 			startCorrectActivity = new Intent(this, MainHoneycombActivity.class);
 		} else {
-			startCorrectActivity = new Intent(this, MainPhoneActivity.class);
+			startCorrectActivity = new Intent(this, LauncherActivity.class);
 		}
 		startActivity(startCorrectActivity);
 		finish();
