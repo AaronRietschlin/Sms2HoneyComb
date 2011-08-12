@@ -10,4 +10,9 @@
     <string name="login_password_text">Password:</string>
     <string name="login_username_hint">Enter your username...</string>
     <string name="login_password_hint">Enter your password...</string>
+    <string name="register_enter_username">Enter Desired Username: </string>
+    <string name="register_enter_email">Enter Your Email:</string>
+    <string name="register_enter_password">Enter Your Password:</string>
+    <string name="register_username_taken">Username is unavailable...</string>
+    <string name="register_duplicate_email">Email is already registered.</string>
 </resources>

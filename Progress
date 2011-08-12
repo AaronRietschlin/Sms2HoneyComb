@@ -11,3 +11,11 @@
 	-Trying to send push notifications out when a the message is sent to the server.
 		-ERROR: Tablet not receiving push notification.
 		
+		
+8-8-11
+Looked into StackMob. I really like StackMob because of some of their features: custom API’s, social integration, OAuth support…but it doesn’t fully support Android yet. Perhaps in the future, we can use that, but for now I think we will stick with Parse. I am adding in user registration and login. A new launcher screen has been added, as well as a login page as well as registration activity. Working on registering a user now.
+
+	TODO: 
+		•Encrypt passwords
+		•Check for a valid email (make sure it has @ and ends in .something.)
+		•Check for empty input
