@@ -15,4 +15,6 @@
     <string name="register_enter_password">Enter Your Password:</string>
     <string name="register_username_taken">Username is unavailable...</string>
     <string name="register_duplicate_email">Email is already registered.</string>
+    <string name="register_cancel_btn_text">Cancel</string>
+    <string name="register_btn_phone_text">Register</string>
 </resources>

@@ -32,14 +32,11 @@
         <activity android:name=".tablet.MainHoneycombActivity"
                   android:label="@string/app_name">
         </activity>
-        <activity android:name="phone.MainPhoneActivity"
-                  android:label="@string/app_name">
+        <activity android:label="@string/app_name" android:name=".phone.MainPhoneActivity">
         </activity>
-        <activity android:name="phone.LauncherActivity"
-                  android:label="@string/app_name">
+        <activity android:label="@string/app_name" android:name=".phone.LauncherActivity">
         </activity>
-        <activity android:name="phone.LoginActivity"
-                  android:label="@string/app_name">
+        <activity android:label="@string/app_name" android:name=".phone.LoginActivity">
         </activity>
         <activity android:name=".phone.RegisterActivity"
                   android:label="@string/app_name">

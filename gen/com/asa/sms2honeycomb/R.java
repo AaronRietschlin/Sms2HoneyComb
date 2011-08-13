@@ -32,6 +32,8 @@ public final class R {
         public static final int message_input=0x7f070002;
         public static final int message_view_fragment=0x7f070001;
         public static final int messages_layout=0x7f070004;
+        public static final int register_btn_phone=0x7f070019;
+        public static final int register_cancel_btn_phone=0x7f07001a;
         public static final int register_email_phone=0x7f070010;
         public static final int register_email_text_phone=0x7f07000f;
         public static final int register_invalid_email_phone=0x7f070012;
@@ -62,6 +64,8 @@ public final class R {
         public static final int login_password_text=0x7f050007;
         public static final int login_username_hint=0x7f050008;
         public static final int login_username_text=0x7f050006;
+        public static final int register_btn_phone_text=0x7f050010;
+        public static final int register_cancel_btn_text=0x7f05000f;
         public static final int register_duplicate_email=0x7f05000e;
         public static final int register_enter_email=0x7f05000b;
         public static final int register_enter_password=0x7f05000c;
