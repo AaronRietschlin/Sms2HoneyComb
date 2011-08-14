@@ -6,10 +6,12 @@
     <string name="launcher_register_btn_text">Register</string>
     <string name="launcher_login_btn_text">Login</string>
     <string name="login_cancel_btn">Cancel</string>
+    
     <string name="login_username_text">Username:</string>
     <string name="login_password_text">Password:</string>
     <string name="login_username_hint">Enter your username...</string>
     <string name="login_password_hint">Enter your password...</string>
+    
     <string name="register_enter_username">Enter Desired Username: </string>
     <string name="register_enter_email">Enter Your Email:</string>
     <string name="register_enter_password">Enter Your Password:</string>
@@ -17,4 +19,12 @@
     <string name="register_duplicate_email">Email is already registered.</string>
     <string name="register_cancel_btn_text">Cancel</string>
     <string name="register_btn_phone_text">Register</string>
+    <string name="register_invalid_email">Invalid email.</string>
+    <string name="register_invalid_username">Invalid username. No whitespace allowed.</string>
+    <string name="register_invalid_password">Invalid password.  No whitespace allowed.</string><string name="register_no_email_entered">You must enter an email.</string>
+    <string name="register_invaild_password">You must enter a password.</string>
+    <string name="register_no_password_entered">You must enter a password.</string>
+    <string name="register_no_username_entered">You must enter a username.</string>
+    
+    
 </resources>

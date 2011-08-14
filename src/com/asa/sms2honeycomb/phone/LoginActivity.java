@@ -1,9 +1,8 @@
 package com.asa.sms2honeycomb.phone;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,15 +10,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.asa.sms2honeycomb.Util;
 
 public class LoginActivity extends Activity {
-
-	RegisterActivity regAct;
 
 	private final String TAG = "LoginActivity";
 	private boolean isInTableUsername = false;
@@ -42,18 +37,18 @@ public class LoginActivity extends Activity {
 		cancelButton = (Button) findViewById(R.id.login_cancel_btn_phone);
 		usernameField = (EditText) findViewById(R.id.login_username_field_phone);
 		passwordField = (EditText) findViewById(R.id.login_password_field_phone);
-		final String usernameText = usernameField.getText().toString().trim();
-		final String passwordText = passwordField.getText().toString().trim();
-
-		// TODO testing
-		usernameField.setText("Nemisis");
-		passwordField.setText("12345");
 
 		loginButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				if ((regAct.checkInTable("username", usernameText) == true)
-						&& (regAct.checkInTable("password", passwordText) == true)) {
+				String usernameText = usernameField.getText().toString().trim();
+				String passwordText = passwordField.getText().toString().trim();
+				if (Util.isInTable(Preferences.USERNAME_ROW, usernameText)
+						&& Util.isInTable(Preferences.PASSWORD_ROW,
+								passwordText)) {
 					Log.d(TAG, "Login succesful for user : " + usernameText);
+					// saves the username within the SharedPreferences so it can
+					// be used to make the appropriate channel
+					saveSharedPreference(Preferences.USERNAME_ROW, usernameText);
 					mIntent = new Intent(LoginActivity.this,
 							MainPhoneActivity.class);
 					startActivity(mIntent);
@@ -67,6 +62,23 @@ public class LoginActivity extends Activity {
 				finish();
 			}
 		});
+	}
 
+	/**
+	 * Creates an entry in the Shared Preferences under sms2honeycomb_key with
+	 * the assignment of a of the item. the SharedPreferences is listed under
+	 * the key sms2honeycomb_key.
+	 * 
+	 * @param key
+	 * @param item
+	 */
+	public void saveSharedPreference(String key, String item) {
+		SharedPreferences settings = getSharedPreferences(
+				Preferences.PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("sms2honeycomb_" + key, item);
+		editor.commit();
+		Log.d(TAG, "SharedPreferences created and commited: " + item
+				+ " in key: " + "sms2honeycomb_" + key);
 	}
 }
