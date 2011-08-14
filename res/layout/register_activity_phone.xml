@@ -10,25 +10,25 @@
 		<requestFocus></requestFocus>
 	</EditText>
 	<LinearLayout android:layout_height="wrap_content"
-		android:id="@+id/linearLayout1" android:layout_width="match_parent"
-		android:gravity="center">
+		android:id="@+id/register_invalid_email_ll" android:layout_width="match_parent"
+		android:gravity="center" android:visibility="gone">
 		<TextView android:textAppearance="?android:attr/textAppearanceSmall"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:id="@+id/register_invalid_email_phone" android:text="@string/register_duplicate_email"
-			android:visibility="gone" style="@style/InvalidRegistration"></TextView>
+			style="@style/InvalidRegistration"></TextView>
 	</LinearLayout>
 	<TextView android:id="@+id/register_username_text_phone"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
 		android:text="@string/register_enter_username"></TextView>
 	<EditText android:layout_width="match_parent"
-	android:layout_height="wrap_content" android:id="@+id/register_username_phone"></EditText>
+		android:layout_height="wrap_content" android:id="@+id/register_username_phone"></EditText>
 	<LinearLayout android:layout_height="wrap_content"
-		android:id="@+id/linearLayout2" android:layout_width="match_parent"
-		android:gravity="center">
+		android:id="@+id/register_invalid_username_ll" android:layout_width="match_parent"
+		android:gravity="center" android:visibility="gone">
 		<TextView android:textAppearance="?android:attr/textAppearanceSmall"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:id="@+id/register_invalid_username_phone" android:text="@string/register_username_taken"
-			android:visibility="gone" style="@style/InvalidRegistration"></TextView>
+			style="@style/InvalidRegistration"></TextView>
 	</LinearLayout>
 	<TextView android:id="@+id/register_password_text_phone"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"

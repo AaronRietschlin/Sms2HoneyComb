@@ -1,7 +1,5 @@
 package com.asa.sms2honeycomb.phone;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,14 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.asa.sms2honeycomb.R;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.asa.sms2honeycomb.Util;
 
 public class LoginActivity extends Activity {
-
-	RegisterActivity regAct;
 
 	private final String TAG = "LoginActivity";
 	private boolean isInTableUsername = false;
@@ -51,8 +44,8 @@ public class LoginActivity extends Activity {
 
 		loginButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				if ((regAct.checkInTable("username", usernameText) == true)
-						&& (regAct.checkInTable("password", passwordText) == true)) {
+				if (Util.isInTable("username", usernameText)
+						&& Util.isInTable("password", passwordText)) {
 					Log.d(TAG, "Login succesful for user : " + usernameText);
 					mIntent = new Intent(LoginActivity.this,
 							MainPhoneActivity.class);
