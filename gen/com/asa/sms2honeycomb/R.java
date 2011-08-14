@@ -34,8 +34,11 @@ public final class R {
         public static final int register_cancel_btn_phone=0x7f07001c;
         public static final int register_email_phone=0x7f070010;
         public static final int register_email_text_phone=0x7f07000f;
+<<<<<<< HEAD
         public static final int register_invaild_password_ll=0x7f070019;
         public static final int register_invaild_password_phone=0x7f07001a;
+=======
+>>>>>>> origin/master
         public static final int register_invalid_email_ll=0x7f070011;
         public static final int register_invalid_email_phone=0x7f070012;
         public static final int register_invalid_username_ll=0x7f070015;
@@ -72,6 +75,7 @@ public final class R {
         public static final int register_enter_email=0x7f05000b;
         public static final int register_enter_password=0x7f05000c;
         public static final int register_enter_username=0x7f05000a;
+<<<<<<< HEAD
         public static final int register_invaild_password=0x7f050015;
         public static final int register_invalid_email=0x7f050011;
         public static final int register_invalid_password=0x7f050013;
@@ -79,6 +83,12 @@ public final class R {
         public static final int register_no_email_entered=0x7f050014;
         public static final int register_no_password_entered=0x7f050016;
         public static final int register_no_username_entered=0x7f050017;
+=======
+        public static final int register_invalid_email=0x7f050011;
+        public static final int register_invalid_username=0x7f050012;
+        public static final int register_no_email_entered=0x7f050013;
+        public static final int register_no_username_entered=0x7f050014;
+>>>>>>> origin/master
         public static final int register_username_taken=0x7f05000d;
         public static final int send_msg_btn_text=0x7f050002;
     }

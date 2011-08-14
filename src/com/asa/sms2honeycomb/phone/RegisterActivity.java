@@ -15,7 +15,11 @@ import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
 import com.asa.sms2honeycomb.Util;
 
+<<<<<<< HEAD
 // TODO: Return an error if Parse doesnt save the data (right now the app still fowards you on to the login activity when Parse does not save.) 
+=======
+// TODO: Check for empty password.
+>>>>>>> origin/master
 
 public class RegisterActivity extends Activity {
 	private boolean registrationSuccess = true;
@@ -27,6 +31,7 @@ public class RegisterActivity extends Activity {
 
 	private boolean invalidEmail;
 	private boolean invalidUsername;
+<<<<<<< HEAD
 	private boolean invalidPassword;
 
 	private Button registerButton;
@@ -37,6 +42,15 @@ public class RegisterActivity extends Activity {
 	private TextView invalidUsernameText;
 	private TextView invalidEmailText;
 	private TextView invalidPasswordText;
+=======
+
+	private Button registerButton;
+	private Button cancelButton;
+	private TextView invalidUsernameText;
+	private LinearLayout invalidUsernameLL;
+	private LinearLayout invalidEmailLL;
+	private TextView invalidEmailText;
+>>>>>>> origin/master
 	private EditText emailField;
 	private EditText usernameField;
 	private EditText passwordField;
@@ -54,14 +68,18 @@ public class RegisterActivity extends Activity {
 		invalidUsernameLL = (LinearLayout) findViewById(R.id.register_invalid_username_ll);
 		invalidEmailLL = (LinearLayout) findViewById(R.id.register_invalid_email_ll);
 		invalidEmailText = (TextView) findViewById(R.id.register_invalid_email_phone);
+<<<<<<< HEAD
 		invalidPasswordLL = (LinearLayout) findViewById(R.id.register_invaild_password_ll);
 		invalidPasswordText = (TextView) findViewById(R.id.register_invaild_password_phone);
+=======
+>>>>>>> origin/master
 		emailField = (EditText) findViewById(R.id.register_email_phone);
 		usernameField = (EditText) findViewById(R.id.register_username_phone);
 		passwordField = (EditText) findViewById(R.id.register_password_phone);
 
 		registerButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
+<<<<<<< HEAD
 				String emailText = emailField.getText().toString().trim();
 				String usernameText = usernameField.getText().toString().trim();
 				String passwordText = passwordField.getText().toString().trim();
@@ -72,6 +90,15 @@ public class RegisterActivity extends Activity {
 				int passwordErrorType = -1;
 
 				// Check if email field was entered.
+=======
+				String emailText = emailField.getText().toString();
+				String usernameText = usernameField.getText().toString().trim();
+				String passwordText = passwordField.getText().toString().trim();
+				System.out.println(registrationSuccess);
+				// Check if email field was entered.
+				int emailErrorType = -1;
+				int nameErrorType = -1;
+>>>>>>> origin/master
 				if (emailText.length() == 0) {
 					invalidEmail = true;
 					emailErrorType = EMPTY;
@@ -79,7 +106,11 @@ public class RegisterActivity extends Activity {
 				} else {
 					// Check if email is valid.
 					if (!isValidEmail(emailText)
+<<<<<<< HEAD
 							|| containsWhiteSpace(emailText)) {
+=======
+							|| !containsWhiteSpace(emailText)) {
+>>>>>>> origin/master
 						invalidEmail = true;
 						emailErrorType = INVALID;
 						Log.e(TAG, "Email is invalid.");
@@ -98,6 +129,7 @@ public class RegisterActivity extends Activity {
 						nameErrorType = INVALID;
 						Log.e(TAG, "Username is invalid");
 					}
+<<<<<<< HEAD
 				}
 
 				// Checks if the password was entered.
@@ -112,6 +144,8 @@ public class RegisterActivity extends Activity {
 						passwordErrorType = INVALID;
 						Log.e(TAG, "Password is invalid");
 					}
+=======
+>>>>>>> origin/master
 				}
 
 				// Checks if email is already in the table.
@@ -128,7 +162,10 @@ public class RegisterActivity extends Activity {
 					Log.e(TAG, "Username is in table.");
 				}
 
+<<<<<<< HEAD
 				// If there is an invaild email display the error text.
+=======
+>>>>>>> origin/master
 				if (invalidEmail) {
 					displayEmailFailureText(emailErrorType);
 					System.out.println("Email Error type = " + emailErrorType);
@@ -137,7 +174,10 @@ public class RegisterActivity extends Activity {
 					invalidEmailLL.setVisibility(View.GONE);
 				}
 
+<<<<<<< HEAD
 				// If there is an invaild username display the error text.
+=======
+>>>>>>> origin/master
 				if (invalidUsername) {
 					displayUsernameFailureText(nameErrorType);
 					System.out
@@ -150,6 +190,7 @@ public class RegisterActivity extends Activity {
 					}
 				}
 
+<<<<<<< HEAD
 				// If there is an invaild password displat the error text.
 				if (invalidPassword) {
 					displayPasswordFailureText(passwordErrorType);
@@ -163,6 +204,8 @@ public class RegisterActivity extends Activity {
 					}
 				}
 
+=======
+>>>>>>> origin/master
 				if (registrationSuccess) {
 					Log.d(TAG, "Registration was a success...Pushing to table.");
 					Util.pushToTable(emailText, usernameText, passwordText);
@@ -181,6 +224,7 @@ public class RegisterActivity extends Activity {
 
 	}
 
+<<<<<<< HEAD
 	/**
 	 * Checks to see if the inputed email is vaild by checking to see if there
 	 * is an "@" or a "." If the email is vaild returns true and returns false
@@ -189,6 +233,8 @@ public class RegisterActivity extends Activity {
 	 * @param email
 	 * @return
 	 */
+=======
+>>>>>>> origin/master
 	private boolean isValidEmail(String email) {
 		String atChar = "@";
 		String dotChar = ".";
@@ -208,8 +254,12 @@ public class RegisterActivity extends Activity {
 
 	/**
 	 * Checks to see if there is white space within the input (both username and
+<<<<<<< HEAD
 	 * email). If there is, then it is an invalid input. Returns true if there
 	 * is white space, false if there is no white space.
+=======
+	 * email). If there is, then it is an invalid input.
+>>>>>>> origin/master
 	 * 
 	 * @param input
 	 * @return
@@ -263,6 +313,7 @@ public class RegisterActivity extends Activity {
 		}
 		invalidUsernameText.setText(message);
 		invalidUsernameLL.setVisibility(View.VISIBLE);
+<<<<<<< HEAD
 	}
 
 	private void displayPasswordFailureText(int errorType) {
@@ -278,5 +329,7 @@ public class RegisterActivity extends Activity {
 		}
 		invalidPasswordText.setText(message);
 		invalidPasswordLL.setVisibility(View.VISIBLE);
+=======
+>>>>>>> origin/master
 	}
 }

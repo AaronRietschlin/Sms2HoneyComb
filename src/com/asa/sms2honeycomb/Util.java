@@ -13,6 +13,7 @@ import com.parse.SaveCallback;
 public class Util {
 	private final static String TAG = "Util";
 	private static boolean isInTable;
+<<<<<<< HEAD
 
 	/**
 	 * Checks if the input is the same as the item within the Parse object
@@ -26,6 +27,12 @@ public class Util {
 	public static boolean isInTable(final String item, final String input) {
 		ParseQuery query = new ParseQuery("UserTable");
 		// Log.d(TAG, "Beginning check to see if " + )
+=======
+	
+	public static boolean isInTable(final String item, final String input) {
+		ParseQuery query = new ParseQuery("UserTable");
+//		Log.d(TAG, "Beginning check to see if " + )
+>>>>>>> origin/master
 		query.findInBackground(new FindCallback() {
 			public void done(List<ParseObject> objects, ParseException e) {
 				if (e == null) {
@@ -45,6 +52,7 @@ public class Util {
 		});
 		return isInTable;
 	}
+<<<<<<< HEAD
 
 	/**
 	 * Pushes the email, username, and password to the Parse UserTable object.
@@ -55,6 +63,11 @@ public class Util {
 	 */
 	public static void pushToTable(String email, String username,
 			String password) {
+=======
+	
+
+	public static void pushToTable(String email, String username, String password) {
+>>>>>>> origin/master
 		ParseObject userTable = new ParseObject("UserTable");
 		userTable.put(Preferences.EMAIL_ROW, email);
 		userTable.put(Preferences.USERNAME_ROW, username);
