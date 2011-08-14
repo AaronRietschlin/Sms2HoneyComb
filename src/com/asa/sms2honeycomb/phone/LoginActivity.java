@@ -40,16 +40,11 @@ public class LoginActivity extends Activity {
 
 		loginButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-<<<<<<< HEAD
 				String usernameText = usernameField.getText().toString().trim();
 				String passwordText = passwordField.getText().toString().trim();
 				if (Util.isInTable(Preferences.USERNAME_ROW, usernameText)
 						&& Util.isInTable(Preferences.PASSWORD_ROW,
 								passwordText)) {
-=======
-				if (Util.isInTable("username", usernameText)
-						&& Util.isInTable("password", passwordText)) {
->>>>>>> origin/master
 					Log.d(TAG, "Login succesful for user : " + usernameText);
 					// saves the username within the SharedPreferences so it can
 					// be used to make the appropriate channel
