@@ -26,8 +26,16 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	-Added Documentation
 	-Fixed bug on checking whitespace implementation on the email
 	
+8-14-11 (Aaron)
+	-Moved lookup into AsyncTask. 
+		-It works, but the AsyncTask.Status is always RUNNING. I believe it needs to be FINISHED in order to do registration.
+	-Reworked entire RegistrationActivity to accomodate Asynctask.
+	-Changed the name of the SharedPrefs.  
+	
 	TODO: 
-
+		•Move Registration to AsyncTask as well. 			
 		•Encrypt passwords
+		•Check if user is logged in. If they are, do not go to login screen. If not, go to login screen.		
 		•Work on MainHoneycombActivity to display messages and send them.
+		
 
