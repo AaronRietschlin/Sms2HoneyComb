@@ -23,8 +23,12 @@ public class RegisterActivity extends Activity {
 	private final int INVALID = 1;
 	private final int IN_TABLE = 2;
 	private final String TAG = "RegisterActivity";
-	boolean isInTable;
-
+	
+	private boolean isInTable;
+	private boolean invalidEmail;
+	private boolean invalidUsername;
+	private boolean invalidPassword;
+	
 	private Button registerButton;
 	private Button cancelButton;
 	private LinearLayout invalidUsernameLL;
@@ -62,9 +66,9 @@ public class RegisterActivity extends Activity {
 				String usernameText = usernameField.getText().toString().trim();
 				String passwordText = passwordField.getText().toString().trim();
 
-				boolean invalidEmail = false;
-				boolean invalidUsername = false;
-				boolean invalidPassword = false;
+				invalidEmail = false;
+				invalidUsername = false;
+				invalidPassword = false;
 				int emailErrorType = -1;
 				int nameErrorType = -1;
 				int passwordErrorType = -1;
@@ -162,11 +166,15 @@ public class RegisterActivity extends Activity {
 					registrationSuccess = false;
 				} else {
 					invalidPasswordLL.setVisibility(View.GONE);
-					if (!invalidPassword) {
-						registrationSuccess = true;
-					}
 				}
-
+				
+				if(!invalidPassword || invalidEmail || invalidUsername){
+					registrationSuccess = false;
+				}else{
+					registrationSuccess = true;
+				}
+				
+				Log.e(TAG, "Registration success is " +String.valueOf(registrationSuccess));
 				if (registrationSuccess) {
 					Log.d(TAG, "Registration was a success...Pushing to table.");
 					Util.pushToTable(emailText, usernameText, passwordText);
