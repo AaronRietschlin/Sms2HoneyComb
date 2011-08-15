@@ -14,7 +14,7 @@ public class Preferences {
 	public static final String LOOKUP_EMAIL = "LOOKUP_EMAIL";
 	public static final String LOOKUP_USERNAME = "LOOKUP_USERNAME";
 	
-	public static final String PREFS_NAME = "MyPrefsFile";
+	public static final String PREFS_NAME = "Sms2HoneycombPrefs";
 	
 	public static boolean DEBUG = true;
 }

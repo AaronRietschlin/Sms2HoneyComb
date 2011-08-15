@@ -65,18 +65,13 @@ public class Util {
 		userTable.put(Preferences.EMAIL_ROW, email);
 		userTable.put(Preferences.USERNAME_ROW, username);
 		userTable.put("password", password); // TODO: Encrypt passwords!
-		userTable.saveInBackground(new SaveCallback() {
-			@Override
-			public void done(ParseException e) {
-				if (e != null) {
-					Log.d(TAG, "Save failed.");
-					e.printStackTrace();
-				} else {
-					if (Preferences.DEBUG)
-						Log.d(TAG, "Save success.");
-				}
-				Log.i(TAG, "Done with table push.");
-			}
-		});
+		try {
+			userTable.save();
+			if (Preferences.DEBUG)
+				Log.d(TAG, "Save success.");
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+			Log.d(TAG, "Save failed.");
+		}
 	}
 }

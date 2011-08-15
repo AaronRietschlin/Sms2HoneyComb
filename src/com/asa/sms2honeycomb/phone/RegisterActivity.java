@@ -138,7 +138,7 @@ public class RegisterActivity extends Activity {
 				 */
 				String[] params = { emailText, usernameText,
 						Preferences.LOOKUP_EMAIL };
-				TableLookupTask lookupTask = new TableLookupTask();
+				TableLookupTask lookupTask = new TableLookupTask(RegisterActivity.this);
 				try {
 					invalidType = lookupTask.execute(params).get();
 					if (invalidType == Preferences.INVALID_EMAIL) {
@@ -158,11 +158,6 @@ public class RegisterActivity extends Activity {
 				} catch (ExecutionException e) {
 					e.printStackTrace();
 				}
-
-				// if (Util.isInTable(Preferences.USERNAME_ROW, usernameText)) {
-				// invalidUsername = true;
-				// nameErrorType = IN_TABLE;
-				// }
 
 				// If there is an invaild email display the error text.
 				if (invalidEmail) {

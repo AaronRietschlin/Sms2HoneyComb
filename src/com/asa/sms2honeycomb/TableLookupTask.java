@@ -1,13 +1,23 @@
 package com.asa.sms2honeycomb;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 public class TableLookupTask extends AsyncTask<String, Void, Integer> {
 
+	Context mContext;
+	ProgressDialog progressDialog;
+	
+	public TableLookupTask(Context context){
+		mContext = context;
+	}
+	
+	//This will be run BEFORE the doInBackground. 
 	@Override
 	protected void onPreExecute() {
-
+		progressDialog = ProgressDialog.show(mContext, "", 
+                "Loading. Please wait...", true);
 	}
 
 	@Override
@@ -32,7 +42,8 @@ public class TableLookupTask extends AsyncTask<String, Void, Integer> {
 
 	@Override
 	protected void onPostExecute(Integer result) {
-
+		RegistrationTask regTask = new RegistrationTask(progressDialog);
+		regTask.execute();
 	}
 
 }
