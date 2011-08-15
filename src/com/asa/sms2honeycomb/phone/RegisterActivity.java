@@ -25,10 +25,6 @@ public class RegisterActivity extends Activity {
 	private final String TAG = "RegisterActivity";
 	boolean isInTable;
 
-	private boolean invalidEmail;
-	private boolean invalidUsername;
-	private boolean invalidPassword;
-
 	private Button registerButton;
 	private Button cancelButton;
 	private LinearLayout invalidUsernameLL;
@@ -65,11 +61,18 @@ public class RegisterActivity extends Activity {
 				String emailText = emailField.getText().toString().trim();
 				String usernameText = usernameField.getText().toString().trim();
 				String passwordText = passwordField.getText().toString().trim();
-				System.out.println(registrationSuccess);
 
+				boolean invalidEmail = false;
+				boolean invalidUsername = false;
+				boolean invalidPassword = false;
 				int emailErrorType = -1;
 				int nameErrorType = -1;
 				int passwordErrorType = -1;
+
+				/*
+				 * May have to move all the work that is not pushing to the
+				 * server into a separate thread. I'll look into it more.
+				 */
 
 				// Check if email field was entered.
 				if (emailText.length() == 0) {
@@ -140,16 +143,17 @@ public class RegisterActivity extends Activity {
 				// If there is an invaild username display the error text.
 				if (invalidUsername) {
 					displayUsernameFailureText(nameErrorType);
-					System.out
-							.println("Username Error type = " + nameErrorType);
+					Log.e(TAG, "Username Error type = " + nameErrorType);
 					registrationSuccess = false;
 				} else {
 					invalidUsernameLL.setVisibility(View.GONE);
-					if (!invalidEmail) {
-						registrationSuccess = true;
-					}
+//					if (!invalidEmail) {
+//						registrationSuccess = true;
+//					}
 				}
-
+				
+//				Log.e(TAG, "VISIBILITY = " + String.valueOf(invalidUsernameLL.getVisibility()));
+				
 				// If there is an invaild password displat the error text.
 				if (invalidPassword) {
 					displayPasswordFailureText(passwordErrorType);
@@ -226,7 +230,19 @@ public class RegisterActivity extends Activity {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Sets the text and makes visible the email error message based on the
+	 * input from the user.
+	 * 
+	 * @param errorType
+	 *            The type of error. The errors are:
+	 *            <ul>
+	 *            <li>0 - No email was given.</li>
+	 *            <li>1 - An invalid email was given (most likely @ nor .* was used).</li>
+	 *            <li>2 - The desired email is already registered.</li>
+	 *            </ul>
+	 */
 	private void displayEmailFailureText(int errorType) {
 		String message = "";
 		switch (errorType) {
@@ -246,6 +262,18 @@ public class RegisterActivity extends Activity {
 		invalidEmailLL.setVisibility(View.VISIBLE);
 	}
 
+	/**
+	 * Sets the text and makes visible the username error message based on the
+	 * input from the user.
+	 * 
+	 * @param errorType
+	 *            The type of error. The errors are:
+	 *            <ul>
+	 *            <li>0 - No username was given.</li>
+	 *            <li>1 - An invalid username was given (white space was used).</li>
+	 *            <li>2 - The desired username is already registered.</li>
+	 *            </ul>
+	 */
 	private void displayUsernameFailureText(int errorType) {
 		String message = "";
 		switch (errorType) {
@@ -264,7 +292,18 @@ public class RegisterActivity extends Activity {
 		invalidUsernameText.setText(message);
 		invalidUsernameLL.setVisibility(View.VISIBLE);
 	}
-
+	
+	/**
+	 * Sets the text and makes visible the password error message based on the
+	 * input from the user.
+	 * 
+	 * @param errorType
+	 *            The type of error. The errors are:
+	 *            <ul>
+	 *            <li>0 - No password was given.</li>
+	 *            <li>1 - An invalid password was given.</li>
+	 *            </ul>
+	 */
 	private void displayPasswordFailureText(int errorType) {
 		String message = "";
 		switch (errorType) {
