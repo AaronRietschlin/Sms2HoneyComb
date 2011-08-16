@@ -1,7 +1,10 @@
 package com.asa.sms2honeycomb.phone;
 
+import java.util.concurrent.ExecutionException;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
+import com.asa.sms2honeycomb.TableLookupTask;
 import com.asa.sms2honeycomb.Util;
 
 // TODO: Return an error if Parse doesnt save the data (right now the app still fowards you on to the login activity when Parse does not save.) 
@@ -22,12 +26,16 @@ public class RegisterActivity extends Activity {
 	private final int EMPTY = 0;
 	private final int INVALID = 1;
 	private final int IN_TABLE = 2;
+	private final int EMAIL = 0;
+	private final int USERNAME = 1;
+	private final int BOTH = 2;
 	private final String TAG = "RegisterActivity";
-	boolean isInTable;
 
+	private boolean isInTable;
 	private boolean invalidEmail;
 	private boolean invalidUsername;
 	private boolean invalidPassword;
+	private int invalidType;
 
 	private Button registerButton;
 	private Button cancelButton;
@@ -65,24 +73,30 @@ public class RegisterActivity extends Activity {
 				String emailText = emailField.getText().toString().trim();
 				String usernameText = usernameField.getText().toString().trim();
 				String passwordText = passwordField.getText().toString().trim();
-				System.out.println(registrationSuccess);
 
+				invalidEmail = false;
+				invalidUsername = false;
+				invalidPassword = false;
+				isInTable = false;
 				int emailErrorType = -1;
 				int nameErrorType = -1;
 				int passwordErrorType = -1;
+
+				/*
+				 * May have to move all the work that is not pushing to the
+				 * server into a separate thread. I'll look into it more.
+				 */
 
 				// Check if email field was entered.
 				if (emailText.length() == 0) {
 					invalidEmail = true;
 					emailErrorType = EMPTY;
-					Log.e(TAG, "Email length is 0");
 				} else {
 					// Check if email is valid.
 					if (!isValidEmail(emailText)
 							|| containsWhiteSpace(emailText)) {
 						invalidEmail = true;
 						emailErrorType = INVALID;
-						Log.e(TAG, "Email is invalid.");
 					}
 				}
 
@@ -90,13 +104,11 @@ public class RegisterActivity extends Activity {
 				if (usernameText.length() == 0) {
 					invalidUsername = true;
 					nameErrorType = EMPTY;
-					Log.e(TAG, "Username length is 0");
 				} else {
 					// Check if username contains whitespace.
 					if (containsWhiteSpace(usernameText)) {
 						invalidUsername = true;
 						nameErrorType = INVALID;
-						Log.e(TAG, "Username is invalid");
 					}
 				}
 
@@ -104,35 +116,52 @@ public class RegisterActivity extends Activity {
 				if (passwordText.length() == 0) {
 					invalidPassword = true;
 					passwordErrorType = EMPTY;
-					Log.e(TAG, "Password length is 0");
 				} else {
 					// Check if password contains whitespace.
 					if (containsWhiteSpace(passwordText)) {
 						invalidPassword = true;
 						passwordErrorType = INVALID;
-						Log.e(TAG, "Password is invalid");
 					}
 				}
 
 				// Checks if email is already in the table.
-				if (Util.isInTable(Preferences.EMAIL_ROW, emailText)) {
-					invalidEmail = true;
-					emailErrorType = IN_TABLE;
-					Log.e(TAG, "Email is in table");
-				}
+				// if (Util.isInTable(Preferences.EMAIL_ROW, emailText)) {
+				// invalidEmail = true;
+				// emailErrorType = IN_TABLE;
+				// }
 
-				// Check if username is already taken.
-				if (Util.isInTable(Preferences.USERNAME_ROW, usernameText)) {
-					invalidUsername = true;
-					nameErrorType = IN_TABLE;
-					Log.e(TAG, "Username is in table.");
+				/*
+				 * Check if username and email is already taken by using the
+				 * LookupAsyncTask. Doing lookups for username AND email in this
+				 * single AsyncTask call to minimize number of background
+				 * threads.
+				 */
+				String[] params = { emailText, usernameText,
+						Preferences.LOOKUP_EMAIL };
+				TableLookupTask lookupTask = new TableLookupTask(RegisterActivity.this);
+				try {
+					invalidType = lookupTask.execute(params).get();
+					if (invalidType == Preferences.INVALID_EMAIL) {
+						invalidEmail = true;
+						emailErrorType = IN_TABLE;
+					} else if (invalidType == Preferences.INVALID_USERNAME) {
+						invalidUsername = true;
+						nameErrorType = IN_TABLE;
+					} else if (invalidType == Preferences.INVALID_BOTH) {
+						invalidEmail = true;
+						invalidUsername = true;
+						emailErrorType = IN_TABLE;
+						nameErrorType = IN_TABLE;
+					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					e.printStackTrace();
 				}
 
 				// If there is an invaild email display the error text.
 				if (invalidEmail) {
 					displayEmailFailureText(emailErrorType);
-					System.out.println("Email Error type = " + emailErrorType);
-					registrationSuccess = false;
 				} else {
 					invalidEmailLL.setVisibility(View.GONE);
 				}
@@ -140,14 +169,8 @@ public class RegisterActivity extends Activity {
 				// If there is an invaild username display the error text.
 				if (invalidUsername) {
 					displayUsernameFailureText(nameErrorType);
-					System.out
-							.println("Username Error type = " + nameErrorType);
-					registrationSuccess = false;
 				} else {
 					invalidUsernameLL.setVisibility(View.GONE);
-					if (!invalidEmail) {
-						registrationSuccess = true;
-					}
 				}
 
 				// If there is an invaild password displat the error text.
@@ -155,14 +178,28 @@ public class RegisterActivity extends Activity {
 					displayPasswordFailureText(passwordErrorType);
 					System.out.println("Password Error type = "
 							+ passwordErrorType);
-					registrationSuccess = false;
 				} else {
 					invalidPasswordLL.setVisibility(View.GONE);
-					if (!invalidPassword) {
-						registrationSuccess = true;
-					}
+				}
+				
+				while(lookupTask.getStatus() != AsyncTask.Status.FINISHED){
+					Log.d(TAG, "Status is: " + lookupTask.getStatus());
+				} 
+				
+				Log.e(TAG, lookupTask.getStatus().toString());
+				// Log.e(TAG, "Email: " + String.valueOf(invalidEmail));
+				// Log.e(TAG, "Username: " + String.valueOf(invalidUsername));
+				// Log.e(TAG, "Password: " + String.valueOf(invalidPassword));
+
+				if (invalidPassword || invalidEmail || invalidUsername) {
+					registrationSuccess = false;
+				} else {
+					registrationSuccess = true;
 				}
 
+				// Log.e(TAG,
+				// "Registration success is "
+				// + String.valueOf(registrationSuccess));
 				if (registrationSuccess) {
 					Log.d(TAG, "Registration was a success...Pushing to table.");
 					Util.pushToTable(emailText, usernameText, passwordText);
@@ -178,6 +215,12 @@ public class RegisterActivity extends Activity {
 				finish();
 			}
 		});
+
+		if (Preferences.DEBUG) {
+			emailField.setText("test.@testing.com");
+			usernameField.setText("TestName");
+			passwordField.setText("12345");
+		}
 
 	}
 
@@ -227,6 +270,19 @@ public class RegisterActivity extends Activity {
 		return false;
 	}
 
+	/**
+	 * Sets the text and makes visible the email error message based on the
+	 * input from the user.
+	 * 
+	 * @param errorType
+	 *            The type of error. The errors are:
+	 *            <ul>
+	 *            <li>0 - No email was given.</li>
+	 *            <li>1 - An invalid email was given (most likely @ nor .* was
+	 *            used).</li>
+	 *            <li>2 - The desired email is already registered.</li>
+	 *            </ul>
+	 */
 	private void displayEmailFailureText(int errorType) {
 		String message = "";
 		switch (errorType) {
@@ -246,6 +302,18 @@ public class RegisterActivity extends Activity {
 		invalidEmailLL.setVisibility(View.VISIBLE);
 	}
 
+	/**
+	 * Sets the text and makes visible the username error message based on the
+	 * input from the user.
+	 * 
+	 * @param errorType
+	 *            The type of error. The errors are:
+	 *            <ul>
+	 *            <li>0 - No username was given.</li>
+	 *            <li>1 - An invalid username was given (white space was used).</li>
+	 *            <li>2 - The desired username is already registered.</li>
+	 *            </ul>
+	 */
 	private void displayUsernameFailureText(int errorType) {
 		String message = "";
 		switch (errorType) {
@@ -265,6 +333,17 @@ public class RegisterActivity extends Activity {
 		invalidUsernameLL.setVisibility(View.VISIBLE);
 	}
 
+	/**
+	 * Sets the text and makes visible the password error message based on the
+	 * input from the user.
+	 * 
+	 * @param errorType
+	 *            The type of error. The errors are:
+	 *            <ul>
+	 *            <li>0 - No password was given.</li>
+	 *            <li>1 - An invalid password was given.</li>
+	 *            </ul>
+	 */
 	private void displayPasswordFailureText(int errorType) {
 		String message = "";
 		switch (errorType) {

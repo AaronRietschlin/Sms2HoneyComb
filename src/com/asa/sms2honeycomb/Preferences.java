@@ -7,7 +7,14 @@ public class Preferences {
 	public static final String TABLET = "TABLET";
 	public static final String PHONE = "PHONE"; 
 	
-	public static final String PREFS_NAME = "MyPrefsFile";
+	public static final int INVALID_NONE = 0;
+	public static final int INVALID_EMAIL = 1;
+	public static final int INVALID_USERNAME = 2;
+	public static final int INVALID_BOTH = 3;
+	public static final String LOOKUP_EMAIL = "LOOKUP_EMAIL";
+	public static final String LOOKUP_USERNAME = "LOOKUP_USERNAME";
+	
+	public static final String PREFS_NAME = "Sms2HoneycombPrefs";
 	
 	public static boolean DEBUG = true;
 }

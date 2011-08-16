@@ -25,6 +25,11 @@
     <string name="register_invaild_password">You must enter a password.</string>
     <string name="register_no_password_entered">You must enter a password.</string>
     <string name="register_no_username_entered">You must enter a username.</string>
+    <string name="main_send_btn">Send</string>
+    <string name="main_message_text">Message:</string>
+    <string name="main_to_text">To:</string>
+    <string name="main_message_list_text">Messages:</string>
+    <string name="main_logout_btn_text">Logout</string>
     
     
 </resources>

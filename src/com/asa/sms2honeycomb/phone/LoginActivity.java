@@ -25,6 +25,7 @@ public class LoginActivity extends Activity {
 	private Button cancelButton;
 	private EditText usernameField;
 	private EditText passwordField;
+	SharedPreferences prefs;
 
 	private Intent mIntent;
 
@@ -33,6 +34,7 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_phone);
 
+		prefs = getSharedPreferences(Preferences.PREFS_NAME, MODE_PRIVATE);
 		loginButton = (Button) findViewById(R.id.login_login_btn_phone);
 		cancelButton = (Button) findViewById(R.id.login_cancel_btn_phone);
 		usernameField = (EditText) findViewById(R.id.login_username_field_phone);
@@ -62,23 +64,26 @@ public class LoginActivity extends Activity {
 				finish();
 			}
 		});
+		
+		if (Preferences.DEBUG) {
+			usernameField.setText("TestName");
+			passwordField.setText("12345");
+		}
 	}
 
 	/**
 	 * Creates an entry in the Shared Preferences under sms2honeycomb_key with
 	 * the assignment of a of the item. the SharedPreferences is listed under
-	 * the key sms2honeycomb_key.
+	 * the key is key.
 	 * 
 	 * @param key
 	 * @param item
 	 */
 	public void saveSharedPreference(String key, String item) {
-		SharedPreferences settings = getSharedPreferences(
-				Preferences.PREFS_NAME, 0);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putString("sms2honeycomb_" + key, item);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(key, item);
 		editor.commit();
 		Log.d(TAG, "SharedPreferences created and commited: " + item
-				+ " in key: " + "sms2honeycomb_" + key);
+				+ " in key: " + key);
 	}
 }

@@ -20,14 +20,27 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	-Added checking for empty input pluse whitespace within inputs
 	-Fixed some stuff with .phone.RegusterActivity twiked it
 	-Made .phone.LoginActitivy work it creates a shared preference file which will auto-login the user
+
 8-14-11
 	-Shared preference file auto-login plus auto subscribe user to two channels, username_Phone and username_Tablet
 	-Added invaild password textviews
 	-Added Documentation
 	-Fixed bug on checking whitespace implementation on the email
 	
-	TODO: 
+8-14-11 (Aaron)
+	-Moved lookup into AsyncTask. 
+		-It works, but the AsyncTask.Status is always RUNNING. I believe it needs to be FINISHED in order to do registration.
+	-Reworked entire RegistrationActivity to accomodate Asynctask.
+	-Changed the name of the SharedPrefs.  
 
+8-16-11 (Parker)
+	- Made a MainPhoneActivty to try and get the messages off of the server but ya it really doesnt work.
+	- With above activty added a logout button that unscribes from the channel and sends you back to the Launcher, but there is a bug in getPushChannel method and it returns the key not the key's value.
+	
+	TODO: 
+		•Move Registration to AsyncTask as well. 			
 		•Encrypt passwords
+		•Check if user is logged in. If they are, do not go to login screen. If not, go to login screen.		
 		•Work on MainHoneycombActivity to display messages and send them.
+		
 
