@@ -18,7 +18,7 @@ public class SMS2HoneycombLauncher extends Activity {
 		super.onCreate(savedInstanceState);
 		// Initialize Parse to allow server access.
 		Parse.initialize(this, "CDu0jepIuQQrZBJwIItLNYs7B2RntnwdqvjmsFB0", "cLBmzNyXWj0Fn3ItWR8sq79JMVJfIiD0udntjBku");
-		PushService.subscribe(this, "", MainHoneycombActivity.class);
+//		PushService.subscribe(this, "", MainHoneycombActivity.class);
 		Intent startCorrectActivity;
 		// If the phone is honeycomb based, then start the Honeycomb activity,
 		// if not, start phone activity

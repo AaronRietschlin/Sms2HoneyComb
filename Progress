@@ -32,10 +32,13 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 		-It works, but the AsyncTask.Status is always RUNNING. I believe it needs to be FINISHED in order to do registration.
 	-Reworked entire RegistrationActivity to accomodate Asynctask.
 	-Changed the name of the SharedPrefs.  
+<<<<<<< HEAD
 
 8-16-11 (Parker)
 	- Made a MainPhoneActivty to try and get the messages off of the server but ya it really doesnt work.
 	- With above activty added a logout button that unscribes from the channel and sends you back to the Launcher, but there is a bug in getPushChannel method and it returns the key not the key's value.
+=======
+>>>>>>> origin/master
 	
 	TODO: 
 		•Move Registration to AsyncTask as well. 			
