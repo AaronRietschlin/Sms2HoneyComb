@@ -1,10 +1,10 @@
 package com.asa.sms2honeycomb.phone;
 
-import java.util.concurrent.ExecutionException;
-
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,19 +13,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
-import com.asa.sms2honeycomb.TableLookupTask;
-import com.asa.sms2honeycomb.Util;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 // TODO: Return an error if Parse doesnt save the data (right now the app still fowards you on to the login activity when Parse does not save.) 
 
 public class RegisterActivity extends Activity {
 	private boolean registrationSuccess = true;
-	private final int EMPTY = 0;
-	private final int INVALID = 1;
-	private final int IN_TABLE = 2;
 	private final int EMAIL = 0;
 	private final int USERNAME = 1;
 	private final int BOTH = 2;
@@ -50,6 +49,10 @@ public class RegisterActivity extends Activity {
 	private EditText passwordField;
 
 	private Intent mIntent;
+	private SharedPreferences prefs;
+	private SharedPreferences.Editor editor;
+	private ProgressDialog loginProgress;
+	private Context mContext;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,10 @@ public class RegisterActivity extends Activity {
 		emailField = (EditText) findViewById(R.id.register_email_phone);
 		usernameField = (EditText) findViewById(R.id.register_username_phone);
 		passwordField = (EditText) findViewById(R.id.register_password_phone);
+
+		prefs = this.getSharedPreferences(Preferences.PREFS_NAME, MODE_PRIVATE);
+		editor = prefs.edit();
+		mContext = getApplicationContext();
 
 		registerButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
@@ -90,73 +97,38 @@ public class RegisterActivity extends Activity {
 				// Check if email field was entered.
 				if (emailText.length() == 0) {
 					invalidEmail = true;
-					emailErrorType = EMPTY;
+					emailErrorType = Preferences.REG_EMPTY;
 				} else {
 					// Check if email is valid.
 					if (!isValidEmail(emailText)
 							|| containsWhiteSpace(emailText)) {
 						invalidEmail = true;
-						emailErrorType = INVALID;
+						emailErrorType = Preferences.REG_INVALID;
 					}
 				}
 
 				// Check if username was entered.
 				if (usernameText.length() == 0) {
 					invalidUsername = true;
-					nameErrorType = EMPTY;
+					nameErrorType = Preferences.REG_EMPTY;
 				} else {
 					// Check if username contains whitespace.
 					if (containsWhiteSpace(usernameText)) {
 						invalidUsername = true;
-						nameErrorType = INVALID;
+						nameErrorType = Preferences.REG_INVALID;
 					}
 				}
 
 				// Checks if the password was entered.
 				if (passwordText.length() == 0) {
 					invalidPassword = true;
-					passwordErrorType = EMPTY;
+					passwordErrorType = Preferences.REG_EMPTY;
 				} else {
 					// Check if password contains whitespace.
 					if (containsWhiteSpace(passwordText)) {
 						invalidPassword = true;
-						passwordErrorType = INVALID;
+						passwordErrorType = Preferences.REG_INVALID;
 					}
-				}
-
-				// Checks if email is already in the table.
-				// if (Util.isInTable(Preferences.EMAIL_ROW, emailText)) {
-				// invalidEmail = true;
-				// emailErrorType = IN_TABLE;
-				// }
-
-				/*
-				 * Check if username and email is already taken by using the
-				 * LookupAsyncTask. Doing lookups for username AND email in this
-				 * single AsyncTask call to minimize number of background
-				 * threads.
-				 */
-				String[] params = { emailText, usernameText,
-						Preferences.LOOKUP_EMAIL };
-				TableLookupTask lookupTask = new TableLookupTask(RegisterActivity.this);
-				try {
-					invalidType = lookupTask.execute(params).get();
-					if (invalidType == Preferences.INVALID_EMAIL) {
-						invalidEmail = true;
-						emailErrorType = IN_TABLE;
-					} else if (invalidType == Preferences.INVALID_USERNAME) {
-						invalidUsername = true;
-						nameErrorType = IN_TABLE;
-					} else if (invalidType == Preferences.INVALID_BOTH) {
-						invalidEmail = true;
-						invalidUsername = true;
-						emailErrorType = IN_TABLE;
-						nameErrorType = IN_TABLE;
-					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					e.printStackTrace();
 				}
 
 				// If there is an invaild email display the error text.
@@ -181,12 +153,7 @@ public class RegisterActivity extends Activity {
 				} else {
 					invalidPasswordLL.setVisibility(View.GONE);
 				}
-				
-				while(lookupTask.getStatus() != AsyncTask.Status.FINISHED){
-					Log.d(TAG, "Status is: " + lookupTask.getStatus());
-				} 
-				
-				Log.e(TAG, lookupTask.getStatus().toString());
+
 				// Log.e(TAG, "Email: " + String.valueOf(invalidEmail));
 				// Log.e(TAG, "Username: " + String.valueOf(invalidUsername));
 				// Log.e(TAG, "Password: " + String.valueOf(invalidPassword));
@@ -201,11 +168,12 @@ public class RegisterActivity extends Activity {
 				// "Registration success is "
 				// + String.valueOf(registrationSuccess));
 				if (registrationSuccess) {
-					Log.d(TAG, "Registration was a success...Pushing to table.");
-					Util.pushToTable(emailText, usernameText, passwordText);
-					mIntent = new Intent(RegisterActivity.this,
-							LoginActivity.class);
-					startActivity(mIntent);
+					loginProgress = ProgressDialog.show(
+							RegisterActivity.this,
+							"",
+							getResources().getString(
+									R.string.dialog_login_message), true);
+					registerUser(usernameText, passwordText, emailText);
 				}
 			}
 		});
@@ -286,14 +254,14 @@ public class RegisterActivity extends Activity {
 	private void displayEmailFailureText(int errorType) {
 		String message = "";
 		switch (errorType) {
-		case EMPTY:
+		case Preferences.REG_EMPTY:
 			message = getResources().getString(
 					R.string.register_no_email_entered);
 			break;
-		case INVALID:
+		case Preferences.REG_INVALID:
 			message = getResources().getString(R.string.register_invalid_email);
 			break;
-		case IN_TABLE:
+		case Preferences.REG_IN_TABLE:
 			message = getResources().getString(
 					R.string.register_duplicate_email);
 			break;
@@ -317,14 +285,14 @@ public class RegisterActivity extends Activity {
 	private void displayUsernameFailureText(int errorType) {
 		String message = "";
 		switch (errorType) {
-		case EMPTY:
+		case Preferences.REG_EMPTY:
 			message = getResources().getString(
 					R.string.register_no_username_entered);
 			break;
-		case INVALID:
+		case Preferences.REG_INVALID:
 			message = getResources().getString(
 					R.string.register_invalid_username);
-		case IN_TABLE:
+		case Preferences.REG_IN_TABLE:
 			message = getResources()
 					.getString(R.string.register_username_taken);
 			break;
@@ -347,15 +315,67 @@ public class RegisterActivity extends Activity {
 	private void displayPasswordFailureText(int errorType) {
 		String message = "";
 		switch (errorType) {
-		case EMPTY:
+		case Preferences.REG_EMPTY:
 			message = getResources().getString(
 					R.string.register_no_password_entered);
 			break;
-		case INVALID:
+		case Preferences.REG_INVALID:
 			message = getResources().getString(
 					R.string.register_invalid_password);
 		}
 		invalidPasswordText.setText(message);
 		invalidPasswordLL.setVisibility(View.VISIBLE);
+	}
+
+	private void registerUser(final String username, String password,
+			final String email) {
+		final ParseUser newUser = new ParseUser();
+		newUser.setUsername(username);
+		newUser.setPassword(password);
+		newUser.setEmail(email);
+		newUser.put(Preferences.PARSE_INSTALLATION_ID, ParseUser.getInstallationId(mContext));
+
+		newUser.signUpInBackground(new SignUpCallback() {
+			@Override
+			public void done(ParseException e) {
+				loginProgress.dismiss();
+				if (e == null) {
+					// Successful signup
+					// Put registered information in the users
+					// SharedPreferences.
+					editor.putString(Preferences.PREFS_EMAIL, email);
+					editor.putString(Preferences.PREFS_USERNAME, username);
+					editor.putString(Preferences.PREFS_SESSIONID,
+							newUser.getSessionToken());
+					editor.commit();
+					registrationSuccess = true;
+
+					Log.d(TAG, "Registration was a success...Pushing to table.");
+					// Util.pushToTable(emailText, usernameText, passwordText);
+					mIntent = new Intent(mContext, MainPhoneActivity.class);
+					startActivity(mIntent);
+					finish();
+				} else {
+					Log.e(TAG, String.valueOf(e.getCode()));
+					Log.e(TAG, e.getMessage());
+					if(e.getCode() == Preferences.REG_EMAIL_TAKEN){
+						displayEmailFailureText(Preferences.REG_IN_TABLE);
+						Toast invalidLoginToast = Toast.makeText(mContext,
+								"Login failed.", Toast.LENGTH_LONG);
+						invalidLoginToast.show();
+					}else if(e.getCode() == Preferences.REG_USERNAME_TAKEN){
+						displayUsernameFailureText(Preferences.REG_IN_TABLE);
+						Toast invalidLoginToast = Toast.makeText(mContext,
+								"Login failed.", Toast.LENGTH_LONG);
+						invalidLoginToast.show();
+					}else if(e.getCode() == Preferences.REG_NO_CONNECTION){
+						Toast invalidLoginToast = Toast.makeText(mContext,
+								"No Internet connection...Please connect to the Internet and try again.", Toast.LENGTH_LONG);
+						invalidLoginToast.show();
+					}
+				}
+
+			}
+		});
 	}
 }

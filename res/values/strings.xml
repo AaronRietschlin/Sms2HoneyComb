@@ -7,6 +7,8 @@
     <string name="launcher_login_btn_text">Login</string>
     <string name="login_cancel_btn">Cancel</string>
     
+    <string name="dialog_login_message">Logging in...</string>
+    
     <string name="login_username_text">Username:</string>
     <string name="login_password_text">Password:</string>
     <string name="login_username_hint">Enter your username...</string>

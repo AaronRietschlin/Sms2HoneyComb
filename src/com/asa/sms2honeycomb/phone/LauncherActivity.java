@@ -14,12 +14,12 @@ public class LauncherActivity extends Activity{
 	Button registerButton;
 	Button loginButton;
 	Intent mIntent; 
-	
+	private ParseUser currentUser;
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
-		ParseUser currentUser = ParseUser.getCurrentUser();
+		currentUser = ParseUser.getCurrentUser();
 		if(currentUser == null){
 			//User is not logged in.
 			setContentView(R.layout.launcher_phone);

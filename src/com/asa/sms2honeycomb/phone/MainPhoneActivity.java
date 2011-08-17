@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,6 +18,7 @@ import com.asa.sms2honeycomb.R;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
+import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SaveCallback;
 import com.parse.SendCallback;
@@ -54,11 +57,12 @@ public class MainPhoneActivity extends Activity {
 		logoutButton = (Button) findViewById(R.id.main_logout_btn);
 
 		PushService.subscribe(this,
-				getPushChannel(Preferences.USERNAME_ROW, Preferences.TABLET),
+				getPushChannel(Preferences.PARSE_USERNAME_ROW, Preferences.TABLET),
 				MainPhoneActivity.class);
 
+		
 		sendButton.setOnClickListener(new OnClickListener() {
-			@Override
+			
 			public void onClick(View view) {
 				// TODO: get strings from the text feilds
 				// then send them on to parse and to the push channel(phone)
@@ -79,7 +83,7 @@ public class MainPhoneActivity extends Activity {
 						} else {
 							ParsePush push = new ParsePush();
 							push.setChannel(getPushChannel(
-									Preferences.USERNAME_ROW,
+									Preferences.PARSE_USERNAME_ROW,
 									Preferences.TABLET));
 							push.setMessage("To: " + to + "Message: " + body);
 							push.sendInBackground(new SendCallback() {
@@ -105,14 +109,13 @@ public class MainPhoneActivity extends Activity {
 
 		logoutButton.setOnClickListener(new OnClickListener() {
 
-			@Override
 			public void onClick(View v) {
-				logoutUser(Preferences.USERNAME_ROW);
+				logoutUser(Preferences.PARSE_USERNAME_ROW);
 				if (logoutSuccess) {
 					// unsubscribe to the push channel
 					PushService.unsubscribe(
 							MainPhoneActivity.this,
-							getPushChannel(Preferences.USERNAME_ROW,
+							getPushChannel(Preferences.PARSE_USERNAME_ROW,
 									Preferences.TABLET));
 					Log.d(TAG, "Log out of user a success");
 					mIntent = new Intent(MainPhoneActivity.this,
@@ -130,6 +133,25 @@ public class MainPhoneActivity extends Activity {
 		}
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		menu.add(0, Preferences.MENU_LOGOUT, 0, "Logout");
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem){
+		switch(menuItem.getItemId()){
+		case Preferences.MENU_LOGOUT:
+			ParseUser.logOut();
+			mIntent = new Intent(MainPhoneActivity.this, LauncherActivity.class);
+			startActivity(mIntent);
+			finish();
+			
+		}
+		return false;
+	}
+	
 	/**
 	 * Creates a string from the SharedPreferences using the key and a given
 	 * name of the wanted push channel. Returns a string

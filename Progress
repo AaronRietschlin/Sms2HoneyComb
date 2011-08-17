@@ -37,10 +37,24 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	- Made a MainPhoneActivty to try and get the messages off of the server but ya it really doesnt work.
 	- With above activty added a logout button that unscribes from the channel and sends you back to the Launcher, but there is a bug in getPushChannel method and it returns the key not the key's value.
 	
-	TODO: 
-		•Move Registration to AsyncTask as well. 			
+8-16-11 (Aaron)
+	-Changed the Registration Activity to use the newly introduced ParseUser. 
+	-Added check to LauncherActivity to see if user is Logged in.
+		-Added Logout menu option in MainPhoneActivity that logs the user out. (Works)
+	-Added a ProgressDialog that lasts as long as it takes to login.
+	-Does proper checking of whether or not email or username is in table
+		-Does NOT do both. It's either username OR email. If they're both wrong, only Username error is catched.
+	-Added a check on the ParseException object returned to see if result is no internet connection
+	-Parker, you need to update the Parse jar file (download the updated version: https://www.parse.com/apps/quickstart#android/existing)
+		
+	~!~!~NOTE~!~! Parker, make all the global variables (the ones that are defined outside of methods) private. 
+	
+	TODO: 		
 		•Encrypt passwords
-		•Check if user is logged in. If they are, do not go to login screen. If not, go to login screen.		
+			-DONE 8-16-11 Using ParseUser which does this for us. 
+		•Check if user is logged in. If they are, do not go to login screen. If not, go to login screen.	
+			-DONE 8-16-11	
 		•Work on MainHoneycombActivity to display messages and send them.
+		•Make BroadcastReceiver that recognizes when user successfully logged in to finish LauncherActivity (?)
 		
 

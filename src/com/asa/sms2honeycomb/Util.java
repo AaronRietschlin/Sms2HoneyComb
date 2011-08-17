@@ -62,8 +62,8 @@ public class Util {
 	public static void pushToTable(String email, String username,
 			String password) {
 		ParseObject userTable = new ParseObject("UserTable");
-		userTable.put(Preferences.EMAIL_ROW, email);
-		userTable.put(Preferences.USERNAME_ROW, username);
+		userTable.put(Preferences.PARSE_EMAIL_ROW, email);
+		userTable.put(Preferences.PARSE_USERNAME_ROW, username);
 		userTable.put("password", password); // TODO: Encrypt passwords!
 		try {
 			userTable.save();

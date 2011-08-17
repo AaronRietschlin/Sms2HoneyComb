@@ -23,7 +23,7 @@ public class MainHoneycombActivity extends Activity{
 		setContentView(R.layout.activity_tablet_main);
 		Log.e(TAG, "HoneycombActivity started.");
 		// Want to send the messages to the phone so they can be sms messages
-		PushService.subscribe(this, getPushChannel(Preferences.USERNAME_ROW, Preferences.PHONE), MainHoneycombActivity.class);
+		PushService.subscribe(this, getPushChannel(Preferences.PARSE_USERNAME_ROW, Preferences.PHONE), MainHoneycombActivity.class);
 		
 		FragmentManager fm = getFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
