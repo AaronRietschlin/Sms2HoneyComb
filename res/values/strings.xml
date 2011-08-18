@@ -8,6 +8,7 @@
     <string name="login_cancel_btn">Cancel</string>
     
     <string name="dialog_login_message">Logging in...</string>
+    <string name="dialog_register_message">Registering...</string>
     
     <string name="login_username_text">Username:</string>
     <string name="login_password_text">Password:</string>

@@ -49,6 +49,18 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 		
 	~!~!~NOTE~!~! Parker, make all the global variables (the ones that are defined outside of methods) private. 
 	
+8-17-11 (Aaron)
+	-Removed bug that made the whitespace check in username/email/password not work.
+	-Moved the checkWhiteSpace to Util.java
+	-Added functionality for login. 
+	-Added check for acceptable username and passwords.
+		-I'm using Toasts in this one instead of the Red text. Let me know what you think.
+	-Made the fields only single line.
+	-Made it so that all fields except the last one (in both login and register) will display the next button
+		-The last one displays Go. Logs in when clicked.
+		-The GO doesn't seem to want to work for some reason.
+	-Formatted the layout XML files.
+	
 	TODO: 		
 		•Encrypt passwords
 			-DONE 8-16-11 Using ParseUser which does this for us. 
@@ -56,5 +68,8 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 			-DONE 8-16-11	
 		•Work on MainHoneycombActivity to display messages and send them.
 		•Make BroadcastReceiver that recognizes when user successfully logged in to finish LauncherActivity (?)
+		•Distinguish between username or password being wrong
+			-And network connection, too I think.
+			
 		
 

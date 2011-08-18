@@ -1,57 +1,33 @@
 package com.asa.sms2honeycomb;
 
-import java.util.List;
-
 import android.util.Log;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 
 public class Util {
 	private final static String TAG = "Util";
-	private static boolean isInTable;
 
+	
 	/**
-	 * Checks if the input is the same as the item within the Parse object
-	 * UserTable. Returns true if the input is in the table and false if the
-	 * item is not in the the table.
+	 * Checks to see if there is white space within the input (both username and
+	 * email). If there is, then it is an invalid input. Returns true if there
+	 * is white space, false if there is no white space.
 	 * 
-	 * @param item
 	 * @param input
 	 * @return
 	 */
-	public static boolean isInTable(final String item, final String input) {
-		ParseQuery query = new ParseQuery("UserTable");
-		// Log.d(TAG, "Beginning check to see if " + ) 
-		try {
-			List<ParseObject> objectList = query.find();
-			int i = 1;
-			if(item == null) {
-				Log.e(TAG, "ITEM IS NULL!");
-			}else{
-				Log.e(TAG, "ITEM IS NOT NULL!");
+	public static boolean containsWhiteSpace(String input) {
+		if (input != null) {
+			for (int i = 0; i < input.length(); i++) {
+				if (Character.isWhitespace(input.charAt(i))) {
+					return true;
+				} 
 			}
-			if(input == null){
-				Log.e(TAG, "INPUT IS NULL!");
-			}
-			for (ParseObject object : objectList) {
-				if (object.getString(item).compareTo(input) == 0) {
-					isInTable = true;
-					break;
-				} else {
-					isInTable = false;
-					break;
-				}
-			}
-			Log.i(TAG, "Done with table lookup.");
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}		
-		return isInTable;
+		}
+		return false;
 	}
-
+	
 	/**
 	 * Pushes the email, username, and password to the Parse UserTable object.
 	 * 

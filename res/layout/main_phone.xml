@@ -1,22 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:weightSum="1">
-	<TextView android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:text="@string/hello" />
-	<LinearLayout android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="match_parent" android:id="@+id/linearLayout1" android:layout_weight="0.98">
-		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/main_message_list_text" android:text="@string/main_message_list_text"></TextView>
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" 
+	android:weightSum="1">
+	<TextView 
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:text="@string/hello" />
+	<LinearLayout 
+		android:layout_height="wrap_content"
+		android:orientation="vertical" 
+		android:layout_width="match_parent"
+		android:id="@+id/linearLayout1" 
+		android:layout_weight="0.98">
+		<TextView 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:id="@+id/main_message_list_text"
+			android:text="@string/main_message_list_text">
+		</TextView>
 	</LinearLayout>
-	<LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:id="@+id/linearLayout2" android:layout_height="wrap_content">
-		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/main_to_text" android:text="@string/main_to_text"></TextView>
-		<EditText android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/main_to_felid"></EditText>
-		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/main_message_text" android:text="@string/main_message_text"></TextView>
-		<EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:id="@+id/main_message_felid">
+	<LinearLayout 
+		android:orientation="vertical"
+		android:layout_width="match_parent" 
+		android:id="@+id/linearLayout2"
+		android:layout_height="wrap_content">
+		<TextView 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:id="@+id/main_to_text"
+			android:text="@string/main_to_text">
+		</TextView>
+		<EditText 
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent" 
+			android:id="@+id/main_to_felid"></EditText>
+		<TextView 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:id="@+id/main_message_text"
+			android:text="@string/main_message_text">
+		</TextView>
+		<EditText 
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" 
+			android:id="@+id/main_message_felid">
 			<requestFocus></requestFocus>
 		</EditText>
 	</LinearLayout>
-	<LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent" android:id="@+id/linearLayout3" android:weightSum="1">
-		<Button android:id="@+id/main_send_btn" android:text="@string/main_send_btn" android:layout_height="wrap_content" android:layout_width="148dp" android:layout_weight="0.40"></Button>
-		<Button android:layout_width="133dp" android:layout_height="wrap_content" android:layout_weight="0.58" android:id="@+id/main_logout_btn" android:text="@string/main_logout_btn_text"></Button>
+	<LinearLayout 
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent" 
+		android:id="@+id/linearLayout3"
+		android:weightSum="1">
+		<Button 
+			android:id="@+id/main_send_btn" 
+			android:text="@string/main_send_btn"
+			android:layout_height="wrap_content"
+			android:layout_width="148dp"
+			android:layout_weight="0.40">
+		</Button>
+		<Button 
+			android:layout_width="133dp" 
+			android:layout_height="wrap_content"
+			android:layout_weight="0.58" 
+			android:id="@+id/main_logout_btn"
+			android:text="@string/main_logout_btn_text">
+		</Button>
 	</LinearLayout>
 </LinearLayout>

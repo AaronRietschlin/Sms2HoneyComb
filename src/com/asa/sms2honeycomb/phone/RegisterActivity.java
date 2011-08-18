@@ -7,16 +7,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
+import com.asa.sms2honeycomb.Util;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -51,7 +55,7 @@ public class RegisterActivity extends Activity {
 	private Intent mIntent;
 	private SharedPreferences prefs;
 	private SharedPreferences.Editor editor;
-	private ProgressDialog loginProgress;
+	private ProgressDialog registerProgress;
 	private Context mContext;
 
 	@Override
@@ -101,7 +105,7 @@ public class RegisterActivity extends Activity {
 				} else {
 					// Check if email is valid.
 					if (!isValidEmail(emailText)
-							|| containsWhiteSpace(emailText)) {
+							|| Util.containsWhiteSpace(emailText)) {
 						invalidEmail = true;
 						emailErrorType = Preferences.REG_INVALID;
 					}
@@ -113,7 +117,7 @@ public class RegisterActivity extends Activity {
 					nameErrorType = Preferences.REG_EMPTY;
 				} else {
 					// Check if username contains whitespace.
-					if (containsWhiteSpace(usernameText)) {
+					if (Util.containsWhiteSpace(usernameText)) {
 						invalidUsername = true;
 						nameErrorType = Preferences.REG_INVALID;
 					}
@@ -125,7 +129,7 @@ public class RegisterActivity extends Activity {
 					passwordErrorType = Preferences.REG_EMPTY;
 				} else {
 					// Check if password contains whitespace.
-					if (containsWhiteSpace(passwordText)) {
+					if (Util.containsWhiteSpace(passwordText)) {
 						invalidPassword = true;
 						passwordErrorType = Preferences.REG_INVALID;
 					}
@@ -168,11 +172,11 @@ public class RegisterActivity extends Activity {
 				// "Registration success is "
 				// + String.valueOf(registrationSuccess));
 				if (registrationSuccess) {
-					loginProgress = ProgressDialog.show(
+					registerProgress = ProgressDialog.show(
 							RegisterActivity.this,
 							"",
 							getResources().getString(
-									R.string.dialog_login_message), true);
+									R.string.dialog_register_message), true);
 					registerUser(usernameText, passwordText, emailText);
 				}
 			}
@@ -181,6 +185,27 @@ public class RegisterActivity extends Activity {
 		cancelButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				finish();
+			}
+		});
+
+		// Allow user to click on the DPAD, or enter button within the password
+		// field Register.
+		passwordField.setOnEditorActionListener(new OnEditorActionListener() {
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if (event != null) {
+					int action = event.getAction();
+					if (actionId == EditorInfo.IME_ACTION_GO
+							|| action == KeyEvent.KEYCODE_DPAD_CENTER
+							|| action == KeyEvent.KEYCODE_ENTER) {
+						Log.e(TAG, "Enter button hit.");
+						registerButton.performClick();
+					}
+					return true;
+				} else {
+					return false;
+
+				}
 			}
 		});
 
@@ -214,27 +239,6 @@ public class RegisterActivity extends Activity {
 			}
 		}
 		Log.d(TAG, "The inputed email is null.");
-		return false;
-	}
-
-	/**
-	 * Checks to see if there is white space within the input (both username and
-	 * email). If there is, then it is an invalid input. Returns true if there
-	 * is white space, false if there is no white space.
-	 * 
-	 * @param input
-	 * @return
-	 */
-	private boolean containsWhiteSpace(String input) {
-		if (input != null) {
-			for (int i = 0; i < input.length(); i++) {
-				if (Character.isWhitespace(input.charAt(i))) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		}
 		return false;
 	}
 
@@ -333,12 +337,13 @@ public class RegisterActivity extends Activity {
 		newUser.setUsername(username);
 		newUser.setPassword(password);
 		newUser.setEmail(email);
-		newUser.put(Preferences.PARSE_INSTALLATION_ID, ParseUser.getInstallationId(mContext));
+		newUser.put(Preferences.PARSE_INSTALLATION_ID,
+				ParseUser.getInstallationId(mContext));
 
 		newUser.signUpInBackground(new SignUpCallback() {
 			@Override
 			public void done(ParseException e) {
-				loginProgress.dismiss();
+				registerProgress.dismiss();
 				if (e == null) {
 					// Successful signup
 					// Put registered information in the users
@@ -358,19 +363,22 @@ public class RegisterActivity extends Activity {
 				} else {
 					Log.e(TAG, String.valueOf(e.getCode()));
 					Log.e(TAG, e.getMessage());
-					if(e.getCode() == Preferences.REG_EMAIL_TAKEN){
+					if (e.getCode() == Preferences.REG_EMAIL_TAKEN) {
 						displayEmailFailureText(Preferences.REG_IN_TABLE);
 						Toast invalidLoginToast = Toast.makeText(mContext,
 								"Login failed.", Toast.LENGTH_LONG);
 						invalidLoginToast.show();
-					}else if(e.getCode() == Preferences.REG_USERNAME_TAKEN){
+					} else if (e.getCode() == Preferences.REG_USERNAME_TAKEN) {
 						displayUsernameFailureText(Preferences.REG_IN_TABLE);
 						Toast invalidLoginToast = Toast.makeText(mContext,
 								"Login failed.", Toast.LENGTH_LONG);
 						invalidLoginToast.show();
-					}else if(e.getCode() == Preferences.REG_NO_CONNECTION){
-						Toast invalidLoginToast = Toast.makeText(mContext,
-								"No Internet connection...Please connect to the Internet and try again.", Toast.LENGTH_LONG);
+					} else if (e.getCode() == Preferences.REG_NO_CONNECTION) {
+						Toast invalidLoginToast = Toast
+								.makeText(
+										mContext,
+										"No Internet connection...Please connect to the Internet and try again.",
+										Toast.LENGTH_LONG);
 						invalidLoginToast.show();
 					}
 				}
