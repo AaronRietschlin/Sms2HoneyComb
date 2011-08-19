@@ -61,6 +61,13 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 		-The GO doesn't seem to want to work for some reason.
 	-Formatted the layout XML files.
 	
+8-19-11 (Parker)
+	- Worked on quering the server to get messages off (see the MainPhoneActivity) each message prints to consle
+	- Created a broadcast reciver so when they add an intent to be fired of we will be able to query the server that way
+	- moved functions into Util
+	- from now on add the username to the Incomming and Outgoing messages so the aporate user can get them.
+	- removed the need for shared preferences
+	
 	TODO: 		
 		•Encrypt passwords
 			-DONE 8-16-11 Using ParseUser which does this for us. 
@@ -70,6 +77,8 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 		•Make BroadcastReceiver that recognizes when user successfully logged in to finish LauncherActivity (?)
 		•Distinguish between username or password being wrong
 			-And network connection, too I think.
+		• Make the messages into a list and display them
+		• Add the username to each message pushed to the server
 			
 		
 

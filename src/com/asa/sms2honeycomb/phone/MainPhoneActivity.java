@@ -1,8 +1,10 @@
 package com.asa.sms2honeycomb.phone;
 
+import java.util.Date;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,9 +17,12 @@ import android.widget.TextView;
 
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
+import com.asa.sms2honeycomb.Util;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SaveCallback;
@@ -37,8 +42,6 @@ public class MainPhoneActivity extends Activity {
 
 	Intent mIntent;
 
-	SharedPreferences prefs;
-
 	private boolean logoutSuccess;
 
 	@Override
@@ -48,7 +51,7 @@ public class MainPhoneActivity extends Activity {
 		// I'm thinking this will just direct to the settings page.
 		setContentView(R.layout.main_phone);
 
-		messageListText = (TextView) findViewById(R.id.main_message_list_text);
+		messageListText = (TextView) findViewById(R.id.main_message_list);
 		toText = (TextView) findViewById(R.id.main_to_text);
 		messageText = (TextView) findViewById(R.id.main_message_text);
 		toField = (EditText) findViewById(R.id.main_to_felid);
@@ -57,12 +60,11 @@ public class MainPhoneActivity extends Activity {
 		logoutButton = (Button) findViewById(R.id.main_logout_btn);
 
 		PushService.subscribe(this,
-				getPushChannel(Preferences.PARSE_USERNAME_ROW, Preferences.TABLET),
+				Util.getPushChannel(Util.getUser(), Preferences.TABLET),
 				MainPhoneActivity.class);
 
-		
 		sendButton.setOnClickListener(new OnClickListener() {
-			
+
 			public void onClick(View view) {
 				// TODO: get strings from the text feilds
 				// then send them on to parse and to the push channel(phone)
@@ -74,6 +76,8 @@ public class MainPhoneActivity extends Activity {
 				ParseObject outgoingMessage = new ParseObject("OutgoingMessage");
 				outgoingMessage.put("messageTo", to);
 				outgoingMessage.put("messageBody", body);
+				outgoingMessage.put(Preferences.PARSE_USERNAME_ROW,
+						Util.getUser());
 				outgoingMessage.saveInBackground(new SaveCallback() {
 					@Override
 					public void done(ParseException e) {
@@ -82,10 +86,9 @@ public class MainPhoneActivity extends Activity {
 							Log.e(TAG, "Message not successfully saved.");
 						} else {
 							ParsePush push = new ParsePush();
-							push.setChannel(getPushChannel(
-									Preferences.PARSE_USERNAME_ROW,
-									Preferences.TABLET));
-							push.setMessage("To: " + to + "Message: " + body);
+							push.setChannel(Util.getPushChannel(
+									Util.getUser(), Preferences.TABLET));
+							push.setMessage("To: " + to + " Message: " + body);
 							push.sendInBackground(new SendCallback() {
 								@Override
 								public void done(ParseException e) {
@@ -104,18 +107,53 @@ public class MainPhoneActivity extends Activity {
 						}
 					}
 				});
+				// TODO this is for testing the querying and pulling the info
+				// off of the server will be replaced by the one in the Util
+				// section and eventually used in a broadcast reciver to fetch
+				// messages from the server
+				final ParseQuery query = new ParseQuery("OutgoingMessage");
+				query.whereEqualTo(Preferences.PARSE_USERNAME_ROW, "TestName");
+				query.orderByDescending("createdAt");
+				query.setLimit(10);
+				query.findInBackground(new FindCallback() {
+					public void done(List<ParseObject> messageList,
+							ParseException e) {
+						if (e == null) {
+							Log.d(TAG, "Retrieved " + messageList.size()
+									+ " messages.");
+							for (ParseObject messageObject : messageList) {
+								String objectId = messageObject.objectId();
+								try {
+									ParseObject message = query.get(objectId);
+									Date time = message.createdAt();
+									String to = message.getString("messageTo");
+									String body = message
+											.getString("messageBody");
+									String totalMessage = "Sent: " + time
+											+ " To: " + to + " Message : "
+											+ body;
+									System.out.println(totalMessage);
+								} catch (ParseException e1) {
+									Log.e(TAG, e1.getMessage());
+								}
+							}
+						} else {
+							Log.d(TAG, "Error: " + e.getMessage());
+						}
+					}
+				});
 			}
 		});
 
 		logoutButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				logoutUser(Preferences.PARSE_USERNAME_ROW);
+				Util.getUser();
+				Util.logoutUser();
 				if (logoutSuccess) {
 					// unsubscribe to the push channel
-					PushService.unsubscribe(
-							MainPhoneActivity.this,
-							getPushChannel(Preferences.PARSE_USERNAME_ROW,
+					PushService.unsubscribe(MainPhoneActivity.this, Util
+							.getPushChannel(Util.getUser(),
 									Preferences.TABLET));
 					Log.d(TAG, "Log out of user a success");
 					mIntent = new Intent(MainPhoneActivity.this,
@@ -134,55 +172,21 @@ public class MainPhoneActivity extends Activity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu){
+	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, Preferences.MENU_LOGOUT, 0, "Logout");
 		return true;
 	}
-	
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem menuItem){
-		switch(menuItem.getItemId()){
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
 		case Preferences.MENU_LOGOUT:
 			ParseUser.logOut();
 			mIntent = new Intent(MainPhoneActivity.this, LauncherActivity.class);
 			startActivity(mIntent);
 			finish();
-			
+
 		}
 		return false;
-	}
-	
-	/**
-	 * Creates a string from the SharedPreferences using the key and a given
-	 * name of the wanted push channel. Returns a string
-	 * "keyitem_nameOfPushChannel".
-	 * 
-	 * @param key
-	 * @param nameOfPushChannel
-	 * @return
-	 */
-	// TODO: this doesnt work right returns the key_nameOfPushChannel on the
-	// login
-	// part of the app it saves as key:item it should return the item(user's
-	// name)
-	public String getPushChannel(String key, String nameOfPushChannel) {
-		SharedPreferences sharedPreferences = getSharedPreferences(
-				Preferences.PREFS_NAME, 0);
-		String savedPreference = sharedPreferences.getString(key, "");
-		Log.d(TAG, "SharedPreference is loaded: " + key);
-		String pushChannel = savedPreference + "_" + nameOfPushChannel;
-		Log.d(TAG, "Push channel has been created for: " + key + "_"
-				+ nameOfPushChannel);
-		return pushChannel;
-	}
-
-	/**
-	 * Removes the key from the SharedPreferences
-	 * 
-	 * @param key
-	 */
-	public void logoutUser(String key) {
-		// TODO delete the key from the SharredPreferences or remove the value
-		logoutSuccess = true;
 	}
 }

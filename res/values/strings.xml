@@ -31,8 +31,8 @@
     <string name="main_send_btn">Send</string>
     <string name="main_message_text">Message:</string>
     <string name="main_to_text">To:</string>
-    <string name="main_message_list_text">Messages:</string>
     <string name="main_logout_btn_text">Logout</string>
+    <string name="message_list_text">Messages</string>
     
     
 </resources>

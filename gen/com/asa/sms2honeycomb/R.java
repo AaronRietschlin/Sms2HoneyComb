@@ -32,7 +32,7 @@ public final class R {
         public static final int login_username_title_phone=0x7f070008;
         public static final int main_logout_btn=0x7f070018;
         public static final int main_message_felid=0x7f070015;
-        public static final int main_message_list_text=0x7f070010;
+        public static final int main_message_list=0x7f070010;
         public static final int main_message_text=0x7f070014;
         public static final int main_send_btn=0x7f070017;
         public static final int main_to_felid=0x7f070013;
@@ -64,6 +64,7 @@ public final class R {
         public static final int login_phone=0x7f030003;
         public static final int main_phone=0x7f030004;
         public static final int register_activity_phone=0x7f030005;
+        public static final int register_phone=0x7f030006;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
@@ -77,11 +78,11 @@ public final class R {
         public static final int login_password_text=0x7f050009;
         public static final int login_username_hint=0x7f05000a;
         public static final int login_username_text=0x7f050008;
-        public static final int main_logout_btn_text=0x7f05001e;
-        public static final int main_message_list_text=0x7f05001d;
+        public static final int main_logout_btn_text=0x7f05001d;
         public static final int main_message_text=0x7f05001b;
         public static final int main_send_btn=0x7f05001a;
         public static final int main_to_text=0x7f05001c;
+        public static final int message_list_text=0x7f05001e;
         public static final int register_btn_phone_text=0x7f050012;
         public static final int register_cancel_btn_text=0x7f050011;
         public static final int register_duplicate_email=0x7f050010;
