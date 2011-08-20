@@ -68,17 +68,26 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	- from now on add the username to the Incomming and Outgoing messages so the aporate user can get them.
 	- removed the need for shared preferences
 	
+8-20-11 (Parker)
+	- Added a sqlite database to store messages so now only need to pull one message from the server at a time
+	
+	
 	TODO: 		
 		•Encrypt passwords
 			-DONE 8-16-11 Using ParseUser which does this for us. 
 		•Check if user is logged in. If they are, do not go to login screen. If not, go to login screen.	
 			-DONE 8-16-11	
 		•Work on MainHoneycombActivity to display messages and send them.
-		•Make BroadcastReceiver that recognizes when user successfully logged in to finish LauncherActivity (?)
+		•Make BroadcastReceiver and Intent that recognizes when user successfully logged in to finish LauncherActivity (?)
 		•Distinguish between username or password being wrong
-			-And network connection, too I think.
+		•Check for internet connection
 		• Make the messages into a list and display them
 		• Add the username to each message pushed to the server
+		•Reset, Change and Forgot Password
+		•Contacts ListView.
+		•Move the messages into a ListView and sort them by numbers.
+		•Retrive the messages from the sqlitedb
+		•Once a message is pulled delete it? (Parse is adding REST apis so we can have a webpage to send and recive messages?)
 			
 		
 

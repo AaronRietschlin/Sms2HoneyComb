@@ -66,7 +66,7 @@ public class Util {
 	 */
 	public String getMessages(String table) {
 		final ParseQuery query = new ParseQuery(table);
-		query.whereEqualTo(Preferences.PARSE_USERNAME_ROW, getUser());
+		query.whereEqualTo(Preferences.PARSE_USERNAME_ROW, getUsernameString());
 		query.orderByDescending("createdAt");
 		query.setLimit(10);
 		query.findInBackground(new FindCallback() {
@@ -124,9 +124,8 @@ public class Util {
 	 * 
 	 * @return String currentUser
 	 */
-	public static String getUser() {
-		ParseUser currentUser = ParseUser.getCurrentUser();
-		return currentUser.getUsername();
+	public static String getUsernameString() {
+		return ParseUser.getCurrentUser().getUsername();
 	}
 
 }

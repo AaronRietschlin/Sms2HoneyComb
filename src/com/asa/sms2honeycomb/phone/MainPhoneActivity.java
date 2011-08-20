@@ -7,7 +7,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.asa.sms2honeycomb.DatabaseHandler;
+import com.asa.sms2honeycomb.MessageItem;
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
 import com.asa.sms2honeycomb.Util;
@@ -42,15 +43,22 @@ public class MainPhoneActivity extends Activity {
 	Button sendButton;
 	Button logoutButton;
 
+	ArrayList<String> messageArrayList;
+	
+	public static DatabaseHandler dbHandler;
+
 	Intent mIntent;
 
 	private boolean logoutSuccess;
 
+	public static String timeDB;
+	public static String toDB;
+	public static String fromDB;
+	public static String bodyDB;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// TODO: Start the phone activity
-		// I'm thinking this will just direct to the settings page.
 		setContentView(R.layout.main_phone);
 
 		messageListText = (TextView) findViewById(R.id.main_message_list);
@@ -60,11 +68,16 @@ public class MainPhoneActivity extends Activity {
 		messageField = (EditText) findViewById(R.id.main_message_felid);
 		sendButton = (Button) findViewById(R.id.main_send_btn);
 		logoutButton = (Button) findViewById(R.id.main_logout_btn);
+
+		messageArrayList = new ArrayList<String>();
 		
-		PushService.subscribe(this,
-				Util.getPushChannel(Util.getUser(), Preferences.TABLET),
+		dbHandler = new DatabaseHandler(MainPhoneActivity.this);
+		dbHandler.open();
+
+		PushService.subscribe(this, Util.getPushChannel(
+				Util.getUsernameString(), Preferences.TABLET),
 				MainPhoneActivity.class);
-		
+
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View view) {
@@ -79,7 +92,7 @@ public class MainPhoneActivity extends Activity {
 				outgoingMessage.put("messageTo", to);
 				outgoingMessage.put("messageBody", body);
 				outgoingMessage.put(Preferences.PARSE_USERNAME_ROW,
-						Util.getUser());
+						Util.getUsernameString());
 				outgoingMessage.saveInBackground(new SaveCallback() {
 					@Override
 					public void done(ParseException e) {
@@ -88,7 +101,8 @@ public class MainPhoneActivity extends Activity {
 							Log.e(TAG, "Message not successfully saved.");
 						} else {
 							ParsePush push = new ParsePush();
-							push.setChannel(Util.getPushChannel(Util.getUser(),
+							push.setChannel(Util.getPushChannel(
+									Util.getUsernameString(),
 									Preferences.TABLET));
 							push.setMessage("To: " + to + " Message: " + body);
 							push.sendInBackground(new SendCallback() {
@@ -109,7 +123,6 @@ public class MainPhoneActivity extends Activity {
 						}
 					}
 				});
-
 				// TODO this is for testing the querying and pulling the info
 				// off of the server will be replaced by the one in the Util
 				// section and eventually used in a broadcast reciver to fetch
@@ -122,7 +135,6 @@ public class MainPhoneActivity extends Activity {
 					public void done(List<ParseObject> messageList,
 							ParseException e) {
 						if (e == null) {
-							ArrayList<String> messageArrayList = new ArrayList<String>();
 							Log.d(TAG, "Retrieved " + messageList.size()
 									+ " messages.");
 							for (ParseObject messageObject : messageList) {
@@ -130,15 +142,20 @@ public class MainPhoneActivity extends Activity {
 								try {
 									ParseObject message = query.get(objectId);
 									Date time = message.createdAt();
-									String to = message.getString("messageTo");
-									String body = message
-											.getString("messageBody");
-									String totalMessage = "Sent: " + time
-											+ "\n" + "To: " + to + "\n"
-											+ "Message : " + body + "\n";
+									timeDB = time.toString();
+									toDB = message.getString("messageTo");
+									fromDB = message.getString("messageFrom");
+									bodyDB = message.getString("messageBody");
+									String totalMessage = "Sent: " + timeDB
+											+ "\n" + "To: " + toDB + "\n"
+											+ "Message : " + bodyDB + "\n";
 									//System.out.println(totalMessage);
 									messageArrayList.add(totalMessage);
-									//Log.d(TAG, "messageArrayList is : " + messageArrayList.size() + " long.");
+									//Log.d(TAG, "messageArrayList is : " +
+									//messageArrayList.size() + " long.");
+									// add the shit to the sqlitedb
+									MessageItem item = new MessageItem(timeDB, toDB, fromDB, bodyDB);
+									dbHandler.insertMessageMessageItem(item);
 								} catch (ParseException e1) {
 									Log.e(TAG, e1.getMessage());
 								}
@@ -147,10 +164,12 @@ public class MainPhoneActivity extends Activity {
 							for (String s : messageArrayList) {
 								messageListString.append(s);
 								messageListString.append("\n");
-								//Log.d(TAG, "String: " + s + " has been connected.");
+								Log.d(TAG, "String: " + s +
+								" has been connected.");
 							}
-							//System.out.println(messageListString.toString());
-							messageListText.setText(messageListString.toString());
+							System.out.println(messageListString.toString());
+							messageListText.setText(messageListString
+									.toString());
 						} else {
 							Log.d(TAG, "Error: " + e.getMessage());
 						}
@@ -162,12 +181,12 @@ public class MainPhoneActivity extends Activity {
 		logoutButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Util.getUser();
 				Util.logoutUser();
 				if (logoutSuccess) {
 					// unsubscribe to the push channel
 					PushService.unsubscribe(MainPhoneActivity.this, Util
-							.getPushChannel(Util.getUser(), Preferences.TABLET));
+							.getPushChannel(Util.getUsernameString(),
+									Preferences.TABLET));
 					Log.d(TAG, "Log out of user a success");
 					mIntent = new Intent(MainPhoneActivity.this,
 							LauncherActivity.class);
