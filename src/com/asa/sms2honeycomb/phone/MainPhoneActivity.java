@@ -69,6 +69,7 @@ public class MainPhoneActivity extends Activity {
 		sendButton = (Button) findViewById(R.id.main_send_btn);
 		logoutButton = (Button) findViewById(R.id.main_logout_btn);
 
+<<<<<<< HEAD
 		messageArrayList = new ArrayList<String>();
 		
 		dbHandler = new DatabaseHandler(MainPhoneActivity.this);
@@ -76,6 +77,10 @@ public class MainPhoneActivity extends Activity {
 
 		PushService.subscribe(this, Util.getPushChannel(
 				Util.getUsernameString(), Preferences.TABLET),
+=======
+		PushService.subscribe(this,
+				Util.getPushChannel(Util.getUsernameString(), Preferences.TABLET),
+>>>>>>> origin/master
 				MainPhoneActivity.class);
 
 		sendButton.setOnClickListener(new OnClickListener() {
@@ -102,8 +107,12 @@ public class MainPhoneActivity extends Activity {
 						} else {
 							ParsePush push = new ParsePush();
 							push.setChannel(Util.getPushChannel(
+<<<<<<< HEAD
 									Util.getUsernameString(),
 									Preferences.TABLET));
+=======
+									Util.getUsernameString(), Preferences.TABLET));
+>>>>>>> origin/master
 							push.setMessage("To: " + to + " Message: " + body);
 							push.sendInBackground(new SendCallback() {
 								@Override
@@ -135,6 +144,7 @@ public class MainPhoneActivity extends Activity {
 					public void done(List<ParseObject> messageList,
 							ParseException e) {
 						if (e == null) {
+							ArrayList<String> messageArrayList = new ArrayList<String>();
 							Log.d(TAG, "Retrieved " + messageList.size()
 									+ " messages.");
 							for (ParseObject messageObject : messageList) {
@@ -142,6 +152,7 @@ public class MainPhoneActivity extends Activity {
 								try {
 									ParseObject message = query.get(objectId);
 									Date time = message.createdAt();
+<<<<<<< HEAD
 									timeDB = time.toString();
 									toDB = message.getString("messageTo");
 									fromDB = message.getString("messageFrom");
@@ -156,6 +167,17 @@ public class MainPhoneActivity extends Activity {
 									// add the shit to the sqlitedb
 									MessageItem item = new MessageItem(timeDB, toDB, fromDB, bodyDB);
 									dbHandler.insertMessageMessageItem(item);
+=======
+									String to = message.getString("messageTo");
+									String body = message
+											.getString("messageBody");
+									String totalMessage = "Sent: " + time
+											+ "\n" + "To: " + to + "\n"
+											+ "Message : " + body + "\n";
+									//System.out.println(totalMessage);
+									messageArrayList.add(totalMessage);
+									//Log.d(TAG, "messageArrayList is : " + messageArrayList.size() + " long.");
+>>>>>>> origin/master
 								} catch (ParseException e1) {
 									Log.e(TAG, e1.getMessage());
 								}
@@ -164,12 +186,19 @@ public class MainPhoneActivity extends Activity {
 							for (String s : messageArrayList) {
 								messageListString.append(s);
 								messageListString.append("\n");
+<<<<<<< HEAD
 								Log.d(TAG, "String: " + s +
 								" has been connected.");
 							}
 							System.out.println(messageListString.toString());
 							messageListText.setText(messageListString
 									.toString());
+=======
+								//Log.d(TAG, "String: " + s + " has been connected.");
+							}
+							//System.out.println(messageListString.toString());
+							messageListText.setText(messageListString.toString());
+>>>>>>> origin/master
 						} else {
 							Log.d(TAG, "Error: " + e.getMessage());
 						}
