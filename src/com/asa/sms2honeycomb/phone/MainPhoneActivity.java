@@ -1,11 +1,13 @@
 package com.asa.sms2honeycomb.phone;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,11 +60,11 @@ public class MainPhoneActivity extends Activity {
 		messageField = (EditText) findViewById(R.id.main_message_felid);
 		sendButton = (Button) findViewById(R.id.main_send_btn);
 		logoutButton = (Button) findViewById(R.id.main_logout_btn);
-
+		
 		PushService.subscribe(this,
 				Util.getPushChannel(Util.getUser(), Preferences.TABLET),
 				MainPhoneActivity.class);
-
+		
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View view) {
@@ -86,8 +88,8 @@ public class MainPhoneActivity extends Activity {
 							Log.e(TAG, "Message not successfully saved.");
 						} else {
 							ParsePush push = new ParsePush();
-							push.setChannel(Util.getPushChannel(
-									Util.getUser(), Preferences.TABLET));
+							push.setChannel(Util.getPushChannel(Util.getUser(),
+									Preferences.TABLET));
 							push.setMessage("To: " + to + " Message: " + body);
 							push.sendInBackground(new SendCallback() {
 								@Override
@@ -107,6 +109,7 @@ public class MainPhoneActivity extends Activity {
 						}
 					}
 				});
+
 				// TODO this is for testing the querying and pulling the info
 				// off of the server will be replaced by the one in the Util
 				// section and eventually used in a broadcast reciver to fetch
@@ -119,6 +122,7 @@ public class MainPhoneActivity extends Activity {
 					public void done(List<ParseObject> messageList,
 							ParseException e) {
 						if (e == null) {
+							ArrayList<String> messageArrayList = new ArrayList<String>();
 							Log.d(TAG, "Retrieved " + messageList.size()
 									+ " messages.");
 							for (ParseObject messageObject : messageList) {
@@ -130,13 +134,23 @@ public class MainPhoneActivity extends Activity {
 									String body = message
 											.getString("messageBody");
 									String totalMessage = "Sent: " + time
-											+ " To: " + to + " Message : "
-											+ body;
-									System.out.println(totalMessage);
+											+ "\n" + "To: " + to + "\n"
+											+ "Message : " + body + "\n";
+									//System.out.println(totalMessage);
+									messageArrayList.add(totalMessage);
+									//Log.d(TAG, "messageArrayList is : " + messageArrayList.size() + " long.");
 								} catch (ParseException e1) {
 									Log.e(TAG, e1.getMessage());
 								}
 							}
+							StringBuilder messageListString = new StringBuilder();
+							for (String s : messageArrayList) {
+								messageListString.append(s);
+								messageListString.append("\n");
+								//Log.d(TAG, "String: " + s + " has been connected.");
+							}
+							//System.out.println(messageListString.toString());
+							messageListText.setText(messageListString.toString());
 						} else {
 							Log.d(TAG, "Error: " + e.getMessage());
 						}
@@ -153,8 +167,7 @@ public class MainPhoneActivity extends Activity {
 				if (logoutSuccess) {
 					// unsubscribe to the push channel
 					PushService.unsubscribe(MainPhoneActivity.this, Util
-							.getPushChannel(Util.getUser(),
-									Preferences.TABLET));
+							.getPushChannel(Util.getUser(), Preferences.TABLET));
 					Log.d(TAG, "Log out of user a success");
 					mIntent = new Intent(MainPhoneActivity.this,
 							LauncherActivity.class);
