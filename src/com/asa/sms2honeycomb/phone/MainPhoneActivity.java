@@ -117,6 +117,7 @@ public class MainPhoneActivity extends Activity {
 					public void done(List<ParseObject> messageList,
 							ParseException e) {
 						if (e == null) {
+							ArrayList<String> messageArrayList = new ArrayList<String>();
 							Log.d(TAG, "Retrieved " + messageList.size()
 									+ " messages.");
 							for (ParseObject messageObject : messageList) {
@@ -128,13 +129,23 @@ public class MainPhoneActivity extends Activity {
 									String body = message
 											.getString("messageBody");
 									String totalMessage = "Sent: " + time
-											+ " To: " + to + " Message : "
-											+ body;
-									System.out.println(totalMessage);
+											+ "\n" + "To: " + to + "\n"
+											+ "Message : " + body + "\n";
+									//System.out.println(totalMessage);
+									messageArrayList.add(totalMessage);
+									//Log.d(TAG, "messageArrayList is : " + messageArrayList.size() + " long.");
 								} catch (ParseException e1) {
 									Log.e(TAG, e1.getMessage());
 								}
 							}
+							StringBuilder messageListString = new StringBuilder();
+							for (String s : messageArrayList) {
+								messageListString.append(s);
+								messageListString.append("\n");
+								//Log.d(TAG, "String: " + s + " has been connected.");
+							}
+							//System.out.println(messageListString.toString());
+							messageListText.setText(messageListString.toString());
 						} else {
 							Log.d(TAG, "Error: " + e.getMessage());
 						}
