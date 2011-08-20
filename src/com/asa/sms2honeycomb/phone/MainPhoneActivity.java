@@ -47,8 +47,6 @@ public class MainPhoneActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// TODO: Start the phone activity
-		// I'm thinking this will just direct to the settings page.
 		setContentView(R.layout.main_phone);
 
 		messageListText = (TextView) findViewById(R.id.main_message_list);
@@ -60,7 +58,7 @@ public class MainPhoneActivity extends Activity {
 		logoutButton = (Button) findViewById(R.id.main_logout_btn);
 
 		PushService.subscribe(this,
-				Util.getPushChannel(Util.getUser(), Preferences.TABLET),
+				Util.getPushChannel(Util.getUsernameString(), Preferences.TABLET),
 				MainPhoneActivity.class);
 
 		sendButton.setOnClickListener(new OnClickListener() {
@@ -77,7 +75,7 @@ public class MainPhoneActivity extends Activity {
 				outgoingMessage.put("messageTo", to);
 				outgoingMessage.put("messageBody", body);
 				outgoingMessage.put(Preferences.PARSE_USERNAME_ROW,
-						Util.getUser());
+						Util.getUsernameString());
 				outgoingMessage.saveInBackground(new SaveCallback() {
 					@Override
 					public void done(ParseException e) {
@@ -87,7 +85,7 @@ public class MainPhoneActivity extends Activity {
 						} else {
 							ParsePush push = new ParsePush();
 							push.setChannel(Util.getPushChannel(
-									Util.getUser(), Preferences.TABLET));
+									Util.getUsernameString(), Preferences.TABLET));
 							push.setMessage("To: " + to + " Message: " + body);
 							push.sendInBackground(new SendCallback() {
 								@Override
@@ -148,12 +146,11 @@ public class MainPhoneActivity extends Activity {
 		logoutButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Util.getUser();
 				Util.logoutUser();
 				if (logoutSuccess) {
 					// unsubscribe to the push channel
 					PushService.unsubscribe(MainPhoneActivity.this, Util
-							.getPushChannel(Util.getUser(),
+							.getPushChannel(Util.getUsernameString(),
 									Preferences.TABLET));
 					Log.d(TAG, "Log out of user a success");
 					mIntent = new Intent(MainPhoneActivity.this,
