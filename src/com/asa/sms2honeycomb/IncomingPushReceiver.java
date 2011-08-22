@@ -1,5 +1,6 @@
 package com.asa.sms2honeycomb;
 
+import java.util.Date;
 import java.util.List;
 
 import com.parse.FindCallback;
@@ -7,72 +8,166 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.telephony.SmsManager;
 import android.util.Log;
 
 public class IncomingPushReceiver extends BroadcastReceiver {
-	
+
 	// TODO: The intent to listen for
 	public static final String PUSH_RECEIVED = "com.asa.IncomingPushReceiver.PUSH_RECEIVED";
-	
-	private final String  TAG = "IncomingPushReceiver";
+
+	private final String TAG = "IncomingPushReceiver";
 	private static boolean DEVICE_IS_HONEYCOMB = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
-	private String currentUser = "TestName";
-	
+
+	DatabaseHandler dbHandler;
+
+	public static String timeDB;
+	public static String toDB;
+	public static String fromDB;
+	public static String bodyDB;
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// TODO everything decided if the device is honeycomb or a phone
-		// phone pulls the message from the server and sends the most recent one as a sms message
+		// phone pulls the message from the server and sends the most recent one
+		// as a sms message
 		// then in the table added sent feild = true from false
-		// honeycomb onreceive pulls the most recent messages off of the server and displays them
+		// honeycomb onreceive pulls the most recent messages off of the server
+		// and displays them
 		// return strings of from, to and the body.
-		Log.d(TAG, "Is the IncomingPushReceiver working?");
-		 if (DEVICE_IS_HONEYCOMB) {
-			 // quries the server and gives the combined string with the 
-			 // From: 1234567890
-			 // Time: time
-			 // Message: TextyText
-			 
-			 final String to = null;
-			 final String body = null;
-			 
-			 ParseQuery query = new ParseQuery("IncomingMessage");
-			 query.whereEqualTo(Preferences.PARSE_USERNAME_ROW, currentUser);
-			 query.orderByDescending("createdAt");
-			 query.findInBackground(new FindCallback() {
-			     public void done(List<ParseObject> messageList, ParseException e) {
-			         if (e == null) {
-			             Log.d(TAG, "Retrieved " + messageList.size() + " messages");
-			             Log.d(TAG, messageList.toString());
-			         } else {
-			             Log.d(TAG, "Error: " + e.getMessage());
-			         }
-			     }
-			 });
-		 } else {
-			 ParseQuery query = new ParseQuery("OutgoingMessage");
-			 query.whereEqualTo(Preferences.PARSE_USERNAME_ROW, currentUser);
-			 query.orderByDescending("createdAt");
-			 query.setLimit(1);
-			 query.findInBackground(new FindCallback() {
-			     public void done(List<ParseObject> messageList, ParseException e) {
-			         if (e == null) {
-			             Log.d(TAG, "Retrieved " + messageList.size() + " messages");
-			             Log.d(TAG, messageList.toString());
-//			             SmsManager smsManager = SmsManager.getDefault();
-//			             // TODO: get the list to a string and get to and body out of it
-//			             String smsNumber = to;
-//			             String smsText = body;
-//			             smsManager.sendTextMessage(smsNumber, null, smsText, null, null);
-			         } else {
-			             Log.d(TAG, "Error: " + e.getMessage());
-			         }
-			     }
-			 });
-		 }
-		
+		Log.d(TAG, "Has been triggered");
+		if (DEVICE_IS_HONEYCOMB) {
+			// If device is a tablet it will query the server on the receving of
+			// the push intent. When this happends the message will be pulled
+			// from the server, then stored in the sms2honeycomb.db so it can
+			// later be used in the application.
+			// We what to query the IncommingMessage table
+			final ParseQuery query = new ParseQuery("IncommingMessage");
+			// Sort the Parse Object so only the username of the current user
+			// can be accessed.
+			query.whereEqualTo(Preferences.PARSE_USERNAME_ROW,
+					Util.getUsernameString());
+			// The most recent message added will be on top.
+			query.orderByDescending("createdAt");
+			// Only need to get one message from the server, each message will
+			// be from a push
+			query.setLimit(1);
+			query.findInBackground(new FindCallback() {
+				public void done(List<ParseObject> messageList, ParseException e) {
+					if (e == null) {
+						// For the ParseObjects quering get all that needs to be
+						// done.
+						for (ParseObject messageObject : messageList) {
+							// Get the parse object id
+							String objectId = messageObject.objectId();
+							try {
+								// with the objectid you can query the server
+								ParseObject message = query.get(objectId);
+								// Get the time the message was created at
+								// TODO alter the formating to the timezone and
+								// generally look better
+								Date time = message.createdAt();
+								timeDB = time.toString();
+								// Do not need this since it will be null
+								toDB = message.getString("messageTo");
+								// Get who the message is from (phonenumber).
+								fromDB = message.getString("messageFrom");
+								// Get the body of the message
+								bodyDB = message.getString("messageBody");
+								// Display the total message queryed for logging
+								String totalMessage = "Sent: " + timeDB + "\n"
+										+ "To: " + fromDB + "\n" + "Message : "
+										+ bodyDB + "\n";
+								Log.d(TAG, "New message is: " + totalMessage);
+								// Get the MessageItem object so you can create
+								// the db entry.
+								MessageItem item = new MessageItem(timeDB,
+										toDB, fromDB, bodyDB);
+								// Insert the MessageItem into the
+								// sms2honeycomb.db.
+								dbHandler.insertMessageMessageItem(item);
+							} catch (ParseException e1) {
+								Log.e(TAG, e1.getMessage());
+							}
+						}
+					} else {
+						Log.d(TAG, "Error: " + e.getMessage());
+					}
+				}
+			});
+		} else {
+			// If the device is not a tablet it is a phone so you pull from the
+			// server, but then send a sms message from the data recived.
+			// We want to query the OutgoingMessage table
+			final ParseQuery query = new ParseQuery("OutgoingMessage");
+			// Sort the Parse Object so only the username of the current user
+			// can be accessed.
+			query.whereEqualTo(Preferences.PARSE_USERNAME_ROW,
+					Util.getUsernameString());
+			// The most recent message added will be on top.
+			query.orderByDescending("createdAt");
+			// Only need to get one message from the server, each message will
+			// be from a push
+			query.setLimit(1);
+			query.findInBackground(new FindCallback() {
+				public void done(List<ParseObject> messageList, ParseException e) {
+					if (e == null) {
+						// For the ParseObjects quering get all that needs to be
+						// done.
+						for (ParseObject messageObject : messageList) {
+							// Get the parse object id
+							String objectId = messageObject.objectId();
+							try {
+								// with the objectid you can query the server
+								ParseObject message = query.get(objectId);
+								// Get the time the message was created at for
+								// logging, do not need a time to send a
+								// message.
+								Date time = message.createdAt();
+								String timeString = time.toString();
+								// Get who the message is coming from
+								// (phonenumber).
+								String to = message.getString("messageTo");
+								// Get the body of the message
+								String body = message.getString("messageBody");
+								// Display the total message queryed for logging
+								String totalMessage = "Sent: " + timeString
+										+ "\n" + "To: " + to + "\n"
+										+ "Message : " + body + "\n";
+								Log.d(TAG, "New message is: " + totalMessage);
+								// TODO smsmanager and to send the message to
+								// the to number
+								// Get the SmsManager
+								SmsManager sms = SmsManager.getDefault();
+								// If the message is over the 160 Char limit it
+								// will be choped up.
+								if (body.length() > 160) {
+									// Chops up the message
+									sms.divideMessage(body);
+									// Send the sms message in its parts
+									sms.sendMultipartTextMessage(to, null,
+											sms.divideMessage(body), null, null);
+								} else {
+									// Sends the message without cutting it
+									sms.sendTextMessage(to, null, body, null,
+											null);
+								}
+
+							} catch (ParseException e1) {
+								Log.e(TAG, e1.getMessage());
+							}
+						}
+					} else {
+						Log.d(TAG, "Error: " + e.getMessage());
+					}
+				}
+			});
+		}
+
 	}
 
 }

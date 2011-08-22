@@ -23,9 +23,9 @@ public class SMS2HoneycombLauncher extends Activity {
 		// If the phone is honeycomb based, then start the Honeycomb activity,
 		// if not, start phone activity
 		if (DEVICE_IS_HONEYCOMB) {
-			startCorrectActivity = new Intent(this, MainHoneycombActivity.class);
+			startCorrectActivity = new Intent(this, com.asa.sms2honeycomb.tablet.LauncherActivity.class);
 		} else {
-			startCorrectActivity = new Intent(this, LauncherActivity.class);
+			startCorrectActivity = new Intent(this, com.asa.sms2honeycomb.phone.LauncherActivity.class);
 		}
 		startActivity(startCorrectActivity);
 		finish();

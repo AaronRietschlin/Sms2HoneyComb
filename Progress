@@ -71,6 +71,12 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 8-20-11 (Parker)
 	- Added a sqlite database to store messages so now only need to pull one message from the server at a time
 	
+8-21-11 (Aaron)
+	-Changed name of buttons to be more categorized. ie: Send button is: "button_send"; Register button is: "button_register"
+
+8-22-11 (Parker)
+	- Finished the IncomingPushReciver now we just need an intent to use it
+	- Added a ContactListView to the tablet, just need to change it to a ListFragment and it should work just need to do the onClick part to launch the users message
 	
 	TODO: 		
 		•Encrypt passwords
@@ -81,10 +87,10 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 		•Make BroadcastReceiver and Intent that recognizes when user successfully logged in to finish LauncherActivity (?)
 		•Distinguish between username or password being wrong
 		•Check for internet connection
-		• Make the messages into a list and display them
 		• Add the username to each message pushed to the server
 		•Reset, Change and Forgot Password
-		•Contacts ListView.
+		•Contacts ListView 
+			-DONE 8-22-11
 		•Move the messages into a ListView and sort them by numbers.
 		•Retrive the messages from the sqlitedb
 		•Once a message is pulled delete it? (Parse is adding REST apis so we can have a webpage to send and recive messages?)

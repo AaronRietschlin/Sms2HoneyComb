@@ -53,12 +53,12 @@
 			android:layout_width="0dip" 
 			android:layout_weight="1.0"
 			android:layout_height="wrap_content" 
-			android:text="@string/launcher_login_btn_text" />
+			android:text="@string/button_login" />
 		<Button 
 			android:id="@+id/login_cancel_btn_phone"
 			android:layout_width="0dip" 
 			android:layout_weight="1.0"
 			android:layout_height="wrap_content" 
-			android:text="@string/login_cancel_btn" />
+			android:text="@string/button_cancel" />
 	</LinearLayout>
 </LinearLayout>
