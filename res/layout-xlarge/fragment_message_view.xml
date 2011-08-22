@@ -23,6 +23,6 @@
     			<TextView android:layout_width="match_parent" android:text="TextView" android:id="@+id/textView1" android:layout_height="match_parent"></TextView>
     		</ScrollView>
     </LinearLayout>
-    <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignParentBottom="true" android:layout_alignParentRight="true" android:id="@+id/send_message_button" android:text="@string/send_msg_btn_text"></Button>
+    <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignParentBottom="true" android:layout_alignParentRight="true" android:id="@+id/send_message_button" android:text="@string/button_send"></Button>
     
 </RelativeLayout>
