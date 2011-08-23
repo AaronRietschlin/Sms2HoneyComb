@@ -112,11 +112,17 @@ public class Util {
 	}
 
 	/**
-	 * Logouts the current user via the Parse command
+	 * Logouts the current user via the Parse command returns true if logged
+	 * out.
+	 * 
+	 * @return boolean
 	 */
 	public static boolean logoutUser() {
 		ParseUser.logOut();
-		return true;
+		if (ParseUser.getCurrentUser() == null) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

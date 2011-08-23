@@ -3,6 +3,7 @@ package com.asa.sms2honeycomb;
 import java.util.Date;
 import java.util.List;
 
+import com.asa.sms2honeycomb.phone.MainPhoneActivity;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -23,7 +24,7 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 	private final String TAG = "IncomingPushReceiver";
 	private static boolean DEVICE_IS_HONEYCOMB = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
 
-	DatabaseHandler dbHandler;
+	DatabaseAdapter dbAdapter;
 
 	public static String timeDB;
 	public static String toDB;
@@ -32,13 +33,10 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// TODO everything decided if the device is honeycomb or a phone
-		// phone pulls the message from the server and sends the most recent one
-		// as a sms message
-		// then in the table added sent feild = true from false
-		// honeycomb onreceive pulls the most recent messages off of the server
-		// and displays them
-		// return strings of from, to and the body.
+		//TODO figure out what to do with the context problem or this will not work.
+		//dbAdapter = new DatabaseAdapter(Context.this);
+		dbAdapter.open();
+		
 		Log.d(TAG, "Has been triggered");
 		if (DEVICE_IS_HONEYCOMB) {
 			// If device is a tablet it will query the server on the receving of
@@ -89,7 +87,7 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 										toDB, fromDB, bodyDB);
 								// Insert the MessageItem into the
 								// sms2honeycomb.db.
-								dbHandler.insertMessageMessageItem(item);
+								dbAdapter.insertMessageItem(item);
 							} catch (ParseException e1) {
 								Log.e(TAG, e1.getMessage());
 							}

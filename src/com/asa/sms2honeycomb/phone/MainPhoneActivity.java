@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.asa.sms2honeycomb.DatabaseHandler;
+import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.MessageItem;
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
@@ -45,7 +45,7 @@ public class MainPhoneActivity extends Activity {
 
 	ArrayList<String> messageArrayList;
 	
-	public static DatabaseHandler dbHandler;
+	public static DatabaseAdapter dbAdapter;
 
 	Intent mIntent;
 
@@ -71,8 +71,8 @@ public class MainPhoneActivity extends Activity {
 
 		messageArrayList = new ArrayList<String>();
 		
-		dbHandler = new DatabaseHandler(MainPhoneActivity.this);
-		dbHandler.open();
+		dbAdapter = new DatabaseAdapter(MainPhoneActivity.this);
+		dbAdapter.open();
 
 		PushService.subscribe(this, Util.getPushChannel(
 				Util.getUsernameString(), Preferences.TABLET),
@@ -149,19 +149,19 @@ public class MainPhoneActivity extends Activity {
 									String totalMessage = "Sent: " + timeDB
 											+ "\n" + "To: " + toDB + "\n"
 											+ "Message : " + bodyDB + "\n";
-									//System.out.println(totalMessage);
-									messageArrayList.add(totalMessage);
+									System.out.println(totalMessage);
+									//messageArrayList.add(totalMessage);
 									//Log.d(TAG, "messageArrayList is : " +
 									//messageArrayList.size() + " long.");
 									// add the shit to the sqlitedb
 									MessageItem item = new MessageItem(timeDB, toDB, fromDB, bodyDB);
-									dbHandler.insertMessageMessageItem(item);
+									dbAdapter.insertMessageItem(item);
 								} catch (ParseException e1) {
 									Log.e(TAG, e1.getMessage());
 								}
 							}
 							StringBuilder messageListString = new StringBuilder();
-							for (String s : messageArrayList) {
+							for (String s : dbAdapter.getMessageArrayList("KEY_TO", "1234567")) {
 								messageListString.append(s);
 								messageListString.append("\n");
 								Log.d(TAG, "String: " + s +
@@ -182,7 +182,7 @@ public class MainPhoneActivity extends Activity {
 
 			public void onClick(View v) {
 				Util.logoutUser();
-				if (logoutSuccess) {
+				if (Util.logoutUser()) {
 					// unsubscribe to the push channel
 					PushService.unsubscribe(MainPhoneActivity.this, Util
 							.getPushChannel(Util.getUsernameString(),
