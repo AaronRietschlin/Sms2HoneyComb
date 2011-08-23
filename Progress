@@ -73,14 +73,10 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	
 8-21-11 (Aaron)
 	-Changed name of buttons to be more categorized. ie: Send button is: "button_send"; Register button is: "button_register"
-<<<<<<< HEAD
 
 8-22-11 (Parker)
 	- Finished the IncomingPushReciver now we just need an intent to use it
 	- Added a ContactListView to the tablet, just need to change it to a ListFragment and it should work just need to do the onClick part to launch the users message
-=======
-	-
->>>>>>> origin/master
 	
 	TODO: 		
 		•Encrypt passwords

@@ -64,18 +64,11 @@ public final class R {
         public static final int fragment_message_view=0x7f030001;
         public static final int launcher_activity_tablet=0x7f030002;
         public static final int launcher_phone=0x7f030003;
-<<<<<<< HEAD
         public static final int list_item=0x7f030004;
         public static final int login_phone=0x7f030005;
         public static final int main_phone=0x7f030006;
         public static final int register_activity_phone=0x7f030007;
         public static final int register_phone=0x7f030008;
-=======
-        public static final int login_phone=0x7f030004;
-        public static final int main_phone=0x7f030005;
-        public static final int register_activity_phone=0x7f030006;
-        public static final int register_phone=0x7f030007;
->>>>>>> origin/master
     }
     public static final class string {
         public static final int app_name=0x7f050001;
