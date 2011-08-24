@@ -120,28 +120,23 @@ public class DatabaseAdapter {
 	}
 
 	/**
-	 * Querys the Database for the key and what to sortBy and the values are
-	 * given by the Time descending. The keys are: KEY_ID, KEY_TIME, KEY_TO,
-	 * KEY_FROM, KEY_BODY. Returns an ArrayList that can be used with a ListView
-	 * to display the messages
+	 * Querys the Database for the number given getting both the TO and the FROM.
 	 * 
 	 * @param String
-	 *            key
-	 * @param String
-	 *            sortBy
+	 *            number
+	 *            
 	 * @return ArrayList<String> list
 	 */
-	public ArrayList<String> getMessageArrayList(String key, String sortBy) {
+	public ArrayList<String> getMessageArrayList(String number) {
 		ArrayList<String> list = new ArrayList<String>();
-		// Only get values from the to number given and sort by time oldest at
+		// Only get values from the to and from number given and sort by time oldest at
 		// the end of the list
-		// TODO get both of the TO and FROM messages combined into one ArrayList
 		Cursor cursor = db.query(true, DATABASE_TABLE, new String[] { KEY_ID,
-				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, KEY_FROM + " AND "
-				+ KEY_TO + "=" + sortBy, null, null, null, KEY_TIME, null);
+				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, KEY_TO + "=" + number + " OR " + KEY_FROM + "=" + number ,
+				null, null, null, KEY_TIME, null);
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
-			throw new SQLException("No location item found for " + key + " #"
-					+ sortBy);
+			throw new SQLException("No location item found for number: "
+					+ number);
 		}
 		if (cursor.moveToFirst()) {
 			do {
