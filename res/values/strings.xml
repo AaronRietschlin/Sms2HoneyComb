@@ -5,9 +5,10 @@
     
     
     <string name="button_send">Send</string>
-    <string name="button_register">Register</string>
-    <string name="button_login">Login</string>
+    <string name="button_register">Create Account</string>
+    <string name="button_login">Sign In</string>
     <string name="button_cancel">Cancel</string>
+    <string name="button_signup">Sign Up</string>
     
     <string name="dialog_login_message">Logging in...</string>
     <string name="dialog_register_message">Registering...</string>

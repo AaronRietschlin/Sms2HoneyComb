@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<EditText android:id="@+id/register_email_field_tab"
+		android:layout_height="wrap_content" android:inputType="textEmailAddress"
+		android:hint="@string/register_enter_email" android:layout_width="350dp"
+		android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
+		android:layout_marginTop="239dp" android:singleLine="true">
+	</EditText>
+	<EditText android:id="@+id/register_username_field_tab"
+		android:layout_height="wrap_content" android:inputType="textPersonName"
+		android:layout_width="350dp" android:layout_below="@+id/register_email_field_tab"
+		android:layout_alignLeft="@+id/register_email_field_tab" android:hint="@string/register_enter_username"
+		android:layout_marginTop="25dp" android:singleLine="true">
+	</EditText>
+	<EditText android:id="@+id/register_password_field_tab"
+		android:layout_height="wrap_content" android:inputType="textPassword"
+		android:layout_width="350dp" android:layout_below="@+id/register_username_field_tab"
+		android:hint="@string/register_enter_password"
+		android:layout_alignLeft="@+id/register_username_field_tab"
+		android:layout_marginTop="25dp" android:singleLine="true">
+	</EditText>
+	<Button android:id="@+id/register_button_tablet" android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:text="@string/button_signup"
+		android:layout_below="@+id/register_password_field_tab"
+		android:layout_marginTop="25dp" android:layout_alignLeft="@+id/register_password_field_tab"
+		android:layout_alignRight="@+id/register_password_field_tab"></Button>
+
+</RelativeLayout>
+<!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"> 
+	</LinearLayout> -->
