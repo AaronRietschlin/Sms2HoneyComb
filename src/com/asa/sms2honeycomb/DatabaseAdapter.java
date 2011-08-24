@@ -137,8 +137,8 @@ public class DatabaseAdapter {
 		// the end of the list
 		// TODO get both of the TO and FROM messages combined into one ArrayList
 		Cursor cursor = db.query(true, DATABASE_TABLE, new String[] { KEY_ID,
-				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, KEY_FROM + "AND" + KEY_TO + "=" + sortBy,
-				null, null, null, KEY_TIME, null);
+				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, KEY_FROM + "AND"
+				+ KEY_TO + "=" + sortBy, null, null, null, KEY_TIME, null);
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
 			throw new SQLException("No location item found for " + key + " #"
 					+ sortBy);
@@ -193,9 +193,11 @@ public class DatabaseAdapter {
 			_db.execSQL(DATABASE_CREATE);
 		}
 
-		// Called when there is a database wersion mismatch meaning that the
-		// version
-		// of the database on disk needs to be upgraded to the current version.
+		/*
+		 * Called when there is a database wersion mismatch meaning that the
+		 * version of the database on disk needs to be upgraded to the current
+		 * version.
+		 */
 		@Override
 		public void onUpgrade(SQLiteDatabase _db, int _oldVersion,
 				int _newVersion) {
@@ -204,11 +206,11 @@ public class DatabaseAdapter {
 					+ " to " + _newVersion
 					+ ", which will destroy all old data");
 
-			// Upgrade the exisiting database to conform ro rh nwq version.
-			// Multiple
-			// previous version can ve handled by comparing _oldVersion and
-			// _newVersion
-			// values.
+			/*
+			 * Upgrade the existing database to conform to the new version.
+			 * Multiple previous version can be handled by comparing _oldVersion
+			 * and _newVersion values.
+			 */
 
 			// The simplest case is to drop the old table and create a new one.
 			_db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
