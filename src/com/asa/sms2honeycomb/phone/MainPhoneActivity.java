@@ -20,7 +20,7 @@ import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.MessageItem;
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
-import com.asa.sms2honeycomb.Util;
+import com.asa.sms2honeycomb.Util.Util;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -161,7 +161,7 @@ public class MainPhoneActivity extends Activity {
 								}
 							}
 							StringBuilder messageListString = new StringBuilder();
-							for (String s : dbAdapter.getMessageArrayList("KEY_TO", "1234567")) {
+							for (String s : dbAdapter.getMessageArrayList("KEY_TO")) {
 								messageListString.append(s);
 								messageListString.append("\n");
 								Log.d(TAG, "String: " + s +

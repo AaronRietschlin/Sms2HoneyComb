@@ -13,6 +13,8 @@
     <string name="dialog_login_message">Logging in...</string>
     <string name="dialog_register_message">Registering...</string>
     
+    <string name="parse_connection_error">An error occurred when attempting to connect to servers. Please try again later.</string>
+    
     <string name="login_username_text">Username:</string>
     <string name="login_password_text">Password:</string>
     <string name="login_username_hint">Enter your username...</string>
@@ -26,6 +28,7 @@
     <string name="invalid_email_none_entered">You must enter an email.</string>
     <string name="invalid_password_none_entered">You must enter a password.</string>
     <string name="invalid_username_none_entered">You must enter a username.</string>
+    <string name="invalid_username_password">The username or password is incorrect. Please try again.</string>
     
     <string name="register_enter_username">Enter Desired Username: </string>
     <string name="register_enter_email">Enter Your Email:</string>

@@ -8,7 +8,6 @@
 		android:layout_alignParentTop="true" android:layout_alignParentLeft="true"
 		android:layout_marginLeft="466dp" android:layout_marginTop="288dp"
 		android:singleLine="true" android:hint="@string/login_username_text">
-		<requestFocus></requestFocus>
 	</EditText>
 	<EditText android:id="@+id/login_password_field_tablet"
 		android:layout_height="wrap_content" android:singleLine="true"

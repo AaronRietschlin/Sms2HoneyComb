@@ -22,9 +22,9 @@
 		android:layout_alignLeft="@+id/register_username_field_tab"
 		android:layout_marginTop="25dp" android:singleLine="true">
 	</EditText>
-	<Button android:id="@+id/register_button_tablet" android:layout_height="wrap_content"
-		android:layout_width="wrap_content" android:text="@string/button_signup"
-		android:layout_below="@+id/register_password_field_tab"
+	<Button android:id="@+id/register_button_tablet"
+		android:layout_height="wrap_content" android:layout_width="wrap_content"
+		android:text="@string/button_signup" android:layout_below="@+id/register_password_field_tab"
 		android:layout_marginTop="25dp" android:layout_alignLeft="@+id/register_password_field_tab"
 		android:layout_alignRight="@+id/register_password_field_tab"></Button>
 
