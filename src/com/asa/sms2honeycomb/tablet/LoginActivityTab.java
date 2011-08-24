@@ -59,8 +59,15 @@ public class LoginActivityTab extends Activity {
 				validLogin = true;
 				mContext = LoginActivityTab.this;
 
-				// Check if username has been entered.
+				// Check if username has whitespace.
 				if (Util.containsWhiteSpace(usernameText)) {
+					validLogin = false;
+					LoginUtil.displayLoginToast(mContext,
+							R.string.invalid_username_none_entered);
+				}
+
+				// Check if username has been entered
+				if (usernameText.length() == 0) {
 					validLogin = false;
 					LoginUtil.displayLoginToast(mContext,
 							R.string.invalid_username_none_entered);
@@ -84,7 +91,6 @@ public class LoginActivityTab extends Activity {
 				}
 			}
 		});
-		
 
 		if (Preferences.DEBUG) {
 			usernameField.setText("TestName");
@@ -115,4 +121,6 @@ public class LoginActivityTab extends Activity {
 					}
 				});
 	}
+	
+	
 }

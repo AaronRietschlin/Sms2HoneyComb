@@ -1,15 +1,6 @@
 package com.asa.sms2honeycomb.Util;
 
-import com.asa.sms2honeycomb.R;
-import com.asa.sms2honeycomb.phone.LoginActivity;
-import com.asa.sms2honeycomb.phone.MainPhoneActivity;
-import com.asa.sms2honeycomb.tablet.LoginActivityTab;
-import com.parse.LogInCallback;
-import com.parse.ParseException;
-import com.parse.ParseUser;
-
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,6 +28,30 @@ public class LoginUtil {
 	public static void displayLoginToast(Context context, int message) {
 		Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
 		toast.show();
+	}
+
+	/**
+	 * Checks to see if the inputed email is vaild by checking to see if there
+	 * is an "@" or a "." If the email is vaild returns true and returns false
+	 * if the email is not vaild.
+	 * 
+	 * @param email
+	 * @return
+	 */
+	public static boolean isValidEmail(String email) {
+		String atChar = "@";
+		String dotChar = ".";
+		if (email != null) {
+			int index1 = email.indexOf(atChar);
+			int index2 = email.indexOf(dotChar);
+			if ((index1 != -1) && (index2 != -1)) {
+				// contatins @ and a . so vaild
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
 	}
 
 }

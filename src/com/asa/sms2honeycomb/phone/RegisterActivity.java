@@ -93,7 +93,7 @@ public class RegisterActivity extends Activity {
 					emailErrorType = Preferences.REG_EMPTY;
 				} else {
 					// Check if email is valid.
-					if (!isValidEmail(emailText)
+					if (!LoginUtil.isValidEmail(emailText)
 							|| Util.containsWhiteSpace(emailText)) {
 						invalidEmail = true;
 						emailErrorType = Preferences.REG_INVALID;
@@ -127,7 +127,7 @@ public class RegisterActivity extends Activity {
 				// If there is an invaild email display the error text.
 				if (invalidEmail) {
 					displayEmailFailureText(emailErrorType);
-				} 
+				}
 
 				// If there is an invaild username display the error text.
 				if (invalidUsername) {
@@ -201,31 +201,6 @@ public class RegisterActivity extends Activity {
 	}
 
 	/**
-	 * Checks to see if the inputed email is vaild by checking to see if there
-	 * is an "@" or a "." If the email is vaild returns true and returns false
-	 * if the email is not vaild.
-	 * 
-	 * @param email
-	 * @return
-	 */
-	private boolean isValidEmail(String email) {
-		String atChar = "@";
-		String dotChar = ".";
-		if (email != null) {
-			int index1 = email.indexOf(atChar);
-			int index2 = email.indexOf(dotChar);
-			if ((index1 != -1) && (index2 != -1)) {
-				// contatins @ and a . so vaild
-				return true;
-			} else {
-				return false;
-			}
-		}
-		Log.d(TAG, "The inputed email is null.");
-		return false;
-	}
-
-	/**
 	 * Sets the text and makes visible the email error message based on the
 	 * input from the user.
 	 * 
@@ -270,12 +245,15 @@ public class RegisterActivity extends Activity {
 		String message = "";
 		switch (errorType) {
 		case Preferences.REG_EMPTY:
-			LoginUtil.displayLoginToast(mContext, R.string.invalid_username_none_entered);
+			LoginUtil.displayLoginToast(mContext,
+					R.string.invalid_username_none_entered);
 			break;
 		case Preferences.REG_INVALID:
-			LoginUtil.displayLoginToast(mContext, R.string.invalid_username_whitespace);
+			LoginUtil.displayLoginToast(mContext,
+					R.string.invalid_username_whitespace);
 		case Preferences.REG_IN_TABLE:
-			LoginUtil.displayLoginToast(mContext, R.string.invalid_username_taken);
+			LoginUtil.displayLoginToast(mContext,
+					R.string.invalid_username_taken);
 			break;
 		}
 	}
@@ -295,10 +273,12 @@ public class RegisterActivity extends Activity {
 		String message = "";
 		switch (errorType) {
 		case Preferences.REG_EMPTY:
-			LoginUtil.displayLoginToast(mContext, R.string.invalid_password_none_entered);
+			LoginUtil.displayLoginToast(mContext,
+					R.string.invalid_password_none_entered);
 			break;
 		case Preferences.REG_INVALID:
-			LoginUtil.displayLoginToast(mContext, R.string.invalid_password_whitespace);
+			LoginUtil.displayLoginToast(mContext,
+					R.string.invalid_password_whitespace);
 		}
 	}
 
@@ -353,7 +333,6 @@ public class RegisterActivity extends Activity {
 						invalidLoginToast.show();
 					}
 				}
-
 			}
 		});
 	}
