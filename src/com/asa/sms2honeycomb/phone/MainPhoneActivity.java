@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -47,7 +49,8 @@ public class MainPhoneActivity extends Activity {
 	
 	public static DatabaseAdapter dbAdapter;
 
-	Intent mIntent;
+	private Intent mIntent;
+	private SharedPreferences prefs; 
 
 	private boolean logoutSuccess;
 
@@ -68,7 +71,9 @@ public class MainPhoneActivity extends Activity {
 		messageField = (EditText) findViewById(R.id.main_message_felid);
 		sendButton = (Button) findViewById(R.id.main_send_btn);
 		logoutButton = (Button) findViewById(R.id.main_logout_btn);
-
+		
+		prefs = getSharedPreferences(Preferences.PREFS_NAME, Context.MODE_PRIVATE);
+		
 		messageArrayList = new ArrayList<String>();
 		
 		dbAdapter = new DatabaseAdapter(MainPhoneActivity.this);
@@ -181,7 +186,6 @@ public class MainPhoneActivity extends Activity {
 		logoutButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Util.logoutUser();
 				if (Util.logoutUser()) {
 					// unsubscribe to the push channel
 					PushService.unsubscribe(MainPhoneActivity.this, Util
@@ -213,8 +217,8 @@ public class MainPhoneActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem menuItem) {
 		switch (menuItem.getItemId()) {
 		case Preferences.MENU_LOGOUT:
-			ParseUser.logOut();
-			mIntent = new Intent(MainPhoneActivity.this, LauncherActivity.class);
+			Util.logoutUser();
+			mIntent = new Intent(MainPhoneActivity.this, LoginActivity.class);
 			startActivity(mIntent);
 			finish();
 

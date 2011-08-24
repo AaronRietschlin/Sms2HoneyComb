@@ -47,7 +47,13 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_phone);
 
-		prefs = getSharedPreferences(Preferences.PREFS_NAME, MODE_PRIVATE);
+		if(ParseUser.getCurrentUser() != null){
+			mIntent = new Intent(LoginActivity.this, MainPhoneActivity.class);
+			startActivity(mIntent);
+			finish();
+		}
+		
+		prefs = getSharedPreferences(Preferences.PREFS_NAME, MODE_PRIVATE);		
 		loginButton = (Button) findViewById(R.id.login_login_btn_phone);
 		registerButton = (Button) findViewById(R.id.login_create_account_btn_phone);
 		forgotPasswordButton = (Button) findViewById(R.id.login_forgot_password_button_phone);
@@ -98,7 +104,6 @@ public class LoginActivity extends Activity {
 									R.string.dialog_login_message), true);
 					loginUser(usernameText, passwordText);
 				}
-
 			}
 		});
 

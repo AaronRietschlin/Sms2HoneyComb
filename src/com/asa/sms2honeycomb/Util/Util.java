@@ -3,6 +3,7 @@ package com.asa.sms2honeycomb.Util;
 import java.util.Date;
 import java.util.List;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.asa.sms2honeycomb.Preferences;
@@ -123,6 +124,7 @@ public class Util {
 		if (ParseUser.getCurrentUser() == null) {
 			return true;
 		}
+		
 		return false;
 	}
 

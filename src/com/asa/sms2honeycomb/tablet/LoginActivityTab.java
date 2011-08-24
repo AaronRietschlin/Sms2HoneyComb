@@ -39,6 +39,12 @@ public class LoginActivityTab extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_activity_tablet);
 
+		if(ParseUser.getCurrentUser() != null){
+			mIntent = new Intent(LoginActivityTab.this, MainHoneycombActivity.class);
+			startActivity(mIntent);
+			finish();
+		}
+		
 		createAccountButton = (Button) findViewById(R.id.login_create_account_btn_tab);
 		loginButton = (Button) findViewById(R.id.login_button_tablet);
 		usernameField = (EditText) findViewById(R.id.login_username_field_tablet);
