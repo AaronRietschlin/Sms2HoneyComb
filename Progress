@@ -85,6 +85,12 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	-Moved DEVICE_IS_HONEYCOMB to Preferences file. 
 	-Categorized the invalid login strings in strings.xml
 	-Changed the invalid notifications in RegisterActivity to toasts instead of the red invalid text.
+	-Added Login and Registration activities
+	-Added login functionality to Honeycomb
+	-Added Registration functionality to Honeycomb
+	-Removed the device specific launchers
+		-They go straight to Login which has option to create new account
+	-Put a Forgot password button on login screens
 	
 	TODO: 		
 		•Encrypt passwords
@@ -102,6 +108,8 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 		•Move the messages into a ListView and sort them by numbers.
 		•Retrive the messages from the sqlitedb
 		•Once a message is pulled delete it? (Parse is adding REST apis so we can have a webpage to send and recive messages?)
+		•Fix the buttons to bottom of screen
+		•Make it so, when softkeyboard comes up, the login/registration screen moves up as well 
 			
 		
 
