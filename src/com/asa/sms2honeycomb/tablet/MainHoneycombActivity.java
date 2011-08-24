@@ -12,7 +12,7 @@ import android.view.MenuItem;
 
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
-import com.asa.sms2honeycomb.Util.Util;
+import com.asa.sms2honeycomb.util.Util;
 import com.asa.sms2honeycomb.phone.LoginActivity;
 import com.asa.sms2honeycomb.phone.MainPhoneActivity;
 import com.parse.PushService;
