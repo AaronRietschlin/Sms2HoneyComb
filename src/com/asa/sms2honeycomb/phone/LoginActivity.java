@@ -29,7 +29,8 @@ public class LoginActivity extends Activity {
 	private final String TAG = "LoginActivity";
 
 	private Button loginButton;
-	private Button cancelButton;
+	private Button registerButton;
+	private Button forgotPasswordButton;
 	private EditText usernameField;
 	private EditText passwordField;
 
@@ -48,7 +49,8 @@ public class LoginActivity extends Activity {
 
 		prefs = getSharedPreferences(Preferences.PREFS_NAME, MODE_PRIVATE);
 		loginButton = (Button) findViewById(R.id.login_login_btn_phone);
-		cancelButton = (Button) findViewById(R.id.login_cancel_btn_phone);
+		registerButton = (Button) findViewById(R.id.login_create_account_btn_phone);
+		forgotPasswordButton = (Button) findViewById(R.id.login_forgot_password_button_phone);
 		usernameField = (EditText) findViewById(R.id.login_username_field_phone);
 		passwordField = (EditText) findViewById(R.id.login_password_field_phone);
 
@@ -100,9 +102,11 @@ public class LoginActivity extends Activity {
 			}
 		});
 
-		cancelButton.setOnClickListener(new OnClickListener() {
+		registerButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				finish();
+				mIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+				startActivity(mIntent);
+				
 			}
 		});
 		// Allow user to click on the DPAD, or enter button within the password
@@ -152,6 +156,8 @@ public class LoginActivity extends Activity {
 							mIntent = new Intent(LoginActivity.this,
 									MainPhoneActivity.class);
 							startActivity(mIntent);
+							
+							finish();
 						} else if (user == null) {
 							// Username or password is incorrect.
 							Log.d(TAG, "Username is incorrect...");

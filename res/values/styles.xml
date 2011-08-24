@@ -3,4 +3,8 @@
     <style name="InvalidRegistration">
     	<item name="android:textColor">@color/red</item>
     </style>
+    <style name="TextButtonsPhone">
+    	<item name="android:textColor">@color/white</item>
+    	<item name="android:background">@null</item>
+    </style>
 </resources>

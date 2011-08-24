@@ -91,6 +91,7 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	-Removed the device specific launchers
 		-They go straight to Login which has option to create new account
 	-Put a Forgot password button on login screens
+	-Got rid of Cancel buttons on registerActivity and Login activity.
 	
 	TODO: 		
 		•Encrypt passwords

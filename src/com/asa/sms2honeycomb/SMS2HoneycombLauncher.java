@@ -29,7 +29,7 @@ public class SMS2HoneycombLauncher extends Activity {
 					com.asa.sms2honeycomb.tablet.LoginActivityTab.class);
 		} else {
 			startCorrectActivity = new Intent(this,
-					com.asa.sms2honeycomb.phone.LauncherActivity.class);
+					com.asa.sms2honeycomb.phone.LoginActivity.class);
 		}
 		startActivity(startCorrectActivity);
 		finish();
