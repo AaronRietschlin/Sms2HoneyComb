@@ -78,6 +78,8 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	- Finished the IncomingPushReciver now we just need an intent to use it
 	- Added a ContactListView to the tablet, just need to change it to a ListFragment and it should work just need to do the onClick part to launch the users message
 	
+8-23-11 (Parker)
+	- Worked on getting messages from the sqlite db see the getMessageArrayList and changed the name of the Database
 	TODO: 		
 		•Encrypt passwords
 			-DONE 8-16-11 Using ParseUser which does this for us. 
