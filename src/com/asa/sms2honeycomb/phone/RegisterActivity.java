@@ -15,12 +15,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
-import com.asa.sms2honeycomb.Util;
+import com.asa.sms2honeycomb.Util.LoginUtil;
+import com.asa.sms2honeycomb.Util.Util;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -42,12 +43,6 @@ public class RegisterActivity extends Activity {
 
 	private Button registerButton;
 	private Button cancelButton;
-	private LinearLayout invalidUsernameLL;
-	private LinearLayout invalidEmailLL;
-	private LinearLayout invalidPasswordLL;
-	private TextView invalidUsernameText;
-	private TextView invalidEmailText;
-	private TextView invalidPasswordText;
 	private EditText emailField;
 	private EditText usernameField;
 	private EditText passwordField;
@@ -65,12 +60,6 @@ public class RegisterActivity extends Activity {
 
 		registerButton = (Button) findViewById(R.id.register_btn_phone);
 		cancelButton = (Button) findViewById(R.id.register_cancel_btn_phone);
-		invalidUsernameText = (TextView) findViewById(R.id.register_invalid_username_phone);
-		invalidUsernameLL = (LinearLayout) findViewById(R.id.register_invalid_username_ll);
-		invalidEmailLL = (LinearLayout) findViewById(R.id.register_invalid_email_ll);
-		invalidEmailText = (TextView) findViewById(R.id.register_invalid_email_phone);
-		invalidPasswordLL = (LinearLayout) findViewById(R.id.register_invaild_password_ll);
-		invalidPasswordText = (TextView) findViewById(R.id.register_invaild_password_phone);
 		emailField = (EditText) findViewById(R.id.register_email_phone);
 		usernameField = (EditText) findViewById(R.id.register_username_phone);
 		passwordField = (EditText) findViewById(R.id.register_password_phone);
@@ -138,15 +127,11 @@ public class RegisterActivity extends Activity {
 				// If there is an invaild email display the error text.
 				if (invalidEmail) {
 					displayEmailFailureText(emailErrorType);
-				} else {
-					invalidEmailLL.setVisibility(View.GONE);
-				}
+				} 
 
 				// If there is an invaild username display the error text.
 				if (invalidUsername) {
 					displayUsernameFailureText(nameErrorType);
-				} else {
-					invalidUsernameLL.setVisibility(View.GONE);
 				}
 
 				// If there is an invaild password displat the error text.
@@ -154,8 +139,6 @@ public class RegisterActivity extends Activity {
 					displayPasswordFailureText(passwordErrorType);
 					System.out.println("Password Error type = "
 							+ passwordErrorType);
-				} else {
-					invalidPasswordLL.setVisibility(View.GONE);
 				}
 
 				// Log.e(TAG, "Email: " + String.valueOf(invalidEmail));
@@ -259,19 +242,16 @@ public class RegisterActivity extends Activity {
 		String message = "";
 		switch (errorType) {
 		case Preferences.REG_EMPTY:
-			message = getResources().getString(
-					R.string.register_no_email_entered);
+			LoginUtil.displayLoginToast(mContext,
+					R.string.invalid_email_none_entered);
 			break;
 		case Preferences.REG_INVALID:
-			message = getResources().getString(R.string.register_invalid_email);
+			LoginUtil.displayLoginToast(mContext, R.string.invalid_email);
 			break;
 		case Preferences.REG_IN_TABLE:
-			message = getResources().getString(
-					R.string.register_duplicate_email);
+			LoginUtil.displayLoginToast(mContext, R.string.invalid_email_taken);
 			break;
 		}
-		invalidEmailText.setText(message);
-		invalidEmailLL.setVisibility(View.VISIBLE);
 	}
 
 	/**
@@ -290,19 +270,14 @@ public class RegisterActivity extends Activity {
 		String message = "";
 		switch (errorType) {
 		case Preferences.REG_EMPTY:
-			message = getResources().getString(
-					R.string.register_no_username_entered);
+			LoginUtil.displayLoginToast(mContext, R.string.invalid_username_none_entered);
 			break;
 		case Preferences.REG_INVALID:
-			message = getResources().getString(
-					R.string.register_invalid_username);
+			LoginUtil.displayLoginToast(mContext, R.string.invalid_username_whitespace);
 		case Preferences.REG_IN_TABLE:
-			message = getResources()
-					.getString(R.string.register_username_taken);
+			LoginUtil.displayLoginToast(mContext, R.string.invalid_username_taken);
 			break;
 		}
-		invalidUsernameText.setText(message);
-		invalidUsernameLL.setVisibility(View.VISIBLE);
 	}
 
 	/**
@@ -320,15 +295,11 @@ public class RegisterActivity extends Activity {
 		String message = "";
 		switch (errorType) {
 		case Preferences.REG_EMPTY:
-			message = getResources().getString(
-					R.string.register_no_password_entered);
+			LoginUtil.displayLoginToast(mContext, R.string.invalid_password_none_entered);
 			break;
 		case Preferences.REG_INVALID:
-			message = getResources().getString(
-					R.string.register_invalid_password);
+			LoginUtil.displayLoginToast(mContext, R.string.invalid_password_whitespace);
 		}
-		invalidPasswordText.setText(message);
-		invalidPasswordLL.setVisibility(View.VISIBLE);
 	}
 
 	private void registerUser(final String username, String password,
