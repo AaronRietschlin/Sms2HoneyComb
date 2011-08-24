@@ -3,6 +3,10 @@ package com.asa.sms2honeycomb.Util;
 import java.util.Date;
 import java.util.List;
 
+<<<<<<< HEAD
+=======
+import android.content.SharedPreferences;
+>>>>>>> origin/master
 import android.util.Log;
 
 import com.asa.sms2honeycomb.Preferences;

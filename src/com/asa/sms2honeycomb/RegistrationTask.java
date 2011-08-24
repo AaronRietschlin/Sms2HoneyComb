@@ -1,5 +1,7 @@
 package com.asa.sms2honeycomb;
 
+import com.asa.sms2honeycomb.Util.Util;
+
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
