@@ -22,9 +22,8 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 	public static final String PUSH_RECEIVED = "com.asa.IncomingPushReceiver.PUSH_RECEIVED";
 
 	private final String TAG = "IncomingPushReceiver";
-	private static boolean DEVICE_IS_HONEYCOMB = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
 
-	DatabaseAdapter dbAdapter;
+	private DatabaseAdapter dbAdapter;
 
 	public static String timeDB;
 	public static String toDB;
@@ -33,17 +32,20 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		//TODO figure out what to do with the context problem or this will not work.
-		//dbAdapter = new DatabaseAdapter(Context.this);
+		// TODO figure out what to do with the context problem or this will not
+		// work.
+		// dbAdapter = new DatabaseAdapter(Context.this);
 		dbAdapter.open();
-		
-		Log.d(TAG, "Has been triggered");
-		if (DEVICE_IS_HONEYCOMB) {
-			// If device is a tablet it will query the server on the receving of
-			// the push intent. When this happends the message will be pulled
-			// from the server, then stored in the sms2honeycomb.db so it can
-			// later be used in the application.
-			// We what to query the IncommingMessage table
+
+		Log.d(TAG, "IncomingPushReceiver has been triggered");
+		if (Preferences.DEVICE_IS_HONEYCOMB) {
+			/*
+			 * If device is a tablet it will query the server on the receving of
+			 * the push intent. When this happends the message will be pulled
+			 * from the server, then stored in the sms2honeycomb.db so it can
+			 * later be used in the application. We what to query the
+			 * IncommingMessage table
+			 */
 			final ParseQuery query = new ParseQuery("IncommingMessage");
 			// Sort the Parse Object so only the username of the current user
 			// can be accessed.
@@ -68,6 +70,12 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 								// Get the time the message was created at
 								// TODO alter the formating to the timezone and
 								// generally look better
+
+								/*
+								 * TODO : Parker, look into SimpleDateFormat; It
+								 * allows you to set the formatting of the time.
+								 */
+
 								Date time = message.createdAt();
 								timeDB = time.toString();
 								// Do not need this since it will be null

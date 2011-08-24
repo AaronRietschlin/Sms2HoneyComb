@@ -10,22 +10,26 @@ import com.parse.Parse;
 import com.parse.PushService;
 
 public class SMS2HoneycombLauncher extends Activity {
-	// Checks the version number of the phone.
-	private static boolean DEVICE_IS_HONEYCOMB = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);// Checks the version number of the
+											// phone.
+		Preferences.DEVICE_IS_HONEYCOMB = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
+
 		// Initialize Parse to allow server access.
-		Parse.initialize(this, "CDu0jepIuQQrZBJwIItLNYs7B2RntnwdqvjmsFB0", "cLBmzNyXWj0Fn3ItWR8sq79JMVJfIiD0udntjBku");
+		Parse.initialize(this, "CDu0jepIuQQrZBJwIItLNYs7B2RntnwdqvjmsFB0",
+				"cLBmzNyXWj0Fn3ItWR8sq79JMVJfIiD0udntjBku");
 		PushService.subscribe(this, "", MainHoneycombActivity.class);
 		Intent startCorrectActivity;
 		// If the phone is honeycomb based, then start the Honeycomb activity,
 		// if not, start phone activity
-		if (DEVICE_IS_HONEYCOMB) {
-			startCorrectActivity = new Intent(this, com.asa.sms2honeycomb.tablet.LauncherActivity.class);
+		if (Preferences.DEVICE_IS_HONEYCOMB) {
+			startCorrectActivity = new Intent(this,
+					com.asa.sms2honeycomb.tablet.LauncherActivity.class);
 		} else {
-			startCorrectActivity = new Intent(this, com.asa.sms2honeycomb.phone.LauncherActivity.class);
+			startCorrectActivity = new Intent(this,
+					com.asa.sms2honeycomb.phone.LauncherActivity.class);
 		}
 		startActivity(startCorrectActivity);
 		finish();

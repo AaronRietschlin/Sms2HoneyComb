@@ -137,7 +137,7 @@ public class DatabaseAdapter {
 		// the end of the list
 		// TODO get both of the TO and FROM messages combined into one ArrayList
 		Cursor cursor = db.query(true, DATABASE_TABLE, new String[] { KEY_ID,
-				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, KEY_FROM + "AND"
+				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, KEY_FROM + " AND "
 				+ KEY_TO + "=" + sortBy, null, null, null, KEY_TIME, null);
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
 			throw new SQLException("No location item found for " + key + " #"
