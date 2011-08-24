@@ -80,6 +80,26 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	
 8-23-11 (Parker)
 	- Worked on getting messages from the sqlite db see the getMessageArrayList and changed the name of the Database
+	
+8-23-11 (Aaron) 
+	-Moved DEVICE_IS_HONEYCOMB to Preferences file. 
+	-Categorized the invalid login strings in strings.xml
+	-Changed the invalid notifications in RegisterActivity to toasts instead of the red invalid text.
+	-Added Login and Registration activities
+	-Added login functionality to Honeycomb
+	-Added Registration functionality to Honeycomb
+	-Removed the device specific launchers
+		-They go straight to Login which has option to create new account
+	-Put a Forgot password button on login screens
+	-Got rid of Cancel buttons on registerActivity and Login activity.
+	-Keeps session state
+		-When logged in and coming from Android Homescreen, it skips Login screen
+		-When logged out, it goes to Login screen.
+		
+8-24-2011 (Parker)
+	- Worked on the ContactsListFragment and the MessageListFragment
+		- ContactsListFragement passes on the phonenumber, when clicked, to the MessageListFragment wia an intent to sortout the internal database.		
+	
 	TODO: 		
 		•Encrypt passwords
 			-DONE 8-16-11 Using ParseUser which does this for us. 
@@ -96,6 +116,8 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 		•Move the messages into a ListView and sort them by numbers.
 		•Retrive the messages from the sqlitedb
 		•Once a message is pulled delete it? (Parse is adding REST apis so we can have a webpage to send and recive messages?)
+		•Fix the buttons to bottom of screen
+		•Make it so, when softkeyboard comes up, the login/registration screen moves up as well 
 			
 		
 

@@ -1,15 +1,15 @@
 package com.asa.sms2honeycomb;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.asa.sms2honeycomb.phone.MainPhoneActivity;
+import com.asa.sms2honeycomb.Util.Util;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,9 +22,8 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 	public static final String PUSH_RECEIVED = "com.asa.IncomingPushReceiver.PUSH_RECEIVED";
 
 	private final String TAG = "IncomingPushReceiver";
-	private static boolean DEVICE_IS_HONEYCOMB = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
 
-	DatabaseAdapter dbAdapter;
+	private DatabaseAdapter dbAdapter;
 
 	public static String timeDB;
 	public static String toDB;
@@ -33,17 +32,20 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		//TODO figure out what to do with the context problem or this will not work.
-		//dbAdapter = new DatabaseAdapter(Context.this);
+		// Get the context from the onReceive
+		dbAdapter = new DatabaseAdapter(context);
+		// Open the database
 		dbAdapter.open();
-		
-		Log.d(TAG, "Has been triggered");
-		if (DEVICE_IS_HONEYCOMB) {
-			// If device is a tablet it will query the server on the receving of
-			// the push intent. When this happends the message will be pulled
-			// from the server, then stored in the sms2honeycomb.db so it can
-			// later be used in the application.
-			// We what to query the IncommingMessage table
+
+		Log.d(TAG, "IncomingPushReceiver has been triggered");
+		if (Preferences.DEVICE_IS_HONEYCOMB) {
+			/*
+			 * If device is a tablet it will query the server on the receving of
+			 * the push intent. When this happends the message will be pulled
+			 * from the server, then stored in the sms2honeycomb.db so it can
+			 * later be used in the application. We what to query the
+			 * IncommingMessage table
+			 */
 			final ParseQuery query = new ParseQuery("IncommingMessage");
 			// Sort the Parse Object so only the username of the current user
 			// can be accessed.
@@ -65,11 +67,12 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 							try {
 								// with the objectid you can query the server
 								ParseObject message = query.get(objectId);
-								// Get the time the message was created at
-								// TODO alter the formating to the timezone and
-								// generally look better
+								// Get the time the message was added to the server
 								Date time = message.createdAt();
-								timeDB = time.toString();
+								// Format the time to (Fri Jan 13 12:00)
+								SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd hh:mm");
+								String formatedTime = sdf.format(time);
+								timeDB = formatedTime.toString();
 								// Do not need this since it will be null
 								toDB = message.getString("messageTo");
 								// Get who the message is from (phonenumber).
@@ -137,9 +140,7 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 										+ "\n" + "To: " + to + "\n"
 										+ "Message : " + body + "\n";
 								Log.d(TAG, "New message is: " + totalMessage);
-								// TODO smsmanager and to send the message to
-								// the to number
-								// Get the SmsManager
+								// get the smsmanager as sms
 								SmsManager sms = SmsManager.getDefault();
 								// If the message is over the 160 Char limit it
 								// will be choped up.

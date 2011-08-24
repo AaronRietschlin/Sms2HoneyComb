@@ -3,16 +3,24 @@ package com.asa.sms2honeycomb.tablet;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
+import com.asa.sms2honeycomb.Util.Util;
+import com.asa.sms2honeycomb.phone.LoginActivity;
+import com.asa.sms2honeycomb.phone.MainPhoneActivity;
 import com.parse.PushService;
 
 public class MainHoneycombActivity extends Activity{
 	private final String TAG = "MainHoneycombActivity";
+	
+	private Intent mIntent;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,5 +49,24 @@ public class MainHoneycombActivity extends Activity{
 		Log.d(TAG, "Push channel has been created for: " + key + "_"
 				+ nameOfPushChannel);
 		return pushChannel;
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, Preferences.MENU_LOGOUT, 0, "Logout");
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem menuItem) {
+		switch (menuItem.getItemId()) {
+		case Preferences.MENU_LOGOUT:
+			Util.logoutUser();
+			mIntent = new Intent(MainHoneycombActivity.this, LoginActivityTab.class);
+			startActivity(mIntent);
+			finish();
+			return true;
+		}
+		return false;
 	}
 }
