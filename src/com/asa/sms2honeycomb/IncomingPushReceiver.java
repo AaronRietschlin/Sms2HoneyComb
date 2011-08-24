@@ -5,10 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.asa.sms2honeycomb.Util.Util;
-<<<<<<< HEAD
-=======
-import com.asa.sms2honeycomb.phone.MainPhoneActivity;
->>>>>>> origin/master
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -36,15 +32,9 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-<<<<<<< HEAD
 		// Get the context from the onReceive
 		dbAdapter = new DatabaseAdapter(context);
 		// Open the database
-=======
-		// TODO figure out what to do with the context problem or this will not
-		// work.
-		// dbAdapter = new DatabaseAdapter(Context.this);
->>>>>>> origin/master
 		dbAdapter.open();
 
 		Log.d(TAG, "IncomingPushReceiver has been triggered");
@@ -77,19 +67,7 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 							try {
 								// with the objectid you can query the server
 								ParseObject message = query.get(objectId);
-<<<<<<< HEAD
 								// Get the time the message was added to the server
-=======
-								// Get the time the message was created at
-								// TODO alter the formating to the timezone and
-								// generally look better
-
-								/*
-								 * TODO : Parker, look into SimpleDateFormat; It
-								 * allows you to set the formatting of the time.
-								 */
-
->>>>>>> origin/master
 								Date time = message.createdAt();
 								// Format the time to (Fri Jan 13 12:00)
 								SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd hh:mm");

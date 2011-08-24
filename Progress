@@ -95,13 +95,10 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	-Keeps session state
 		-When logged in and coming from Android Homescreen, it skips Login screen
 		-When logged out, it goes to Login screen.
-<<<<<<< HEAD
 		
 8-24-2011 (Parker)
 	- Worked on the ContactsListFragment and the MessageListFragment
 		- ContactsListFragement passes on the phonenumber, when clicked, to the MessageListFragment wia an intent to sortout the internal database.		
-=======
->>>>>>> origin/master
 	
 	TODO: 		
 		•Encrypt passwords
