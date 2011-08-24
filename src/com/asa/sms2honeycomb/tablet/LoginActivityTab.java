@@ -109,6 +109,7 @@ public class LoginActivityTab extends Activity {
 							mIntent = new Intent(LoginActivityTab.this,
 									MainHoneycombActivity.class);
 							startActivity(mIntent);
+							finish();
 						} else if (user == null) {
 							// Username or password is incorrect.
 							LoginUtil.displayLoginToast(mContext,
