@@ -1,63 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" 
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent" 
 	android:weightSum="1">
 	<LinearLayout 
 		android:layout_height="wrap_content"
-		android:orientation="vertical" 
-		android:layout_width="match_parent"
-		android:id="@+id/linearLayout1" 
-		android:layout_weight="0.98">
-		<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/main_message_list" android:text="@string/message_list_text"></TextView>
-	</LinearLayout>
-	<LinearLayout 
-		android:orientation="vertical"
 		android:layout_width="match_parent" 
-		android:id="@+id/linearLayout2"
-		android:layout_height="wrap_content">
-		<TextView 
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content" 
-			android:id="@+id/main_to_text"
-			android:text="@string/main_to_text">
-		</TextView>
+		android:id="@+id/phone_to_layout"
+		android:weightSum="1"
+		android:gravity="center|center_vertical"
+		android:layout_alignParentTop="true">
+		<TextView android:text="To:" android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>"
 		<EditText 
-			android:layout_height="wrap_content"
-			android:layout_width="match_parent" 
-			android:id="@+id/main_to_felid"></EditText>
-		<TextView 
-			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" 
-			android:id="@+id/main_message_text"
-			android:text="@string/main_message_text">
-		</TextView>
-		<EditText 
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content" 
-			android:id="@+id/main_message_felid">
+			android:layout_width="fill_parent" 
+			android:id="@+id/phone_to_field">
 			<requestFocus></requestFocus>
 		</EditText>
 	</LinearLayout>
+	<ListView
+		android:id="@android:id/list"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/phone_to_layout">
+	</ListView>
 	<LinearLayout 
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent" 
-		android:id="@+id/linearLayout3"
-		android:weightSum="1">
+		android:id="@+id/phone_text_button"
+		android:weightSum="1"
+		android:gravity="center|center_vertical"
+		android:layout_alignParentBottom="true">
+		<EditText 
+			android:layout_height="wrap_content" 
+			android:id="@+id/main_message_felid" 
+			android:layout_width="wrap_content" 
+			android:layout_weight="0.90">
+		</EditText>
 		<Button 
 			android:id="@+id/main_send_btn" 
 			android:text="@string/main_send_btn"
 			android:layout_height="wrap_content"
-			android:layout_width="148dp"
-			android:layout_weight="0.40">
-		</Button>
-		<Button 
-			android:layout_width="133dp" 
-			android:layout_height="wrap_content"
-			android:layout_weight="0.58" 
-			android:id="@+id/main_logout_btn"
-			android:text="@string/main_logout_btn_text">
+			android:layout_width="wrap_content"
+			android:layout_weight="0.10">
 		</Button>
 	</LinearLayout>
-</LinearLayout>
+</RelativeLayout>
