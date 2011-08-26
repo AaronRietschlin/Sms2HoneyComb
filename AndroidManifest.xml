@@ -34,7 +34,7 @@
         <activity android:name=".tablet.MainHoneycombActivity"
                   android:label="@string/app_name">
         </activity>
-        <activity android:label="@string/app_name" android:name=".phone.MainPhoneActivity">
+        <activity android:label="@string/app_name" android:name=".phone.MainPhoneActivity" android:windowSoftInputMode="adjustResize">
         </activity>
         <activity android:label="@string/app_name" android:name=".phone.LauncherActivity">
         </activity>
@@ -45,7 +45,7 @@
         </activity>
         <activity android:label="@string/app_name" android:name=".tablet.LauncherActivity">
         </activity>
-        <activity android:label="@string/app_name" android:name=".tablet.LoginActivityTab" android:windowSoftInputMode="adjustPan">
+        <activity android:label="@string/app_name" android:name=".tablet.LoginActivityTab" android:windowSoftInputMode="adjustResize">
         </activity>
         <activity android:label="@string/app_name" android:name=".tablet.RegisterActivityTab">
         </activity>
@@ -64,7 +64,7 @@
 		  </intent-filter>
 		</receiver>
 		<receiver android:name=".IncomingPushReceiver"></receiver>
-		<activity android:name=".tablet.ContactsListActivty" android:logo="@drawable/icon"></activity>
+		<activity android:name=".phone.ContactsActivity" android:icon="@drawable/icon"></activity>
 
     </application>
 </manifest>

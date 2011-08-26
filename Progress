@@ -99,6 +99,9 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 8-24-2011 (Parker)
 	- Worked on the ContactsListFragment and the MessageListFragment
 		- ContactsListFragement passes on the phonenumber, when clicked, to the MessageListFragment wia an intent to sortout the internal database.		
+
+8-26-2011 (Parker)
+	- Got the Contacts anf Message activitys to work on phone
 	
 	TODO: 		
 		•Encrypt passwords

@@ -5,18 +5,23 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
+import android.app.ListActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.MessageItem;
@@ -28,60 +33,83 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SaveCallback;
 import com.parse.SendCallback;
 
-public class MainPhoneActivity extends Activity {
+public class MainPhoneActivity extends ListActivity {
 
 	private final String TAG = "MainPhoneActivity";
 
-	TextView messageListText;
-	TextView toText;
-	TextView messageText;
+	ListView messageListView;
 	EditText toField;
 	EditText messageField;
 	Button sendButton;
-	Button logoutButton;
 
 	ArrayList<String> messageArrayList;
-	
+	ArrayAdapter<String> messageAdapter;
+
 	public static DatabaseAdapter dbAdapter;
 
 	private Intent mIntent;
-	private SharedPreferences prefs; 
 
-	private boolean logoutSuccess;
-
-	public static String timeDB;
-	public static String toDB;
-	public static String fromDB;
-	public static String bodyDB;
+	private String phonenumber;
+	private String timeDB;
+	private String toDB;
+	private String fromDB;
+	private String bodyDB;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_phone);
 
-		messageListText = (TextView) findViewById(R.id.main_message_list);
-		toText = (TextView) findViewById(R.id.main_to_text);
-		messageText = (TextView) findViewById(R.id.main_message_text);
-		toField = (EditText) findViewById(R.id.main_to_felid);
-		messageField = (EditText) findViewById(R.id.main_message_felid);
-		sendButton = (Button) findViewById(R.id.main_send_btn);
-		logoutButton = (Button) findViewById(R.id.main_logout_btn);
-		
-		prefs = getSharedPreferences(Preferences.PREFS_NAME, Context.MODE_PRIVATE);
-		
-		messageArrayList = new ArrayList<String>();
-		
+		setContentView(R.layout.main_phone);
+		// TODO use BaseAdapter instead of ArrayAdapter so we can update the
+		// messages with in the ListView see api demo List8
+
+		// The intent passes on the data to the Bundle when the Activity is
+		// created, you have to getExtras from the intent
+		mIntent = getIntent();
+		Bundle extras = mIntent.getExtras();
+
+		// The phone number is gotten by the key "phonenumber" and put into the
+		// String
+		phonenumber = extras.getString("phonenumber");
+		// check it there is a phone number testing
+		if (phonenumber == null) {
+			Log.e(TAG,
+					"The intent from the contacts list did not work phonenumber: "
+							+ phonenumber);
+		} else {
+			Log.d(TAG, "The number selected from the contacts is: "
+					+ phonenumber);
+		}
+
+		// Open up the database
 		dbAdapter = new DatabaseAdapter(MainPhoneActivity.this);
 		dbAdapter.open();
 
+		// Subscribe to the needed PushServer
 		PushService.subscribe(this, Util.getPushChannel(
 				Util.getUsernameString(), Preferences.TABLET),
 				MainPhoneActivity.class);
+
+		// IT FUCKING HAS TO BE andriod.R.id.list fucking POS differences
+		messageListView = (ListView) findViewById(android.R.id.list);
+		toField = (EditText) findViewById(R.id.phone_to_field);
+		messageField = (EditText) findViewById(R.id.main_message_felid);
+		sendButton = (Button) findViewById(R.id.main_send_btn);
+
+		// Get the Adapter for the list so iy can be updated separately
+		messageAdapter = new ArrayAdapter<String>(this, R.layout.list_item,
+				dbAdapter.getMessageArrayList(phonenumber));
+		// Set the list's adapter
+		setListAdapter(messageAdapter);
+
+		messageListView = getListView();
+		messageListView.setTextFilterEnabled(true);
+
+		messageArrayList = new ArrayList<String>();
 
 		sendButton.setOnClickListener(new OnClickListener() {
 
@@ -90,6 +118,7 @@ public class MainPhoneActivity extends Activity {
 				// then send them on to parse and to the push channel(phone)
 				// on then on the phone send the messages via a sms message to
 				// the to number
+				toField.setText(phonenumber);
 				final String to = toField.getText().toString().trim();
 				final String body = messageField.getText().toString().trim();
 
@@ -129,13 +158,11 @@ public class MainPhoneActivity extends Activity {
 					}
 				});
 				// TODO this is for testing the querying and pulling the info
-				// off of the server will be replaced by the one in the Util
-				// section and eventually used in a broadcast reciver to fetch
-				// messages from the server
+				// off of the server
 				final ParseQuery query = new ParseQuery("OutgoingMessage");
 				query.whereEqualTo(Preferences.PARSE_USERNAME_ROW, "TestName");
 				query.orderByDescending("createdAt");
-				query.setLimit(10);
+				query.setLimit(1);
 				query.findInBackground(new FindCallback() {
 					public void done(List<ParseObject> messageList,
 							ParseException e) {
@@ -155,26 +182,14 @@ public class MainPhoneActivity extends Activity {
 											+ "\n" + "To: " + toDB + "\n"
 											+ "Message : " + bodyDB + "\n";
 									System.out.println(totalMessage);
-									//messageArrayList.add(totalMessage);
-									//Log.d(TAG, "messageArrayList is : " +
-									//messageArrayList.size() + " long.");
 									// add the shit to the sqlitedb
-									MessageItem item = new MessageItem(timeDB, toDB, fromDB, bodyDB);
+									MessageItem item = new MessageItem(timeDB,
+											toDB, fromDB, bodyDB);
 									dbAdapter.insertMessageItem(item);
 								} catch (ParseException e1) {
 									Log.e(TAG, e1.getMessage());
 								}
 							}
-							StringBuilder messageListString = new StringBuilder();
-							for (String s : dbAdapter.getMessageArrayList("KEY_TO")) {
-								messageListString.append(s);
-								messageListString.append("\n");
-								Log.d(TAG, "String: " + s +
-								" has been connected.");
-							}
-							System.out.println(messageListString.toString());
-							messageListText.setText(messageListString
-									.toString());
 						} else {
 							Log.d(TAG, "Error: " + e.getMessage());
 						}
@@ -183,28 +198,15 @@ public class MainPhoneActivity extends Activity {
 			}
 		});
 
-		logoutButton.setOnClickListener(new OnClickListener() {
+		messageListView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// When clicked, show a toast with the TextView text
+				Toast.makeText(getApplicationContext(),
+						((TextView) view).getText(), Toast.LENGTH_SHORT).show();
 
-			public void onClick(View v) {
-				if (Util.logoutUser()) {
-					// unsubscribe to the push channel
-					PushService.unsubscribe(MainPhoneActivity.this, Util
-							.getPushChannel(Util.getUsernameString(),
-									Preferences.TABLET));
-					Log.d(TAG, "Log out of user a success");
-					mIntent = new Intent(MainPhoneActivity.this,
-							LauncherActivity.class);
-					startActivity(mIntent);
-				} else {
-					Log.e(TAG, "Logout of user is a failure");
-				}
 			}
 		});
-
-		if (Preferences.DEBUG) {
-			toField.setText("1234567");
-			messageField.setText("Just sending a texty text?!?!?");
-		}
 	}
 
 	@Override

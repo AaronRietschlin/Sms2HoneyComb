@@ -120,23 +120,26 @@ public class DatabaseAdapter {
 	}
 
 	/**
-	 * Querys the Database for the number given getting both the TO and the FROM.
+	 * Querys the Database for the number given getting both the TO and the
+	 * FROM.
 	 * 
 	 * @param String
 	 *            number
-	 *            
+	 * 
 	 * @return ArrayList<String> list
 	 */
 	public ArrayList<String> getMessageArrayList(String number) {
 		ArrayList<String> list = new ArrayList<String>();
-		// Only get values from the to and from number given and sort by time oldest at
+		// Only get values from the to and from number given and sort by time
+		// oldest at
 		// the end of the list
 		Cursor cursor = db.query(true, DATABASE_TABLE, new String[] { KEY_ID,
-				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, KEY_TO + "=" + number + " OR " + KEY_FROM + "=" + number ,
-				null, null, null, KEY_TIME, null);
+				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, KEY_TO + "=" + number
+				+ " OR " + KEY_FROM + "=" + number, null, null, null, KEY_TIME,
+				null);
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
-			throw new SQLException("No location item found for number: "
-					+ number);
+			Log.e(TAG, "No messages for number: " + number);
+			list.add("No messages for " + number);
 		}
 		if (cursor.moveToFirst()) {
 			do {

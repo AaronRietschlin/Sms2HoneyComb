@@ -6,18 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
 import com.asa.sms2honeycomb.util.LoginUtil;
 import com.asa.sms2honeycomb.util.Util;
-import com.asa.sms2honeycomb.phone.MainPhoneActivity;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -48,6 +45,7 @@ public class RegisterActivity extends Activity {
 
 		prefs = this.getSharedPreferences(Preferences.PREFS_NAME,
 				Context.MODE_PRIVATE);
+		
 		editor = prefs.edit();
 
 		registerButton.setOnClickListener(new OnClickListener() {
@@ -144,7 +142,7 @@ public class RegisterActivity extends Activity {
 					editor.commit();
 					validRegistration = true;
 
-					mIntent = new Intent(mContext, MainPhoneActivity.class);
+					mIntent = new Intent(mContext, ContactsActivity.class);
 					startActivity(mIntent);
 					finish();
 				} else {

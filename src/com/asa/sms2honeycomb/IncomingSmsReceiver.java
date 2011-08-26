@@ -9,6 +9,7 @@ import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.asa.sms2honeycomb.util.Util;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
@@ -58,6 +59,8 @@ public class IncomingSmsReceiver extends BroadcastReceiver {
 
 				// Send to server.
 				ParseObject incomingMessage = new ParseObject("IncomingMessage");
+				// Need the username for sorting
+				incomingMessage.put("username", Util.getUsernameString());
 				incomingMessage.put("messageBody", body);
 				incomingMessage.put("messageFrom", from);
 				// TODO: Get device number? incomingMessage.put("messageTo", );
