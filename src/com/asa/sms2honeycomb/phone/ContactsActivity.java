@@ -19,15 +19,15 @@ import android.widget.Toast;
 
 public class ContactsActivity extends ListActivity {
 
-	ListView contactsListView;
-	ArrayList<String> contacts;
-	Intent mIntent;
+	private ListView contactsListView;
+	private ArrayList<String> contacts;
+	private Intent mIntent;
 
 	// Called when the activity is first created.
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-
+		setContentView(R.layout.message_list);
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item,
 				getCotactArrayList()));
 
@@ -58,6 +58,8 @@ public class ContactsActivity extends ListActivity {
 
 				// Start the activity
 				startActivity(mIntent);
+
+				// TODO Need to get ALL contact information. Picture, name, etc
 			}
 		});
 	}

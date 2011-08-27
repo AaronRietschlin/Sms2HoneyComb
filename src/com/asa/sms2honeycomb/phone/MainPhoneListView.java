@@ -30,16 +30,16 @@ import android.widget.Toast;
 
 public class MainPhoneListView extends ListActivity {
 
-	ListView messageListView;
-	TextView messageListText;
-	TextView toText;
-	TextView messageText;
-	EditText toField;
-	EditText messageField;
-	Button sendButton;
-	Button logoutButton;
-	ArrayList<String> messageArrayList;
-	DatabaseAdapter dbAdapter;
+	private ListView messageListView;
+	private TextView messageListText;
+	private TextView toText;
+	private TextView messageText;
+	private EditText toField;
+	private EditText messageField;
+	private Button sendButton;
+	private Button logoutButton;
+	private ArrayList<String> messageArrayList;
+	private DatabaseAdapter dbAdapter;
 
 	private final String TAG = "MainPhoneListView";
 
@@ -65,5 +65,11 @@ public class MainPhoneListView extends ListActivity {
 
 			}
 		});
+	}
+	
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		dbAdapter.close();
 	}
 }

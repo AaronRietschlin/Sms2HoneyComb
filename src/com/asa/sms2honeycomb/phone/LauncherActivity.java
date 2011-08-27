@@ -11,9 +11,9 @@ import com.asa.sms2honeycomb.R;
 import com.parse.ParseUser;
 
 public class LauncherActivity extends Activity{
-	Button registerButton;
-	Button loginButton;
-	Intent mIntent; 
+	private Button registerButton;
+	private Button loginButton;
+	private Intent mIntent; 
 	private ParseUser currentUser;
 	@Override
 	public void onCreate(Bundle savedInstanceState){

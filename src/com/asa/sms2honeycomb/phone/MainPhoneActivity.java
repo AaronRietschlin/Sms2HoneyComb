@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,14 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.MessageItem;
@@ -41,13 +39,13 @@ public class MainPhoneActivity extends ListActivity {
 
 	private final String TAG = "MainPhoneActivity";
 
-	ListView messageListView;
-	EditText toField;
-	EditText messageField;
-	Button sendButton;
+	private ListView messageListView;
+	private EditText toField;
+	private EditText messageField;
+	private Button sendButton;
 
-	ArrayList<String> messageArrayList;
-	ArrayAdapter<String> messageAdapter;
+	private ArrayList<String> messageArrayList;
+	private ArrayAdapter<String> messageAdapter;
 
 	public static DatabaseAdapter dbAdapter;
 
@@ -223,8 +221,14 @@ public class MainPhoneActivity extends ListActivity {
 			mIntent = new Intent(MainPhoneActivity.this, LoginActivity.class);
 			startActivity(mIntent);
 			finish();
-
 		}
 		return false;
+	}
+
+	@Override
+	public void onDestroy() {
+		// Closing the database adapter when the activity gets destroyed.
+		super.onDestroy();
+		dbAdapter.close();
 	}
 }

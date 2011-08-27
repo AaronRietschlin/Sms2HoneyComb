@@ -103,6 +103,10 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 8-26-2011 (Parker)
 	- Got the Contacts anf Message activitys to work on phone
 	
+8-26-2011 (Aaron)
+	- Closed the database adapter when the activities are destroyed
+	- Made a message list xml that contains the list that we need.
+	
 	TODO: 		
 		•Encrypt passwords
 			-DONE 8-16-11 Using ParseUser which does this for us. 
