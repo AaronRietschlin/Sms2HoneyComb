@@ -1,14 +1,13 @@
 package com.asa.sms2honeycomb.phone;
 
 import java.util.ArrayList;
-
-import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -19,15 +18,15 @@ import android.widget.Toast;
 
 public class ContactsActivity extends ListActivity {
 
-	ListView contactsListView;
-	ArrayList<String> contacts;
-	Intent mIntent;
+	private ListView contactsListView;
+	private Intent mIntent;
+	private final String TAG = "ContactsActivity";
 
 	// Called when the activity is first created.
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-
+		setContentView(R.layout.message_list);
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item,
 				getCotactArrayList()));
 
@@ -37,14 +36,28 @@ public class ContactsActivity extends ListActivity {
 		contactsListView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// When clicked, show a toast with the TextView text
-				Toast.makeText(getApplicationContext(),
-						((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-				// TODO make an intent to laucnh an new Activity/Fragment with
-				// the contacts messages( will be sorted by number from the
-				// database)
-				// TODO parse the number out of the contact
+				// Gets the number from the ListView
+				CharSequence numberSplit = (((TextView) view).getText());
+				// Foing to use ( and ) to split the string the number should be
+				// in the ()
+				String delims = "[()]";
+				// make a String array of the results (should only be one)
+				String[] tokens = numberSplit.toString().split(delims);
+				// get the results out of the array with StringBuilder (better
+				// way)??
+				StringBuilder tokenString = new StringBuilder();
+				for (String s : tokens) {
+					tokenString.append(s);
+					tokenString.append("\n");
+				}
+				Log.d(TAG, "The number selected is: " + tokenString.toString());
+
+				// TODO this is for testing
 				String number = "1234567";
+				// This is the actual code, but my test phone has no contacts
+				// on it
+				// String number = tokenString.toString();
+
 				// Create the Intent to launch the activity
 				mIntent = new Intent(ContactsActivity.this,
 						MainPhoneActivity.class);
@@ -58,6 +71,8 @@ public class ContactsActivity extends ListActivity {
 
 				// Start the activity
 				startActivity(mIntent);
+
+				// TODO Need to get ALL contact information. Picture, name, etc
 			}
 		});
 	}

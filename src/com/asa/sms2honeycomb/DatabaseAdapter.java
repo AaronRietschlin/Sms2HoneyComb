@@ -139,7 +139,7 @@ public class DatabaseAdapter {
 				null);
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
 			Log.e(TAG, "No messages for number: " + number);
-			list.add("No messages for " + number);
+			list.add("No messages for: " + number + " Start a conversation.");
 		}
 		if (cursor.moveToFirst()) {
 			do {
@@ -147,30 +147,63 @@ public class DatabaseAdapter {
 				String to = cursor.getString(TO_COLUMN);
 				String from = cursor.getString(FROM_COLUMN);
 				String body = cursor.getString(BODY_COLUMN);
-				Log.d(TAG, "MessageItem containing: " + time + to + from + body
-						+ " queryed and pulled from the table: "
-						+ DATABASE_TABLE);
 				if (to == null) {
 					String message = "Received: " + time + "\n" + "From: "
 							+ from + "\n" + "Message : " + body + "\n";
 					list.add(message);
-					Log.d(TAG, message
-							+ " was added to the ArrayList with the length of "
-							+ list.size());
 				}
 				if (from == null) {
 					String message = "Sent: " + time + "\n" + "To: " + to
 							+ "\n" + "Message : " + body + "\n";
 					list.add(message);
-					Log.d(TAG, message
-							+ " was added to the ArrayList with the length of "
-							+ list.size());
 				}
 			} while (cursor.moveToNext());
 			{
 				cursor.close();
 			}
 		}
+		return list;
+	}
+
+	public ArrayList<String> getConversationList() {
+		ArrayList<String> list = new ArrayList<String>();
+		// TODO get the cursor to query the db and get the number of entries for
+		// both the to and from that are from the same person MAKE IT WORK
+		
+		// public Cursor query (boolean distinct, String table, String[]
+		// columns, String selection, String[] selectionArgs, String groupBy,
+		// String having, String orderBy, String limit)
+		Cursor cursor = db.query(true, DATABASE_TABLE, new String[] { KEY_ID,
+				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, KEY_TO + "="
+				+ "1234567" + " AND " + "KEY_FROM" + "=" + "1234567", null, null, null, null, null);
+
+		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
+			Log.e(TAG, "No conversations.");
+			list.add("No conversations start a new one.");
+		}
+
+		if (cursor.moveToFirst()) {
+			do {
+				String to = cursor.getString(TO_COLUMN);
+				Log.d(TAG, "Conversations from: " + to + " have been found.");
+				if (to != null) {
+					String conversationCount = Integer.toString(cursor
+							.getColumnCount());
+					String conversationItem = " " + to + " ("
+							+ conversationCount + ")";
+					list.add(conversationItem);
+					Log.d(TAG, conversationItem + " with the count of "
+							+ conversationCount
+							+ " was added to the ArrayList with the length of "
+							+ list.size());
+				}
+
+			} while (cursor.moveToNext());
+			{
+				cursor.close();
+			}
+		}
+
 		return list;
 	}
 

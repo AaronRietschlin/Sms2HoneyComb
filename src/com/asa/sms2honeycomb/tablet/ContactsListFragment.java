@@ -19,9 +19,9 @@ import android.widget.Toast;
 
 public class ContactsListFragment extends ListFragment {
 
-	ListView contactsListView;
-	ArrayList<String> contacts;
-	Intent mIntent;
+	private ListView contactsListView;
+	private ArrayList<String> contacts;
+	private Intent mIntent;
 
 	// Called when the activity is first created.
 	@Override

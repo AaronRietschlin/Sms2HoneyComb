@@ -48,7 +48,7 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.login_phone);
 
 		if(ParseUser.getCurrentUser() != null){
-			mIntent = new Intent(LoginActivity.this, ContactsActivity.class);
+			mIntent = new Intent(LoginActivity.this, ConversationActivity.class);
 			startActivity(mIntent);
 			finish();
 		}
@@ -159,7 +159,7 @@ public class LoginActivity extends Activity {
 						if (e == null && user != null) {
 							// Successful login.
 							mIntent = new Intent(LoginActivity.this,
-									ContactsActivity.class);
+									ConversationActivity.class);
 							startActivity(mIntent);
 							
 							finish();

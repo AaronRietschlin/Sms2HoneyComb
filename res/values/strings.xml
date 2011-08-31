@@ -41,6 +41,7 @@
     <string name="main_to_text">To:</string>
     <string name="main_logout_btn_text">Logout</string>
     <string name="message_list_text">Messages</string>
+    <string name="conversation_new_btn_text">New Conversation</string>
     
     
 </resources>

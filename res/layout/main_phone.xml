@@ -11,16 +11,12 @@
 		android:weightSum="1"
 		android:gravity="center|center_vertical"
 		android:layout_alignParentTop="true">
-<<<<<<< HEAD
 		<TextView 
 		android:text="To:" 
 		android:id="@+id/textView1" 
 		android:layout_width="wrap_content" 
 		android:layout_height="wrap_content">
-		</TextView>"
-=======
-		<TextView android:text="To:" android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>"
->>>>>>> origin/master
+		</TextView>
 		<EditText 
 			android:layout_height="wrap_content" 
 			android:layout_width="fill_parent" 
@@ -29,15 +25,17 @@
 		</EditText>
 	</LinearLayout>
 	<ListView
-		android:id="@android:id/list"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/phone_to_layout">
+	android:layout_height="match_parent" 
+	android:layout_width="wrap_content" 
+	android:layout_below="@+id/phone_to_layout" 
+	android:layout_alignParentLeft="true" 
+	android:id="@android:id/list"
+	android:layout_above="@+id/phone_send_layout">
 	</ListView>
 	<LinearLayout 
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent" 
-		android:id="@+id/phone_text_button"
+		android:id="@+id/phone_send_layout"
 		android:weightSum="1"
 		android:gravity="center|center_vertical"
 		android:layout_alignParentBottom="true">
@@ -55,8 +53,4 @@
 			android:layout_weight="0.10">
 		</Button>
 	</LinearLayout>
-<<<<<<< HEAD
-	<ListView android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_below="@+id/phone_to_layout" android:layout_alignParentLeft="true" android:layout_above="@+id/phone_text_button" android:id="@+id/@android:id/list"></ListView>
-=======
->>>>>>> origin/master
 </RelativeLayout>

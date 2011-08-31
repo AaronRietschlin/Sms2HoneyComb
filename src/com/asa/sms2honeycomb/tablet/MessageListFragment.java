@@ -63,4 +63,10 @@ public class MessageListFragment extends ListFragment {
 			}
 		});
 	}
+	
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		dbAdapter.close();
+	}
 }

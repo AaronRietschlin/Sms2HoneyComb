@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 public class ContactsListActivty extends ListActivity {
 
-	ListView contactsListView;
-	ArrayList<String> contacts;
+	private ListView contactsListView;
+	private ArrayList<String> contacts;
 
 	// Called when the activity is first created.
 	@Override

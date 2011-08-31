@@ -65,6 +65,7 @@
 		</receiver>
 		<receiver android:name=".IncomingPushReceiver"></receiver>
 		<activity android:name=".phone.ContactsActivity" android:icon="@drawable/icon"></activity>
+		<activity android:icon="@drawable/icon" android:name=".phone.ConversationActivity"></activity>
 
     </application>
 </manifest>

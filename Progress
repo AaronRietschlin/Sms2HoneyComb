@@ -103,24 +103,38 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 8-26-2011 (Parker)
 	- Got the Contacts anf Message activitys to work on phone
 	
+8-26-2011 (Aaron)
+	- Closed the database adapter when the activities are destroyed
+	- Made a message list xml that contains the list that we need.
+	
+8-31-2011 (Parker)
+	- Made a phone ConversationActivity with a new conversation button
+	- I did not get the db quering working though
+	- I also added when you click the listviews it will pull the number out of the string and then use them in the intents
+	
 	TODO: 		
 		•Encrypt passwords
 			-DONE 8-16-11 Using ParseUser which does this for us. 
 		•Check if user is logged in. If they are, do not go to login screen. If not, go to login screen.	
 			-DONE 8-16-11	
 		•Work on MainHoneycombActivity to display messages and send them.
+			-DONE 8-31-2011
 		•Make BroadcastReceiver and Intent that recognizes when user successfully logged in to finish LauncherActivity (?)
 		•Distinguish between username or password being wrong
 		•Check for internet connection
 		• Add the username to each message pushed to the server
+			-DONE 8-31-2011
 		•Reset, Change and Forgot Password
 		•Contacts ListView 
-			-DONE 8-22-11
+			-DONE 8-22-2011
 		•Move the messages into a ListView and sort them by numbers.
+			- Done 8-22-2011
 		•Retrive the messages from the sqlitedb
+			- DONE 8-22-2011
 		•Once a message is pulled delete it? (Parse is adding REST apis so we can have a webpage to send and recive messages?)
 		•Fix the buttons to bottom of screen
 		•Make it so, when softkeyboard comes up, the login/registration screen moves up as well 
+		•Get the conersation quering to work
 			
 		
 
