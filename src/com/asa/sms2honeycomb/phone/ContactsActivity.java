@@ -19,8 +19,13 @@ import android.widget.Toast;
 public class ContactsActivity extends ListActivity {
 
 	private ListView contactsListView;
+<<<<<<< HEAD
 	private Intent mIntent;
 	private final String TAG = "ContactsActivity";
+=======
+	private ArrayList<String> contacts;
+	private Intent mIntent;
+>>>>>>> origin/master
 
 	// Called when the activity is first created.
 	@Override

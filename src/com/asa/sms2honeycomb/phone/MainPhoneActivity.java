@@ -42,6 +42,14 @@ public class MainPhoneActivity extends ListActivity {
 	private EditText toField;
 	private EditText messageField;
 	private Button sendButton;
+<<<<<<< HEAD
+=======
+
+	private ArrayList<String> messageArrayList;
+	private ArrayAdapter<String> messageAdapter;
+
+	public static DatabaseAdapter dbAdapter;
+>>>>>>> origin/master
 
 	private ArrayAdapter<String> messageAdapter;
 	private DatabaseAdapter dbAdapter;

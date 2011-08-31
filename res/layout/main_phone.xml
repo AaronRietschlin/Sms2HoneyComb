@@ -53,4 +53,9 @@
 			android:layout_weight="0.10">
 		</Button>
 	</LinearLayout>
+<<<<<<< HEAD
+=======
+	<ListView android:layout_height="match_parent" android:layout_width="wrap_content" android:layout_below="@+id/phone_to_layout" android:layout_alignParentLeft="true" android:layout_above="@+id/phone_text_button" android:id="@+id/@android:id/list"></ListView>
+
+>>>>>>> origin/master
 </RelativeLayout>
