@@ -107,14 +107,11 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	- Closed the database adapter when the activities are destroyed
 	- Made a message list xml that contains the list that we need.
 	
-<<<<<<< HEAD
 8-31-2011 (Parker)
 	- Made a phone ConversationActivity with a new conversation button
 	- I did not get the db quering working though
 	- I also added when you click the listviews it will pull the number out of the string and then use them in the intents
 	
-=======
->>>>>>> origin/master
 	TODO: 		
 		•Encrypt passwords
 			-DONE 8-16-11 Using ParseUser which does this for us. 
