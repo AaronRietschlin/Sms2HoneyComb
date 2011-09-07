@@ -1,10 +1,5 @@
 package com.asa.sms2honeycomb.phone;
 
-import com.asa.sms2honeycomb.DatabaseAdapter;
-import com.asa.sms2honeycomb.Preferences;
-import com.asa.sms2honeycomb.R;
-import com.asa.sms2honeycomb.util.Util;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.asa.sms2honeycomb.DatabaseAdapter;
+import com.asa.sms2honeycomb.Preferences;
+import com.asa.sms2honeycomb.R;
+import com.asa.sms2honeycomb.util.Util;
 
 public class ConversationActivity extends ListActivity {
 
@@ -55,7 +55,6 @@ public class ConversationActivity extends ListActivity {
 
 		newButton.setOnClickListener(new OnClickListener() {
 
-			@Override
 			public void onClick(View v) {
 				// Launch the ContactsActivity
 				mIntent = new Intent(ConversationActivity.this, ContactsActivity.class);

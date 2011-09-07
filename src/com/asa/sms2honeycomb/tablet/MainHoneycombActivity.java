@@ -35,12 +35,14 @@ public class MainHoneycombActivity extends Activity {
 		PushService.subscribe(this, Util.getPushChannel(
 				Util.getUsernameString(), Preferences.PHONE),
 				MainHoneycombActivity.class);
-
-		FragmentManager fm = getFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
-		MessageViewFragment fragment = new MessageViewFragment();
-		ft.add(R.id.fragment_container, fragment);
-		ft.commit();
+//
+//		FragmentManager fm = getFragmentManager();
+//		FragmentTransaction ft = fm.beginTransaction();
+//		MessageViewFragment fragment = new MessageViewFragment();
+//		ConversationListFragment convoFragment = new ConversationListFragment();
+//		ft.add(R.id.fragment_container, fragment);
+//		ft.add(R.id.fragment_container, convoFragment);
+//		ft.commit();
 	}
 
 	public String getPushChannel(String key, String nameOfPushChannel) {

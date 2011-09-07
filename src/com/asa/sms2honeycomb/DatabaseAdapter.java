@@ -174,8 +174,7 @@ public class DatabaseAdapter {
 		// columns, String selection, String[] selectionArgs, String groupBy,
 		// String having, String orderBy, String limit)
 		Cursor cursor = db.query(true, DATABASE_TABLE, new String[] { KEY_ID,
-				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, KEY_TO + "="
-				+ "1234567" + " AND " + "KEY_FROM" + "=" + "1234567", null, null, null, null, null);
+				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, null, null, null, null, null, null);
 
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
 			Log.e(TAG, "No conversations.");

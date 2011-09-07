@@ -3,17 +3,19 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:id="@+id/fragment_container" android:weightSum="1" android:orientation="horizontal">
+  android:id="@+id/fragment_container" 
+  android:weightSum="1" 
+  android:orientation="horizontal">
     <fragment 
-    android:name="com.asa.sms2honeycomb.tablet.ContactsListFragment" 
-    android:id="@+id/contacts_fragment" 
-    android:layout_height="match_parent" 
-    android:layout_width="wrap_content">
+	    android:name="com.asa.sms2honeycomb.tablet.ConversationListFragment" 
+	    android:id="@+id/contacts_fragment" 
+	    android:layout_height="match_parent" 
+	    android:layout_width="wrap_content">
     </fragment>
     <fragment 
-    android:name="com.asa.sms2honeycomb.tablet.MessageViewFragment" 
-    android:id="@+id/message_fragment" 
-    android:layout_width="match_parent" 
-    android:layout_height="match_parent">
+	    android:name="com.asa.sms2honeycomb.tablet.MessageViewFragment" 
+	    android:id="@+id/message_fragment" 
+	    android:layout_width="match_parent" 
+	    android:layout_height="match_parent">
     </fragment>
 </LinearLayout>

@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="10dp"
-    android:textSize="16sp" >
-</TextView>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal" android:layout_width="match_parent"
+	android:layout_height="wrap_content" android:weightSum="1">
+	<QuickContactBadge android:layout_height="50dp"
+		android:layout_width="50dp" android:id="@+id/quickContactBadge1"
+		android:layout_alignParentTop="true" android:layout_alignParentLeft="true"></QuickContactBadge>
+	<TextView android:text="TextView" android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:id="@+id/conversation_list_contact_name"
+		android:layout_centerVertical="true" android:layout_toRightOf="@+id/quickContactBadge1"
+		android:layout_marginLeft="20dp"></TextView>
+	<ImageView  android:layout_alignParentRight="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@android:drawable/ic_media_play"
+		android:id="@+id/list_image_right"/>
+</RelativeLayout>
