@@ -97,6 +97,11 @@ public class MainPhoneActivity extends ListActivity {
 		// Get the Adapter for the list so iy can be updated separately
 		messageAdapter = new ArrayAdapter<String>(this, R.layout.list_item,
 				dbAdapter.getMessageArrayList(phonenumber));
+				
+		// TODO I dont know if this works when the bd is updated to updated the listview
+		// if the messageAdapter is updated then refresh the data
+		messageAdapter.notifyDataSetChanged();
+		
 		// Set the list's adapter
 		setListAdapter(messageAdapter);
 
