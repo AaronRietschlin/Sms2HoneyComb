@@ -112,6 +112,11 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	- I did not get the db quering working though
 	- I also added when you click the listviews it will pull the number out of the string and then use them in the intents
 	
+9-22-2011 (Parker)
+	- Created the fragments for the tablet
+	- TODO: The fragment layout doesnt work
+	-TODO: The ConversationFagment needs works on the querying part of it
+	
 	TODO: 		
 		•Encrypt passwords
 			-DONE 8-16-11 Using ParseUser which does this for us. 

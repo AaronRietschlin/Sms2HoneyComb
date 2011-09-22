@@ -1,28 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-    <EditText android:id="@+id/message_input" android:inputType="textMultiLine" android:layout_alignParentBottom="true" android:layout_alignParentLeft="true" android:layout_toLeftOf="@+id/send_message_button" android:layout_width="wrap_content" android:layout_height="wrap_content">
-        <requestFocus></requestFocus>
-    </EditText>
-    <LinearLayout 	
-    	android:layout_height="wrap_content" 
-    	android:orientation="vertical" 
-    	android:id="@+id/messages_layout" 
-    	android:layout_width="wrap_content" 
-    	android:layout_alignParentTop="true" 
-    	android:layout_alignParentLeft="true" 
-    	android:layout_above="@+id/message_input" 
-    	android:layout_alignParentRight="true">
-    		<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_weight="1.0"
-                android:layout_width="match_parent"
-                android:layout_height="0dip">
-    			<TextView android:layout_width="match_parent" android:text="TextView" android:id="@+id/textView1" android:layout_height="match_parent"></TextView>
-    		</ScrollView>
-    </LinearLayout>
-    <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignParentBottom="true" android:layout_alignParentRight="true" android:id="@+id/send_message_button" android:text="@string/button_send"></Button>
-    
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" 
+	android:weightSum="1">
+	<LinearLayout 
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent" 
+		android:id="@+id/phone_to_layout"
+		android:weightSum="1"
+		android:gravity="center|center_vertical"
+		android:layout_alignParentTop="true">
+		<TextView 
+		android:text="To:" 
+		android:id="@+id/to_text" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content">
+		</TextView>
+		<EditText 
+			android:layout_height="wrap_content" 
+			android:layout_width="fill_parent" 
+			android:id="@+id/phone_to_field"
+			android:inputType="phone">
+			<requestFocus>
+			</requestFocus>
+		</EditText>
+	</LinearLayout>
+	<ListView
+	android:layout_height="match_parent" 
+	android:layout_width="wrap_content" 
+	android:layout_below="@+id/phone_to_layout" 
+	android:layout_alignParentLeft="true" 
+	android:id="@android:id/list"
+	android:layout_above="@+id/phone_send_layout">
+	</ListView>
+	<LinearLayout 
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent" 
+		android:id="@+id/phone_send_layout"
+		android:weightSum="1"
+		android:gravity="center|center_vertical"
+		android:layout_alignParentBottom="true">
+		<EditText 
+			android:layout_height="wrap_content" 
+			android:id="@+id/main_message_felid" 
+			android:layout_width="wrap_content" 
+			android:layout_weight="0.90">
+		</EditText>
+		<Button 
+			android:id="@+id/main_send_btn" 
+			android:text="@string/main_send_btn"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_weight="0.10">
+		</Button>
+	</LinearLayout>
 </RelativeLayout>

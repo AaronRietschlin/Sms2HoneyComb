@@ -123,8 +123,6 @@ public class RegisterActivity extends Activity {
 		newUser.setUsername(username);
 		newUser.setPassword(password);
 		newUser.setEmail(email);
-		newUser.put(Preferences.PARSE_INSTALLATION_ID,
-				ParseUser.getInstallationId(mContext));
 
 		newUser.signUpInBackground(new SignUpCallback() {
 			@Override

@@ -1,24 +1,7 @@
-package com.asa.sms2honeycomb.phone;
+package com.asa.sms2honeycomb.tablet;
 
 import java.util.Date;
 import java.util.List;
-
-import android.app.ListActivity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.MessageItem;
@@ -30,84 +13,68 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
-import com.parse.PushService;
 import com.parse.SaveCallback;
 import com.parse.SendCallback;
 
-public class MainPhoneActivity extends ListActivity {
+import android.app.ListFragment;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-	private final String TAG = "MainPhoneActivity";
-
+public class MessageFragment extends ListFragment {
+	
+	private Intent mIntent;
+	private final String TAG = "MessageFragment";
+	private DatabaseAdapter dbAdapter;
+	private ArrayAdapter<String> messageAdapter;
+	
 	private ListView messageListView;
 	private EditText toField;
 	private EditText messageField;
 	private Button sendButton;
-
-	private ArrayAdapter<String> messageAdapter;
-	private DatabaseAdapter dbAdapter;
-	private Intent mIntent;
-
+	
 	private String phonenumber;
 	private String timeDB;
 	private String toDB;
 	private String fromDB;
 	private String bodyDB;
-
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.main_phone);
-		// TODO use BaseAdapter instead of ArrayAdapter so we can update the
-		// messages with in the ListView see api demo List8
-
-		// The intent passes on the data to the Bundle when the Activity is
-		// created, you have to getExtras from the intent
-		mIntent = getIntent();
-		Bundle extras = mIntent.getExtras();
-
-		// The phone number is gotten by the key "phonenumber" and put into the
-		// String
-		phonenumber = extras.getString("phonenumber");
-		// check it there is a phone number testing
-		if (phonenumber == null) {
-			Log.e(TAG,
-					"The intent from the contacts list did not work phonenumber: "
-							+ phonenumber);
-		} else {
-			Log.d(TAG, "The number selected from the contacts is: "
-					+ phonenumber);
-		}
-
-		// Open up the database
-		dbAdapter = new DatabaseAdapter(MainPhoneActivity.this);
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		
+		getActivity().setContentView(R.layout.fragment_message_view);
+		
+		// TODO TESTING SHIT
+		phonenumber = "1234567";
+		
+		// Open up the database needs to be above the conversationAdapter
+		dbAdapter = new DatabaseAdapter(getActivity());
 		dbAdapter.open();
-
-		// Subscribe to the needed PushServer
-		PushService.subscribe(this, Util.getPushChannel(
-				Util.getUsernameString(), Preferences.TABLET),
-				MainPhoneActivity.class);
-
+		
 		// IT FUCKING HAS TO BE andriod.R.id.list fucking POS differences
-		messageListView = (ListView) findViewById(android.R.id.list);
-		toField = (EditText) findViewById(R.id.phone_to_field);
-		messageField = (EditText) findViewById(R.id.main_message_felid);
-		sendButton = (Button) findViewById(R.id.main_send_btn);
-
+		messageListView = (ListView) getActivity().findViewById(android.R.id.list);
+		toField = (EditText) getActivity().findViewById(R.id.phone_to_field);
+		messageField = (EditText) getActivity().findViewById(R.id.main_message_felid);
+		sendButton = (Button) getActivity().findViewById(R.id.main_send_btn);
+		
 		// Get the Adapter for the list so iy can be updated separately
-		messageAdapter = new ArrayAdapter<String>(this, R.layout.list_item,
-				dbAdapter.getMessageArrayList(phonenumber));
-				
-		// TODO I dont know if this works when the bd is updated to updated the listview
-		// if the messageAdapter is updated then refresh the data
+		// I dont know why simple_list_item_1 works i copied it from an example
+		messageAdapter = new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_list_item_1,  dbAdapter.getMessageArrayList(phonenumber));
+		
 		messageAdapter.notifyDataSetChanged();
 		
-		// Set the list's adapter
 		setListAdapter(messageAdapter);
-
-		messageListView = getListView();
-		messageListView.setTextFilterEnabled(true);
-
+		
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View view) {
@@ -194,36 +161,17 @@ public class MainPhoneActivity extends ListActivity {
 				});
 			}
 		});
-
-		messageListView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// When clicked, show a toast with the TextView text
-				Toast.makeText(getApplicationContext(),
-						((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-
-			}
-		});
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, Preferences.MENU_LOGOUT, 0, "Logout");
-		return true;
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		Log.d(TAG, "Item clicked: " + id);
+		// When clicked, show a toast with the TextView text
+		Toast.makeText(getActivity().getApplicationContext(),
+				((TextView) v).getText(), Toast.LENGTH_SHORT).show();
+		
 	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem menuItem) {
-		switch (menuItem.getItemId()) {
-		case Preferences.MENU_LOGOUT:
-			Util.logoutUser();
-			mIntent = new Intent(MainPhoneActivity.this, LoginActivity.class);
-			startActivity(mIntent);
-			finish();
-		}
-		return false;
-	}
-
+	
 	@Override
 	public void onDestroy() {
 		// Closing the database adapter when the activity gets destroyed.

@@ -1,6 +1,6 @@
-package com.asa.sms2honeycomb.phone;
+package com.asa.sms2honeycomb.tablet;
 
-import android.app.ListActivity;
+import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +21,7 @@ import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
 import com.asa.sms2honeycomb.util.Util;
 
-public class ConversationActivity extends ListActivity {
+public class ConversationFragment extends ListFragment {
 
 	private Intent mIntent;
 	private ArrayAdapter<String> conversationAdapter;
@@ -34,19 +34,21 @@ public class ConversationActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		setContentView(R.layout.conversation_list);
+
+		getActivity().setContentView(R.layout.conversation_list);
 
 		// Open up the database needs to be above the conversationAdapter
-		dbAdapter = new DatabaseAdapter(ConversationActivity.this);
+		dbAdapter = new DatabaseAdapter(getActivity());
 		dbAdapter.open();
-		
-		conversationListView = (ListView) findViewById(android.R.id.list);
-		newButton = (Button) findViewById(R.id.conversation_new_btn);
+
+		conversationListView = (ListView) getActivity().findViewById(
+				android.R.id.list);
+		newButton = (Button) getActivity().findViewById(
+				R.id.conversation_new_btn);
 
 		// ListView stuff
-		conversationAdapter = new ArrayAdapter<String>(this,
-				R.layout.list_item, dbAdapter.getConversationList());
+		conversationAdapter = new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_list_item_1,  dbAdapter.getConversationList());
 
 		setListAdapter(conversationAdapter);
 
@@ -57,14 +59,14 @@ public class ConversationActivity extends ListActivity {
 
 			public void onClick(View v) {
 				// Launch the ContactsActivity
-				mIntent = new Intent(ConversationActivity.this, ContactsActivity.class);
+				mIntent = new Intent(getActivity(), ContactsFragment.class);
 				startActivity(mIntent);
-				finish();
+				getActivity().finish();
 
 			}
 
 		});
-		
+
 		conversationListView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -91,8 +93,7 @@ public class ConversationActivity extends ListActivity {
 				// String number = tokenString.toString();
 
 				// Create the Intent to launch the activity
-				mIntent = new Intent(ConversationActivity.this,
-						MainPhoneActivity.class);
+				mIntent = new Intent(getActivity(), MessageFragment.class);
 
 				// Put the phone number into the bundle.
 				Bundle b = new Bundle();
@@ -103,31 +104,13 @@ public class ConversationActivity extends ListActivity {
 
 				// Start the activity
 				startActivity(mIntent);
-				
+
 				// When clicked, show a toast with the TextView text
-				Toast.makeText(getApplicationContext(),
+				Toast.makeText(getActivity().getApplicationContext(),
 						((TextView) view).getText(), Toast.LENGTH_SHORT).show();
 
 			}
 		});
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, Preferences.MENU_LOGOUT, 0, "Logout");
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem menuItem) {
-		switch (menuItem.getItemId()) {
-		case Preferences.MENU_LOGOUT:
-			Util.logoutUser();
-			mIntent = new Intent(ConversationActivity.this, LoginActivity.class);
-			startActivity(mIntent);
-			finish();
-		}
-		return false;
 	}
 
 	@Override
