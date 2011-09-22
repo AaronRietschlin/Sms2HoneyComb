@@ -30,6 +30,28 @@ public class MainHoneycombActivity extends Activity {
 		PushService.subscribe(this, Util.getPushChannel(
 				Util.getUsernameString(), Preferences.TABLET),
 				MainHoneycombActivity.class);
+<<<<<<< HEAD
+=======
+//
+//		FragmentManager fm = getFragmentManager();
+//		FragmentTransaction ft = fm.beginTransaction();
+//		MessageViewFragment fragment = new MessageViewFragment();
+//		ConversationListFragment convoFragment = new ConversationListFragment();
+//		ft.add(R.id.fragment_container, fragment);
+//		ft.add(R.id.fragment_container, convoFragment);
+//		ft.commit();
+	}
+
+	public String getPushChannel(String key, String nameOfPushChannel) {
+		SharedPreferences sharedPreferences = getSharedPreferences(
+				Preferences.PREFS_NAME, 0);
+		String savedPreference = sharedPreferences.getString(key, "");
+		Log.d(TAG, "SharedPreference is loaded: " + key);
+		String pushChannel = savedPreference + "_" + nameOfPushChannel;
+		Log.d(TAG, "Push channel has been created for: " + key + "_"
+				+ nameOfPushChannel);
+		return pushChannel;
+>>>>>>> origin/master
 	}
 
 	@Override
