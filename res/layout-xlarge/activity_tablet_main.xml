@@ -4,34 +4,17 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:id="@+id/fragment_container" 
-<<<<<<< HEAD
   android:orientation="horizontal">
     	<fragment 
-	    android:name="com.asa.sms2honeycomb.tablet.ConversationFragment" 
-	    android:id="@+id/conversation_fragment" 
-	    android:layout_height="match_parent" 
-	    android:layout_width="0dp"
-	    android:layout_weight="4"/>
-	    <fragment 
-	    android:name="com.asa.sms2honeycomb.tablet.MessageFragment"
+	    android:name="com.asa.sms2honeycomb.tablet.ConversationFragment"
 	    android:id="@+id/message_fragment" 
 	    android:layout_height="match_parent" 
 	    android:layout_width="0dp"
 	    android:layout_weight="1"/>
-=======
-  android:weightSum="1" 
-  android:orientation="horizontal">
-    <fragment 
-	    android:name="com.asa.sms2honeycomb.tablet.ConversationListFragment" 
-	    android:id="@+id/contacts_fragment" 
+	    <fragment 
+	    android:name="com.asa.sms2honeycomb.tablet.MessageFragment" 
+	    android:id="@+id/conversation_fragment" 
 	    android:layout_height="match_parent" 
-	    android:layout_width="wrap_content">
-    </fragment>
-    <fragment 
-	    android:name="com.asa.sms2honeycomb.tablet.MessageViewFragment" 
-	    android:id="@+id/message_fragment" 
-	    android:layout_width="match_parent" 
-	    android:layout_height="match_parent">
-    </fragment>
->>>>>>> origin/master
+	    android:layout_width="0dp"
+	    android:layout_weight="3"/>
 </LinearLayout>

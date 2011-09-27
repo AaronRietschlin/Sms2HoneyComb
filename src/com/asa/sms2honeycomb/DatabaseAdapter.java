@@ -169,7 +169,7 @@ public class DatabaseAdapter {
 		ArrayList<String> list = new ArrayList<String>();
 		// TODO get the cursor to query the db and get the number of entries for
 		// both the to and from that are from the same person MAKE IT WORK
-		
+		// TODO bug counts get number's conversation then adds that name entries
 		// public Cursor query (boolean distinct, String table, String[]
 		// columns, String selection, String[] selectionArgs, String groupBy,
 		// String having, String orderBy, String limit)
@@ -177,14 +177,17 @@ public class DatabaseAdapter {
 				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, null, null, null, null, null, null);
 
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
-			Log.e(TAG, "No conversations.");
-			list.add("No conversations start a new one.");
+			Log.d(TAG, "No conversations.");
+			list.add("Start a new conversation");
 		}
 
 		if (cursor.moveToFirst()) {
+			// This will be used to start the new conversations within the ConversationFragment
+			list.add("Start a new conversation");
 			do {
 				String to = cursor.getString(TO_COLUMN);
-				Log.d(TAG, "Conversations from: " + to + " have been found.");
+				String from = cursor.getString(FROM_COLUMN);
+				Log.d(TAG, "Conversations from/to: " + to + "/" + from + " have been found");
 				if (to != null) {
 					String conversationCount = Integer.toString(cursor
 							.getColumnCount());

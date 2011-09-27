@@ -1,27 +1,23 @@
 package com.asa.sms2honeycomb.tablet;
 
-import java.util.Date;
-import java.util.List;
-
 import com.asa.sms2honeycomb.DatabaseAdapter;
-import com.asa.sms2honeycomb.MessageItem;
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
 import com.asa.sms2honeycomb.util.Util;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.parse.SendCallback;
 
 import android.app.ListFragment;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,54 +26,56 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MessageFragment extends ListFragment {
-	
-	private Intent mIntent;
+	LayoutInflater inflater;
+	ViewGroup container;
+
 	private final String TAG = "MessageFragment";
 	private DatabaseAdapter dbAdapter;
 	private ArrayAdapter<String> messageAdapter;
-	
+
 	private ListView messageListView;
 	private EditText toField;
 	private EditText messageField;
 	private Button sendButton;
-	
+
 	private String phonenumber;
-	private String timeDB;
-	private String toDB;
-	private String fromDB;
-	private String bodyDB;
-	
+
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		
-		getActivity().setContentView(R.layout.fragment_message_view);
-		
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// inflates the main.xml resource, but the default ListView is still
+		// generated on top of this view.
+
+		inflater.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		inflater.inflate(R.layout.fragment_message_view, container);
+		View view = inflater.inflate(R.layout.fragment_message_view, null);
+
 		// TODO TESTING SHIT
 		phonenumber = "1234567";
-		
+
 		// Open up the database needs to be above the conversationAdapter
 		dbAdapter = new DatabaseAdapter(getActivity());
 		dbAdapter.open();
-		
-		// IT FUCKING HAS TO BE andriod.R.id.list fucking POS differences
-		messageListView = (ListView) getActivity().findViewById(android.R.id.list);
-		toField = (EditText) getActivity().findViewById(R.id.phone_to_field);
-		messageField = (EditText) getActivity().findViewById(R.id.main_message_felid);
-		sendButton = (Button) getActivity().findViewById(R.id.main_send_btn);
-		
+
 		// Get the Adapter for the list so iy can be updated separately
 		// I dont know why simple_list_item_1 works i copied it from an example
 		messageAdapter = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1,  dbAdapter.getMessageArrayList(phonenumber));
-		
+				android.R.layout.simple_list_item_1,
+				dbAdapter.getMessageArrayList(phonenumber));
+
 		messageAdapter.notifyDataSetChanged();
-		
+
 		setListAdapter(messageAdapter);
-		
+
+		// IT FUCKING HAS TO BE andriod.R.id.list fucking POS differences
+		messageListView = (ListView) view.findViewById(android.R.id.list);
+		toField = (EditText) view.findViewById(R.id.phone_to_field);
+		messageField = (EditText) view.findViewById(R.id.main_message_felid);
+		sendButton = (Button) view.findViewById(R.id.main_send_btn);
+
 		sendButton.setOnClickListener(new OnClickListener() {
 
-			public void onClick(View view) {
+			public void onClick(View v) {
 				// TODO: get strings from the text feilds
 				// then send them on to parse and to the push channel(phone)
 				// on then on the phone send the messages via a sms message to
@@ -121,46 +119,9 @@ public class MessageFragment extends ListFragment {
 						}
 					}
 				});
-				// TODO this is for testing the querying and pulling the info
-				// off of the server
-				final ParseQuery query = new ParseQuery("OutgoingMessage");
-				query.whereEqualTo(Preferences.PARSE_USERNAME_ROW, "TestName");
-				query.orderByDescending("createdAt");
-				query.setLimit(1);
-				query.findInBackground(new FindCallback() {
-					public void done(List<ParseObject> messageList,
-							ParseException e) {
-						if (e == null) {
-							Log.d(TAG, "Retrieved " + messageList.size()
-									+ " messages.");
-							for (ParseObject messageObject : messageList) {
-								String objectId = messageObject.objectId();
-								try {
-									ParseObject message = query.get(objectId);
-									Date time = message.createdAt();
-									timeDB = time.toString();
-									toDB = message.getString("messageTo");
-									fromDB = message.getString("messageFrom");
-									bodyDB = message.getString("messageBody");
-									String totalMessage = "Sent: " + timeDB
-											+ "\n" + "To: " + toDB + "\n"
-											+ "Message : " + bodyDB + "\n";
-									System.out.println(totalMessage);
-									// add the shit to the sqlitedb
-									MessageItem item = new MessageItem(timeDB,
-											toDB, fromDB, bodyDB);
-									dbAdapter.insertMessageItem(item);
-								} catch (ParseException e1) {
-									Log.e(TAG, e1.getMessage());
-								}
-							}
-						} else {
-							Log.d(TAG, "Error: " + e.getMessage());
-						}
-					}
-				});
 			}
 		});
+		return view;
 	}
 
 	@Override
@@ -169,9 +130,9 @@ public class MessageFragment extends ListFragment {
 		// When clicked, show a toast with the TextView text
 		Toast.makeText(getActivity().getApplicationContext(),
 				((TextView) v).getText(), Toast.LENGTH_SHORT).show();
-		
+
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		// Closing the database adapter when the activity gets destroyed.

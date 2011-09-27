@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ContactsFragment extends ListFragment {
 
@@ -21,7 +22,7 @@ public class ContactsFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
+
 		setListAdapter(new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_list_item_1, getCotactArrayList()));
 	}
@@ -44,26 +45,11 @@ public class ContactsFragment extends ListFragment {
 			tokenString.append(s);
 			tokenString.append("\n");
 		}
+
+		Toast.makeText(getActivity().getApplicationContext(),
+				tokenString.toString(), Toast.LENGTH_SHORT).show();
+
 		Log.d(TAG, "The number selected is: " + tokenString.toString());
-
-		// TODO this is for testing
-		String number = "1234567";
-		// This is the actual code, but my test phone has no contacts
-		// on it
-		// String number = tokenString.toString();
-
-		// Create the Intent to launch the activity
-		// TODO change this so it lauches a new fragment
-		/*
-		 * mIntent = new Intent(getActivity(), MessageFragment.class);
-		 * 
-		 * // Put the phone number into the bundle. Bundle b = new Bundle();
-		 * b.putString("phonenumber", number);
-		 * 
-		 * // Put the bundle into the intent mIntent.putExtras(b);
-		 * 
-		 * // Start the activity startActivity(mIntent);
-		 */
 
 		// TODO Need to get ALL contact information. Picture, name, etc
 	}
@@ -84,6 +70,7 @@ public class ContactsFragment extends ListFragment {
 				.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER);
 
 		ArrayList<String> contacts = new ArrayList<String>();
+
 		if (dataCursor.moveToFirst()) {
 			do {
 				// Extract the name.
@@ -104,6 +91,7 @@ public class ContactsFragment extends ListFragment {
 			getActivity().stopManagingCursor(dataCursor);
 			dataCursor.close();
 		}
+
 		return contacts;
 
 	}

@@ -3,8 +3,11 @@ package com.asa.sms2honeycomb.util;
 import java.util.Date;
 import java.util.List;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.asa.sms2honeycomb.DatabaseAdapter;
+import com.asa.sms2honeycomb.MessageItem;
 import com.asa.sms2honeycomb.Preferences;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -123,7 +126,6 @@ public class Util {
 		if (ParseUser.getCurrentUser() == null) {
 			return true;
 		}
-		
 		return false;
 	}
 
@@ -135,5 +137,4 @@ public class Util {
 	public static String getUsernameString() {
 		return ParseUser.getCurrentUser().getUsername();
 	}
-
 }

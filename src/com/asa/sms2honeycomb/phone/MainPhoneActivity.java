@@ -63,7 +63,7 @@ public class MainPhoneActivity extends ListActivity {
 
 		// The intent passes on the data to the Bundle when the Activity is
 		// created, you have to getExtras from the intent
-		mIntent = getIntent();
+/*		mIntent = getIntent();
 		Bundle extras = mIntent.getExtras();
 
 		// The phone number is gotten by the key "phonenumber" and put into the
@@ -77,7 +77,7 @@ public class MainPhoneActivity extends ListActivity {
 		} else {
 			Log.d(TAG, "The number selected from the contacts is: "
 					+ phonenumber);
-		}
+		}*/
 
 		// Open up the database
 		dbAdapter = new DatabaseAdapter(MainPhoneActivity.this);
