@@ -120,6 +120,11 @@ public final class R {
         public static final int main_message_text=0x7f05001e;
         public static final int main_send_btn=0x7f05001d;
         public static final int main_to_text=0x7f05001f;
+        public static final int menu_contacts=0x7f050024;
+        /**   Don't need this  
+         */
+        public static final int menu_logout=0x7f050025;
+        public static final int menu_refresh=0x7f050023;
         public static final int message_list_text=0x7f050021;
         public static final int parse_connection_error=0x7f050009;
         public static final int register_btn_phone_text=0x7f05001c;

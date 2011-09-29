@@ -123,6 +123,9 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 		2.) THREADS
 		-These tables better represent what we need. 
 		-TODO: relate to Usernames.
+	-Added Button to MessageFragment that allows the user to choose button.
+	-Began work on MessageListItem which will act as the message list.
+		-Also started work on custom ArrayAdapter called MessageListAdapter. 
 	-Wrote method in Util that finds ALL messages (using old table).
 
 	
