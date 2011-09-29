@@ -112,6 +112,20 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	- I did not get the db quering working though
 	- I also added when you click the listviews it will pull the number out of the string and then use them in the intents
 	
+9-38-11 (Aaron)
+	-Got the Contact Picker working
+		-It currently opens up a contact picker in a new activity that overlays the two fragments
+		-You can choose one contact. The effect of choosing one is it adds the Contacts Name and Number to the edit text
+		-TODO : 
+			-Prompt user to input phone number of contact if none exists
+	-Added Two Tables to Parse:
+		1.) SMS
+		2.) THREADS
+		-These tables better represent what we need. 
+		-TODO: relate to Usernames.
+	-Wrote method in Util that finds ALL messages (using old table).
+
+	
 	TODO: 		
 		•Encrypt passwords
 			-DONE 8-16-11 Using ParseUser which does this for us. 

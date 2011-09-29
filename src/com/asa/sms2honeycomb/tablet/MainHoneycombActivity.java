@@ -15,6 +15,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -34,8 +35,11 @@ import com.asa.sms2honeycomb.util.Util;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.PushService;
+import com.parse.SaveCallback;
+import com.parse.SendCallback;
 
 public class MainHoneycombActivity extends ListActivity {
 
@@ -44,6 +48,7 @@ public class MainHoneycombActivity extends ListActivity {
 	Intent mIntent;
 	ListView list;
 	Dialog listDialog;
+	public static ArrayList<ArrayList<MessageItem>> allMessages;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,13 @@ public class MainHoneycombActivity extends ListActivity {
 		PushService.subscribe(this, Util.getPushChannel(
 				Util.getUsernameString(), Preferences.TABLET),
 				MainHoneycombActivity.class);
+
+		// If the user had been logged out, pull in ALL the users convo data.
+		if (Preferences.LAUNCH_FROM_LOGIN) {
+			String userName = Util.getUsernameString();
+			allMessages = Util.getAllMessages(userName);
+			// Preferences.LAUNCH_FROM_LOGIN = false;
+		}
 	}
 
 	@Override
@@ -94,23 +106,22 @@ public class MainHoneycombActivity extends ListActivity {
 	}
 
 	public void showDialog() {
-	    // DialogFragment.show() will take care of adding the fragment
-	    // in a transaction.  We also want to remove any currently showing
-	    // dialog, so make our own transaction and take care of that here.
-	    FragmentTransaction ft = getFragmentManager().beginTransaction();
-	    Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-	    if (prev != null) {
-	        ft.remove(prev);
-	    }
-	    ft.addToBackStack(null);
+		// DialogFragment.show() will take care of adding the fragment
+		// in a transaction. We also want to remove any currently showing
+		// dialog, so make our own transaction and take care of that here.
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
 
-	    // Create and show the dialog.
-	    DialogFragment newFragment = ContactsDialogFragment.newInstance(0);
-	    newFragment.show(ft, "dialog");
-
+		// Create and show the dialog.
+		DialogFragment newFragment = ContactsDialogFragment.newInstance(0);
+		newFragment.show(ft, "dialog");
 
 	}
-	
+
 	// TODO TESTING
 	public void QueryMessages() {
 		final ParseQuery query = new ParseQuery("OutgoingMessage");
@@ -135,8 +146,8 @@ public class MainHoneycombActivity extends ListActivity {
 									+ bodyDB + "\n";
 							System.out.println(totalMessage);
 							// add the shit to the sqlitedb
-							MessageItem item = new MessageItem(timeDB, toDB,
-									fromDB, bodyDB);
+							MessageItem item = new MessageItem(time
+									.toLocaleString(), toDB, fromDB, bodyDB);
 							dbAdapter.insertMessageItem(item);
 						} catch (ParseException e1) {
 							Log.e(TAG, e1.getMessage());
@@ -186,6 +197,6 @@ public class MainHoneycombActivity extends ListActivity {
 			dataCursor.close();
 		}
 		return contacts;
-
 	}
+	
 }

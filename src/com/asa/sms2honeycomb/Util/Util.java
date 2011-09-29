@@ -1,12 +1,14 @@
 package com.asa.sms2honeycomb.util;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.MessageItem;
 import com.asa.sms2honeycomb.Preferences;
 import com.parse.FindCallback;
@@ -98,6 +100,67 @@ public class Util {
 		});
 		return table;
 	}
+	
+	private static ArrayList<MessageItem> outgoingMessageList; 
+	private static ArrayList<MessageItem> incomingMessageList; 
+	private static ArrayList<ArrayList<MessageItem>> results;
+	
+	public static ArrayList<ArrayList<MessageItem>> getAllMessages(final String username){
+		ParseQuery queryOutgoing = new ParseQuery("OutgoingMessage");
+		ParseQuery queryIncoming = new ParseQuery("IncomingMessage");
+		
+		queryOutgoing.whereEqualTo(Preferences.PARSE_USERNAME_ROW, username);
+		final String outgoingMessageBody, outgoingMessageTo;
+		final Date outgoingMessageDate;
+		outgoingMessageList = new ArrayList<MessageItem>();
+		incomingMessageList = new ArrayList<MessageItem>();
+		results = new ArrayList<ArrayList<MessageItem>>();
+		// Begin query for messages. 
+		queryOutgoing.findInBackground(new FindCallback(){
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				if(e == null){
+					if(Preferences.DEBUG) Log.d(TAG, "Message size: " + objects.size()); 
+					for(ParseObject messageObject : objects){
+						MessageItem messageItem = new MessageItem();
+						messageItem.setMessageBody(messageObject.getString("messageBody"));
+						messageItem.setMessageFrom(messageObject.getString(username));
+						messageItem.setMessageTo(messageObject.getString("messageTo"));
+						messageItem.setMessageTime(messageObject.createdAt().toLocaleString());
+						outgoingMessageList.add(messageItem);
+					}
+					results.add(outgoingMessageList);
+				}else{
+					// Error occurred finding ALL objects. TODO
+				}
+			}
+		});
+		
+		queryIncoming.whereEqualTo(Preferences.PARSE_EMAIL_ROW, username);
+		queryIncoming.findInBackground(new FindCallback(){
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				if(e == null){
+					for(ParseObject messageObject : objects){
+						MessageItem messageItem = new MessageItem();
+						messageItem.setMessageBody(messageObject.getString("messageBody"));
+						messageItem.setMessageFrom(messageObject.getString(username));
+						messageItem.setMessageTo(messageObject.getString("messageTo"));
+						messageItem.setMessageTime(messageObject.createdAt().toLocaleString());
+						incomingMessageList.add(messageItem);
+					}
+					if(incomingMessageList.size() > 0){
+						results.add(incomingMessageList);
+					}
+				}else{
+					// Error occurding finding objects TODO
+					Log.e(TAG, "Error finding incoming messages.");
+				}
+				
+			}
+		});
+		return results;
+	}
 
 	/**
 	 * Creates a string using the uername and a given name of the wanted push
@@ -136,5 +199,23 @@ public class Util {
 	 */
 	public static String getUsernameString() {
 		return ParseUser.getCurrentUser().getUsername();
+	}
+	
+	public static Date formatStringToDate(String stringDate){
+		SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss a");
+		Date date = null; 
+		try {
+			date = formatter.parse(stringDate);
+		} catch (java.text.ParseException e) {
+			// TODO : Handle this exception
+			e.printStackTrace();
+		}
+		return date;
+	}	
+	
+	static Toast mToast;
+	public static void displayToast(Context context, String message){
+		mToast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+		mToast.show();
 	}
 }

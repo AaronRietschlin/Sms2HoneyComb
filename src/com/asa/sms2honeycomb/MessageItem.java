@@ -1,33 +1,63 @@
 package com.asa.sms2honeycomb;
 
+import java.util.Date;
+
 public class MessageItem {
-	
-	String mTime;
-	String mTo;
-	String mFrom;
-	String mBody;
-	
+	// TODO : Change to Date object
+	String messageTime;
+	String messageTo;
+	String messageFrom;
+	String messageBody;
+
 	public MessageItem(String time, String to, String from, String body) {
 		// TODO Auto-generated constructor stub
-		mTime = time;
-		mTo = to;
-		mFrom = from;
-		mBody = body;
+		messageTime = time;
+		messageTo = to;
+		messageFrom = from;
+		messageBody = body;
 	}
 
-	public String getTime() {
-		return mTime;
+	public MessageItem() {
 	}
 
-	public String getTo() {
-		return mTo;
+	public String getMessageTime() {
+		return messageTime;
 	}
 
-	public String getFrom() {
-		return mFrom;
+	public void setMessageTime(String messageTime) {
+		this.messageTime = messageTime;
 	}
 
-	public String getBody() {
-		return mBody;
+	public String getMessageTo() {
+		return messageTo;
 	}
+
+	public void setMessageTo(String messageTo) {
+		this.messageTo = messageTo;
+	}
+
+	public String getMessageFrom() {
+		return messageFrom;
+	}
+
+	public void setMessageFrom(String messageFrom) {
+		this.messageFrom = messageFrom;
+	}
+
+	public String getMessageBody() {
+		return messageBody;
+	}
+
+	public void setMessageBody(String messageBody) {
+		this.messageBody = messageBody;
+	}
+
+	@Override
+	public String toString() {
+		return "MessageItem [messageTime=" + messageTime + ", messageTo="
+				+ messageTo + ", messageFrom=" + messageFrom + ", messageBody="
+				+ messageBody + "]";
+	}
+
+	
 }

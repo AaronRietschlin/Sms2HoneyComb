@@ -2,6 +2,8 @@ package com.asa.sms2honeycomb;
 
 import java.util.ArrayList;
 
+import com.asa.sms2honeycomb.util.Util;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -72,13 +74,13 @@ public class DatabaseAdapter {
 	// Insert a new MessageItem into Database
 	public long insertMessageItem(MessageItem item) {
 		ContentValues newMessageValues = new ContentValues();
-		newMessageValues.put(KEY_TIME, item.getTime());
-		newMessageValues.put(KEY_TO, item.getTo());
-		newMessageValues.put(KEY_FROM, item.getFrom());
-		newMessageValues.put(KEY_BODY, item.getBody());
+		newMessageValues.put(KEY_TIME, item.getMessageTime().toString());
+		newMessageValues.put(KEY_TO, item.getMessageTo());
+		newMessageValues.put(KEY_FROM, item.getMessageFrom());
+		newMessageValues.put(KEY_BODY, item.getMessageBody());
 		// Inserts the new row into the database
-		Log.d(TAG, "Values: " + item.getTime() + item.getTo() + item.getFrom()
-				+ item.getBody() + "has been put in to: " + DATABASE_NAME);
+		Log.d(TAG, "Values: " + item.getMessageTime() + item.getMessageTo() + item.getMessageFrom()
+				+ item.getMessageBody() + "has been put in to: " + DATABASE_NAME);
 		return db.insert(DATABASE_TABLE, null, newMessageValues);
 	}
 
@@ -115,6 +117,7 @@ public class DatabaseAdapter {
 		String body = cursor.getString(BODY_COLUMN);
 		Log.d(TAG, "MessageItem containing: " + time + to + from + body
 				+ " queryed and pulled from the table: " + DATABASE_TABLE);
+		
 		return new MessageItem(time, to, from, body);
 
 	}
