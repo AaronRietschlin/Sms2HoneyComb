@@ -3,11 +3,22 @@ package com.asa.sms2honeycomb.tablet;
 import java.util.ArrayList;
 
 import com.asa.sms2honeycomb.R;
+import com.asa.sms2honeycomb.phone.ContactsActivity;
+import com.asa.sms2honeycomb.phone.ConversationActivity;
 
 import android.app.DialogFragment;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.RawContacts;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,12 +28,15 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class ContactsDialogFragment extends DialogFragment implements
-		OnItemClickListener {
+public class ContactsDialogFragment extends DialogFragment {
 	// used to pick out a layout
+	private final String TAG = "ContactsDialogFragment";
 	int mNum;
+	private boolean mShowInvisible;
 	ListView contactsList;
 
 	/**
@@ -43,20 +57,26 @@ public class ContactsDialogFragment extends DialogFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+
 		View v = inflater.inflate(R.layout.fragment_contacts_view, container,
 				false);
-
-		String[] items = { "lorem", "ipsum", "dolor", "sit", "amet",
-				"consectetuer", "adipiscing", "elit", "morbi", "vel", "ligula",
-				"vitae", "arcu", "aliquet", "mollis", "etiam", "vel", "erat",
-				"placerat", "ante", "porttitor", "sodales", "pellentesque",
-				"augue", "purus" };
 
 		contactsList = (ListView) v.findViewById(android.R.id.list);
 
 		contactsList.setAdapter(new ArrayAdapter<String>(v.getContext(),
 				android.R.layout.simple_list_item_1, getCotactArrayList()));
+
+		contactsList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View v, int postion,
+					long id) {
+
+				Toast.makeText(v.getContext(), (((TextView) v).getText()),
+						Toast.LENGTH_SHORT).show();
+			}
+
+		});
 
 		return v;
 
@@ -152,12 +172,6 @@ public class ContactsDialogFragment extends DialogFragment implements
 			dataCursor.close();
 		}
 		return contacts;
-
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		// TODO Auto-generated method stub
 
 	}
 }

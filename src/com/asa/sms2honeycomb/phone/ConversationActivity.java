@@ -46,7 +46,7 @@ public class ConversationActivity extends ListActivity {
 
 		// ListView stuff
 		conversationAdapter = new ArrayAdapter<String>(this,
-				R.layout.list_item, dbAdapter.getConversationList());
+				android.R.layout.simple_list_item_1, dbAdapter.getConversationList());
 
 		setListAdapter(conversationAdapter);
 

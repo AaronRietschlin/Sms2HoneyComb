@@ -95,7 +95,7 @@ public class MainPhoneActivity extends ListActivity {
 		sendButton = (Button) findViewById(R.id.main_send_btn);
 
 		// Get the Adapter for the list so iy can be updated separately
-		messageAdapter = new ArrayAdapter<String>(this, R.layout.list_item,
+		messageAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
 				dbAdapter.getMessageArrayList(phonenumber));
 				
 		// TODO I dont know if this works when the bd is updated to updated the listview

@@ -183,7 +183,6 @@ public class DatabaseAdapter {
 
 		if (cursor.moveToFirst()) {
 			// This will be used to start the new conversations within the ConversationFragment
-			list.add("Start a new conversation");
 			do {
 				String to = cursor.getString(TO_COLUMN);
 				String from = cursor.getString(FROM_COLUMN);

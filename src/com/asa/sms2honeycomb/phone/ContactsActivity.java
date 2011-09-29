@@ -27,7 +27,7 @@ public class ContactsActivity extends ListActivity {
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.message_list);
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item,
+		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
 				getCotactArrayList()));
 
 		contactsListView = getListView();

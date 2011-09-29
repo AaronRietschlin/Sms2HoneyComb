@@ -51,7 +51,7 @@ public class MainPhoneListView extends ListActivity {
 		dbAdapter = new DatabaseAdapter(MainPhoneListView.this);
 		dbAdapter.open();
 
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item,
+		setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
 				dbAdapter.getMessageArrayList("1234567")));
 		messageListView = getListView();
 		messageListView.setTextFilterEnabled(true);
