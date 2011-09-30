@@ -105,61 +105,64 @@ public class Util {
 	private static ArrayList<MessageItem> incomingMessageList; 
 	private static ArrayList<ArrayList<MessageItem>> results;
 	
-	public static ArrayList<ArrayList<MessageItem>> getAllMessages(final String username){
-		ParseQuery queryOutgoing = new ParseQuery("OutgoingMessage");
-		ParseQuery queryIncoming = new ParseQuery("IncomingMessage");
+	private static ArrayList<MessageItem> messageResults;
+	
+	public static ArrayList<MessageItem> getAllMessages(final String username){
+		ParseQuery querySms = new ParseQuery(Preferences.PARSE_TABLE_SMS);
+		ParseQuery queryThread = new ParseQuery(Preferences.PARSE_TABLE_THREAD);
 		
-		queryOutgoing.whereEqualTo(Preferences.PARSE_USERNAME_ROW, username);
-		final String outgoingMessageBody, outgoingMessageTo;
+		querySms.whereEqualTo(Preferences.PARSE_USERNAME_ROW, username);
+		final String messageBody, messageAddress;
 		final Date outgoingMessageDate;
 		outgoingMessageList = new ArrayList<MessageItem>();
 		incomingMessageList = new ArrayList<MessageItem>();
 		results = new ArrayList<ArrayList<MessageItem>>();
+		messageResults = new ArrayList<MessageItem>();
 		// Begin query for messages. 
-		queryOutgoing.findInBackground(new FindCallback(){
+		querySms.findInBackground(new FindCallback(){
 			@Override
 			public void done(List<ParseObject> objects, ParseException e) {
 				if(e == null){
 					if(Preferences.DEBUG) Log.d(TAG, "Message size: " + objects.size()); 
 					for(ParseObject messageObject : objects){
 						MessageItem messageItem = new MessageItem();
-						messageItem.setMessageBody(messageObject.getString("messageBody"));
+						messageItem.setMessageBody(messageObject.getString(Preferences.PARSE_SMS_BODY));
 						messageItem.setMessageFrom(messageObject.getString(username));
-						messageItem.setMessageTo(messageObject.getString("messageTo"));
+						messageItem.setMessageTo(messageObject.getString(Preferences.PARSE_SMS_ADDRESS));
 						messageItem.setMessageTime(messageObject.createdAt().toLocaleString());
-						outgoingMessageList.add(messageItem);
+						messageResults.add(messageItem);
+						Log.e(TAG, "MessageItem - Size: " + messageResults.size());
 					}
-					results.add(outgoingMessageList);
 				}else{
 					// Error occurred finding ALL objects. TODO
+					Log.e(TAG, "Message Item:");
 				}
 			}
 		});
-		
-		queryIncoming.whereEqualTo(Preferences.PARSE_EMAIL_ROW, username);
-		queryIncoming.findInBackground(new FindCallback(){
-			@Override
-			public void done(List<ParseObject> objects, ParseException e) {
-				if(e == null){
-					for(ParseObject messageObject : objects){
-						MessageItem messageItem = new MessageItem();
-						messageItem.setMessageBody(messageObject.getString("messageBody"));
-						messageItem.setMessageFrom(messageObject.getString(username));
-						messageItem.setMessageTo(messageObject.getString("messageTo"));
-						messageItem.setMessageTime(messageObject.createdAt().toLocaleString());
-						incomingMessageList.add(messageItem);
-					}
-					if(incomingMessageList.size() > 0){
-						results.add(incomingMessageList);
-					}
-				}else{
-					// Error occurding finding objects TODO
-					Log.e(TAG, "Error finding incoming messages.");
-				}
-				
-			}
-		});
-		return results;
+
+		// TODO : This is commented out because I am only testing getting the messages for now.
+//		queryThread.whereEqualTo(Preferences.PARSE_EMAIL_ROW, username);
+//		queryThread.findInBackground(new FindCallback(){
+//			@Override
+//			public void done(List<ParseObject> objects, ParseException e) {
+//				if(e == null){
+//					for(ParseObject messageObject : objects){
+//						MessageItem messageItem = new MessageItem();
+//						messageItem.setMessageBody(messageObject.getString("messageBody"));
+//						messageItem.setMessageFrom(messageObject.getString(username));
+//						messageItem.setMessageTo(messageObject.getString("messageTo"));
+//						messageItem.setMessageTime(messageObject.createdAt().toLocaleString());
+//						messageResults.add(messageItem);
+//					}
+//					
+//				}else{
+//					// Error occurding finding objects TODO
+//					Log.e(TAG, "Error finding incoming messages.");
+//				}
+//				
+//			}
+//		});
+		return messageResults;
 	}
 
 	/**

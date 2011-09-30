@@ -3,27 +3,21 @@ package com.asa.sms2honeycomb.tablet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -35,11 +29,8 @@ import com.asa.sms2honeycomb.util.Util;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.PushService;
-import com.parse.SaveCallback;
-import com.parse.SendCallback;
 
 public class MainHoneycombActivity extends ListActivity {
 
@@ -48,7 +39,8 @@ public class MainHoneycombActivity extends ListActivity {
 	Intent mIntent;
 	ListView list;
 	Dialog listDialog;
-	public static ArrayList<ArrayList<MessageItem>> allMessages;
+
+	public static ArrayList<MessageItem> messageResults;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +58,21 @@ public class MainHoneycombActivity extends ListActivity {
 		// If the user had been logged out, pull in ALL the users convo data.
 		if (Preferences.LAUNCH_FROM_LOGIN) {
 			String userName = Util.getUsernameString();
-			allMessages = Util.getAllMessages(userName);
+			QueryParseAsyncTask task = new QueryParseAsyncTask(0, userName);
+			AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
+					.execute();
+			try {
+				messageResults = asyncTask.get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			for (MessageItem item : messageResults) {
+				Log.e(TAG, item.toString());
+			}
 			// Preferences.LAUNCH_FROM_LOGIN = false;
 		}
 	}
@@ -198,5 +204,5 @@ public class MainHoneycombActivity extends ListActivity {
 		}
 		return contacts;
 	}
-	
+
 }

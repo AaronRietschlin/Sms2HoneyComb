@@ -78,6 +78,8 @@ public class MessageFragment extends ListFragment {
 				dbAdapter.getMessageArrayList(phoneNumber));
 
 		messageAdapter.notifyDataSetChanged();
+		
+		messageAdapter = new MessageListAdapter(getActivity(), R.layout.message_list_item, MainHoneycombActivity.messageResults);
 
 		setListAdapter(messageAdapter);
 
@@ -92,7 +94,6 @@ public class MessageFragment extends ListFragment {
 						CONTACT_PICKER_RESULT);
 			}
 		});
-		
 
 		// IT FUCKING HAS TO BE andriod.R.id.list fucking POS differences
 		messageListView = (ListView) view.findViewById(android.R.id.list);
@@ -175,21 +176,15 @@ public class MessageFragment extends ListFragment {
 	 * @author Aaron
 	 * 
 	 */
-	public class MessageListAdapter extends ArrayAdapter<Object> {
-		private ArrayList<ArrayList<MessageItem>> mMessages;
-		private ArrayList<MessageItem> outgoingMessages;
-		private ArrayList<MessageItem> incomingMessages;
+	public class MessageListAdapter extends ArrayAdapter<String> {
+		private ArrayList<MessageItem> mMessages;
 		private Context mContext;
 		private LayoutInflater inflater;
 
 		public MessageListAdapter(Context context, int textViewResourceId,
-				ArrayList<ArrayList<MessageItem>> messages) {
+				ArrayList<MessageItem> messages) {
 			super(context, textViewResourceId);
 			mMessages = messages;
-			outgoingMessages = messages.get(0);
-			if (messages.size() == 2) {
-				incomingMessages = messages.get(1);
-			}
 			mContext = context;
 		}
 
@@ -198,7 +193,12 @@ public class MessageFragment extends ListFragment {
 			View v = super.getView(position, convertView, parent);
 			inflater = (LayoutInflater) mContext
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+			TextView nameTv = (TextView) v.findViewById(R.id.message_list_name);
+			nameTv.setText(mMessages.get(position).getMessageFrom());
+			TextView messageTv = (TextView) v.findViewById(R.id.message_list_body);
+			messageTv.setText(mMessages.get(position).getMessageBody());
+			TextView timeTv = (TextView) v.findViewById(R.id.message_list_sent);
+			timeTv.setText(mMessages.get(position).getMessageTime());
 			return convertView;
 		}
 
@@ -217,36 +217,39 @@ public class MessageFragment extends ListFragment {
 				String contactId = uri.getLastPathSegment();
 				Log.d(TAG, "Contact Info - ID: " + contactId);
 
-				/* Query the Contacts database with the Phone content_uri. The
-				 selection is the Contact_ID that is equal to the contactId
-				 from the uri returned*/
+				/*
+				 * Query the Contacts database with the Phone content_uri. The
+				 * selection is the Contact_ID that is equal to the contactId
+				 * from the uri returned
+				 */
 				cursor = activity.getContentResolver().query(Phone.CONTENT_URI,
 						null, Phone.CONTACT_ID + "=?",
 						new String[] { contactId }, null);
-				if(cursor.moveToFirst()){  
-				String columns[] = cursor.getColumnNames();  
-				
-				// Iterates throguh the cursor
-//				for (String column : columns) {  
-//				    int index = cursor.getColumnIndex(column);  
-//				    Log.v(TAG, "Contact Info - Column: " + column + " == ["  
-//				            + cursor.getString(index) + "]");  
-//				}
-				int phoneIndex = cursor.getColumnIndex(Phone.DATA1);
-				int nameIndex = cursor.getColumnIndex(Phone.DISPLAY_NAME);
-				phoneNumber = cursor.getString(phoneIndex);
-				String displayName = cursor.getString(nameIndex);
-				displayName = displayName + " <" + phoneNumber + ">, ";
-				String currentText = toField.getText().toString();
-				// If there is current text, then concatenage the new number
-				if(currentText.length() > 0){
-					displayName = currentText + displayName;
-				}
-				toField.setText(displayName);
-				}else{
-					// Contact has no phone information. 
-					//TODO : Prompt user to input phone info?
-					Util.displayToast(mContext, "Contact has no phone information.");
+				if (cursor.moveToFirst()) {
+					String columns[] = cursor.getColumnNames();
+
+					// Iterates throguh the cursor
+					// for (String column : columns) {
+					// int index = cursor.getColumnIndex(column);
+					// Log.v(TAG, "Contact Info - Column: " + column + " == ["
+					// + cursor.getString(index) + "]");
+					// }
+					int phoneIndex = cursor.getColumnIndex(Phone.DATA1);
+					int nameIndex = cursor.getColumnIndex(Phone.DISPLAY_NAME);
+					phoneNumber = cursor.getString(phoneIndex);
+					String displayName = cursor.getString(nameIndex);
+					displayName = displayName + " <" + phoneNumber + ">, ";
+					String currentText = toField.getText().toString();
+					// If there is current text, then concatenage the new number
+					if (currentText.length() > 0) {
+						displayName = currentText + displayName;
+					}
+					toField.setText(displayName);
+				} else {
+					// Contact has no phone information.
+					// TODO : Prompt user to input phone info?
+					Util.displayToast(mContext,
+							"Contact has no phone information.");
 				}
 				break;
 			}
