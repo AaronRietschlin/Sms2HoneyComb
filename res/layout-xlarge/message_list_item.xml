@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<TextView android:text="TextView" android:textAppearance="?android:attr/textAppearanceMedium"
+		android:id="@+id/message_list_name" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_alignParentTop="true"
+		android:layout_alignParentLeft="true"></TextView>
+	<TextView android:text=": " android:textAppearance="?android:attr/textAppearanceMedium"
+		android:id="@+id/message_list_colon" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_alignParentTop="true"
+		android:layout_toRightOf="@+id/message_list_name" android:gravity="left"></TextView>
+	<TextView android:text="TextView" android:id="@+id/message_list_body"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_alignBaseline="@+id/message_list_colon"
+		android:layout_alignBottom="@+id/message_list_colon"
+		android:layout_toRightOf="@+id/message_list_colon"
+		android:layout_alignParentRight="true"></TextView>
+	<TextView android:text="Sent: " android:textAppearance="?android:attr/textAppearanceSmall"
+		android:id="@+id/message_list_sent" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_below="@+id/message_list_body"
+		android:layout_alignParentLeft="true"></TextView>
+	<TextView android:text="TextView" android:textAppearance="?android:attr/textAppearanceSmall"
+		android:id="@+id/textView1" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_alignBaseline="@+id/message_list_sent"
+		android:layout_alignBottom="@+id/message_list_sent"
+		android:layout_toRightOf="@+id/message_list_sent"
+		android:layout_alignParentRight="true"></TextView>
+</RelativeLayout>

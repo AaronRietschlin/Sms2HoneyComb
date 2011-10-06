@@ -115,6 +115,23 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 10-5-2011 (Parker)
 	- Updated to the new databases and updates the quries, threads do not work yet.
 	
+9-38-11 (Aaron)
+	-Got the Contact Picker working
+		-It currently opens up a contact picker in a new activity that overlays the two fragments
+		-You can choose one contact. The effect of choosing one is it adds the Contacts Name and Number to the edit text
+		-TODO : 
+			-Prompt user to input phone number of contact if none exists
+	-Added Two Tables to Parse:
+		1.) SMS
+		2.) THREADS
+		-These tables better represent what we need. 
+		-TODO: relate to Usernames.
+	-Added Button to MessageFragment that allows the user to choose button.
+	-Began work on MessageListItem which will act as the message list.
+		-Also started work on custom ArrayAdapter called MessageListAdapter. 
+	-Wrote method in Util that finds ALL messages (using old table).
+
+	
 	TODO: 		
 		•Encrypt passwords
 			-DONE 8-16-11 Using ParseUser which does this for us. 

@@ -63,21 +63,17 @@ public class MainPhoneActivity extends ListActivity {
 
 		// The intent passes on the data to the Bundle when the Activity is
 		// created, you have to getExtras from the intent
-/*		mIntent = getIntent();
-		Bundle extras = mIntent.getExtras();
-
-		// The phone number is gotten by the key "phonenumber" and put into the
-		// String
-		phonenumber = extras.getString("phonenumber");
-		// check it there is a phone number testing
-		if (phonenumber == null) {
-			Log.e(TAG,
-					"The intent from the contacts list did not work phonenumber: "
-							+ phonenumber);
-		} else {
-			Log.d(TAG, "The number selected from the contacts is: "
-					+ phonenumber);
-		}*/
+		/*
+		 * mIntent = getIntent(); Bundle extras = mIntent.getExtras();
+		 * 
+		 * // The phone number is gotten by the key "phonenumber" and put into
+		 * the // String phonenumber = extras.getString("phonenumber"); // check
+		 * it there is a phone number testing if (phonenumber == null) {
+		 * Log.e(TAG,
+		 * "The intent from the contacts list did not work phonenumber: " +
+		 * phonenumber); } else { Log.d(TAG,
+		 * "The number selected from the contacts is: " + phonenumber); }
+		 */
 
 		// Open up the database
 		dbAdapter = new DatabaseAdapter(MainPhoneActivity.this);
@@ -95,13 +91,15 @@ public class MainPhoneActivity extends ListActivity {
 		sendButton = (Button) findViewById(R.id.main_send_btn);
 
 		// Get the Adapter for the list so iy can be updated separately
-		messageAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+		messageAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1,
 				dbAdapter.getMessageArrayList(phonenumber));
-				
-		// TODO I dont know if this works when the bd is updated to updated the listview
+
+		// TODO I dont know if this works when the bd is updated to updated the
+		// listview
 		// if the messageAdapter is updated then refresh the data
 		messageAdapter.notifyDataSetChanged();
-		
+
 		// Set the list's adapter
 		setListAdapter(messageAdapter);
 
@@ -115,13 +113,21 @@ public class MainPhoneActivity extends ListActivity {
 				// then send them on to parse and to the push channel(phone)
 				// on then on the phone send the messages via a sms message to
 				// the to number
-				toField.setText(phonenumber);
+//				toField.setText(phonenumber);
 				final String to = toField.getText().toString().trim();
 				final String body = messageField.getText().toString().trim();
 
-				ParseObject outgoingMessage = new ParseObject("OutgoingMessage");
-				outgoingMessage.put("messageTo", to);
-				outgoingMessage.put("messageBody", body);
+				ParseObject outgoingMessage = new ParseObject(
+						Preferences.PARSE_TABLE_SMS);
+				Log.e(TAG, "Address to: " + to);
+				outgoingMessage.put(Preferences.PARSE_SMS_ADDRESS, to);
+				outgoingMessage.put(Preferences.PARSE_SMS_BODY, body);
+				outgoingMessage.put(Preferences.PARSE_SMS_READ, 1);
+				outgoingMessage.put(Preferences.PARSE_SMS_TYPE, 2);
+				// TODO : Generate the
+				// SMSID.outgoingMessage.put(Preferences.PARSE_SMS_SMSID, 0);
+				// TODO : Figure out the ThreadID.
+				// outgoingMessage.put(Preferences.PARSE_SMS_THREAD_ID, 1);
 				outgoingMessage.put(Preferences.PARSE_USERNAME_ROW,
 						Util.getUsernameString());
 				outgoingMessage.saveInBackground(new SaveCallback() {

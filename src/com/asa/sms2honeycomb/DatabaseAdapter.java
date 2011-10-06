@@ -2,6 +2,8 @@ package com.asa.sms2honeycomb;
 
 import java.util.ArrayList;
 
+import com.asa.sms2honeycomb.util.Util;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -111,6 +113,7 @@ public class DatabaseAdapter {
 	// Insert a new MessageItem into Database
 	public long insertMessageItem(MessageItem item) {
 		ContentValues newMessageValues = new ContentValues();
+<<<<<<< HEAD
 		newMessageValues.put(KEY_ADDRESS, item.getAddress());
 		newMessageValues.put(KEY_TIME, item.getTime());
 		newMessageValues.put(KEY_BODY, item.getBody());
@@ -123,6 +126,16 @@ public class DatabaseAdapter {
 		// Inserts the new row into the database
 		Log.d(TAG, "Values: " + " have been put in to: " + DATABASE_NAME);
 		return db.insert(MESSAGE_TABLE, null, newMessageValues);
+=======
+		newMessageValues.put(KEY_TIME, item.getMessageTime().toString());
+		newMessageValues.put(KEY_TO, item.getMessageTo());
+		newMessageValues.put(KEY_FROM, item.getMessageFrom());
+		newMessageValues.put(KEY_BODY, item.getMessageBody());
+		// Inserts the new row into the database
+		Log.d(TAG, "Values: " + item.getMessageTime() + item.getMessageTo() + item.getMessageFrom()
+				+ item.getMessageBody() + "has been put in to: " + DATABASE_NAME);
+		return db.insert(DATABASE_TABLE, null, newMessageValues);
+>>>>>>> origin/master
 	}
 
 	public long insertThreadItem(ThreadItem item) {
@@ -173,7 +186,31 @@ public class DatabaseAdapter {
 		return true;
 	}
 
+<<<<<<< HEAD
 	// TODO update
+=======
+	/**
+	 * Returns the MessageItem at the given index in the database.
+	 */
+	public MessageItem getMessageItem(long index) throws SQLException {
+		Cursor cursor = db.query(true, DATABASE_TABLE, new String[] { KEY_ID,
+				KEY_TIME, KEY_TO, KEY_FROM, KEY_BODY }, KEY_ID + "=" + index,
+				null, null, null, null, null);
+		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
+			throw new SQLException("No location item found for row #" + index);
+		}
+		String time = cursor.getString(TIME_COLUMN);
+		String to = cursor.getString(TO_COLUMN);
+		String from = cursor.getString(FROM_COLUMN);
+		String body = cursor.getString(BODY_COLUMN);
+		Log.d(TAG, "MessageItem containing: " + time + to + from + body
+				+ " queryed and pulled from the table: " + DATABASE_TABLE);
+		
+		return new MessageItem(time, to, from, body);
+
+	}
+
+>>>>>>> origin/master
 	/**
 	 * Querys the Database for the number given getting both the TO and the
 	 * FROM.

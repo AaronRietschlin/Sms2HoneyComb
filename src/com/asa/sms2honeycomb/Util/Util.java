@@ -1,12 +1,14 @@
 package com.asa.sms2honeycomb.util;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.MessageItem;
 import com.asa.sms2honeycomb.Preferences;
 import com.parse.FindCallback;
@@ -98,6 +100,70 @@ public class Util {
 		});
 		return table;
 	}
+	
+	private static ArrayList<MessageItem> outgoingMessageList; 
+	private static ArrayList<MessageItem> incomingMessageList; 
+	private static ArrayList<ArrayList<MessageItem>> results;
+	
+	private static ArrayList<MessageItem> messageResults;
+	
+	public static ArrayList<MessageItem> getAllMessages(final String username){
+		ParseQuery querySms = new ParseQuery(Preferences.PARSE_TABLE_SMS);
+		ParseQuery queryThread = new ParseQuery(Preferences.PARSE_TABLE_THREAD);
+		
+		querySms.whereEqualTo(Preferences.PARSE_USERNAME_ROW, username);
+		final String messageBody, messageAddress;
+		final Date outgoingMessageDate;
+		outgoingMessageList = new ArrayList<MessageItem>();
+		incomingMessageList = new ArrayList<MessageItem>();
+		results = new ArrayList<ArrayList<MessageItem>>();
+		messageResults = new ArrayList<MessageItem>();
+		// Begin query for messages. 
+		querySms.findInBackground(new FindCallback(){
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				if(e == null){
+					if(Preferences.DEBUG) Log.d(TAG, "Message size: " + objects.size()); 
+					for(ParseObject messageObject : objects){
+						MessageItem messageItem = new MessageItem();
+						messageItem.setMessageBody(messageObject.getString(Preferences.PARSE_SMS_BODY));
+						messageItem.setMessageFrom(messageObject.getString(username));
+						messageItem.setMessageTo(messageObject.getString(Preferences.PARSE_SMS_ADDRESS));
+						messageItem.setMessageTime(messageObject.createdAt().toLocaleString());
+						messageResults.add(messageItem);
+						Log.e(TAG, "MessageItem - Size: " + messageResults.size());
+					}
+				}else{
+					// Error occurred finding ALL objects. TODO
+					Log.e(TAG, "Message Item:");
+				}
+			}
+		});
+
+		// TODO : This is commented out because I am only testing getting the messages for now.
+//		queryThread.whereEqualTo(Preferences.PARSE_EMAIL_ROW, username);
+//		queryThread.findInBackground(new FindCallback(){
+//			@Override
+//			public void done(List<ParseObject> objects, ParseException e) {
+//				if(e == null){
+//					for(ParseObject messageObject : objects){
+//						MessageItem messageItem = new MessageItem();
+//						messageItem.setMessageBody(messageObject.getString("messageBody"));
+//						messageItem.setMessageFrom(messageObject.getString(username));
+//						messageItem.setMessageTo(messageObject.getString("messageTo"));
+//						messageItem.setMessageTime(messageObject.createdAt().toLocaleString());
+//						messageResults.add(messageItem);
+//					}
+//					
+//				}else{
+//					// Error occurding finding objects TODO
+//					Log.e(TAG, "Error finding incoming messages.");
+//				}
+//				
+//			}
+//		});
+		return messageResults;
+	}
 
 	/**
 	 * Creates a string using the uername and a given name of the wanted push
@@ -136,5 +202,23 @@ public class Util {
 	 */
 	public static String getUsernameString() {
 		return ParseUser.getCurrentUser().getUsername();
+	}
+	
+	public static Date formatStringToDate(String stringDate){
+		SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss a");
+		Date date = null; 
+		try {
+			date = formatter.parse(stringDate);
+		} catch (java.text.ParseException e) {
+			// TODO : Handle this exception
+			e.printStackTrace();
+		}
+		return date;
+	}	
+	
+	static Toast mToast;
+	public static void displayToast(Context context, String message){
+		mToast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+		mToast.show();
 	}
 }
