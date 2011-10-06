@@ -66,17 +66,17 @@ public class ContactsDialogFragment extends DialogFragment {
 		contactsList.setAdapter(new ArrayAdapter<String>(v.getContext(),
 				android.R.layout.simple_list_item_1, getCotactArrayList()));
 
-//		contactsList.setOnItemClickListener(new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> arg0, View v, int postion,
-//					long id) {
-//
-//				Toast.makeText(v.getContext(), (((TextView) v).getText()),
-//						Toast.LENGTH_SHORT).show();
-//			}
-//
-//		});
+		contactsList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View v, int postion,
+					long id) {
+
+				Toast.makeText(v.getContext(), (((TextView) v).getText()),
+						Toast.LENGTH_SHORT).show();
+			}
+
+		});
 
 		return v;
 

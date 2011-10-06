@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"> 
   <item android:id="@+id/query" 
-    android:title="@string/menu_refresh"
+    android:title="Query"
     android:showAsAction="ifRoom|withText"/> 
   <item android:id="@+id/contacts" 
-    android:title="@string/menu_contacts"
+    android:title="Contacts"
     android:showAsAction="ifRoom|withText"/>
   <item android:id="@+id/logout" 
-    android:title="@string/menu_logout"/>  
+    android:title="Logout"/>  
 </menu> 

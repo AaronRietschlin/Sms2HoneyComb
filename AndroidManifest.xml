@@ -3,7 +3,6 @@
       package="com.asa.sms2honeycomb"
       android:versionCode="1"
       android:versionName="1.0">
-      
     <uses-sdk android:minSdkVersion="8"
     	android:targetSdkVersion="11" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />

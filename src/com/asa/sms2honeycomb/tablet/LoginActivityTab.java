@@ -36,8 +36,6 @@ public class LoginActivityTab extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_activity_tablet);
 
-		Preferences.LAUNCH_FROM_LOGIN = true;
-		
 		if(ParseUser.getCurrentUser() != null){
 			mIntent = new Intent(LoginActivityTab.this, MainHoneycombActivity.class);
 			startActivity(mIntent);
