@@ -2,8 +2,7 @@ package com.asa.sms2honeycomb;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import com.asa.sms2honeycomb.Util.Util;
+import java.util.Map;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,6 +13,8 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.asa.sms2honeycomb.Util.Util;
 
 public class DatabaseAdapter {
 	// TAG for debugging
@@ -285,6 +286,14 @@ public class DatabaseAdapter {
 				Log.d(TAG, "Creation: Trying to create SMS table");
 				Log.d(TAG, "Creation: " + DATABASE_CREATE_SMS);
 			_db.execSQL(DATABASE_CREATE_SMS);
+			Map<String, String> map = _db.getSyncedTables();
+			if(map.size() == 0){
+				Log.d(TAG, "Creation: Empty.");
+			}
+			for (Map.Entry<String, String> entry : map.entrySet())
+			{
+				Log.d(TAG, "Creation: " + entry.getKey() + "/" + entry.getValue());
+			}
 			}catch(SQLException e){
 				Log.d(TAG, "Creation: Failed trying to create SMS table");
 			}
