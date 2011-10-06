@@ -10,6 +10,22 @@ public class Preferences {
 	public static final String PARSE_PASSWORD_ROW = "password";
 	// TODO: END Get rid of...
 
+	public static final String PARSE_TABLE_SMS = "SMS";
+	public static final String PARSE_SMS_ID = "smsId";
+	public static final String PARSE_SMS_SUBJECT = "subject";
+	public static final String PARSE_SMS_THREADID = "threadId";
+	public static final String PARSE_SMS_TYPE = "type";
+	public static final String PARSE_SMS_ADDRESS = "address";
+	public static final String PARSE_SMS_READ = "read";
+	
+	public static final String PARSE_TABLE_THREAD = "THREAD";
+	public static final String PARSE_THREAD_ID = "threadId";
+	public static final String PARSE_THREAD_SNIPPET = "snippet";
+	public static final String PARSE_THREAD_READ = "read";
+	public static final String PARSE_THREAD_MESSAGECOUNT = "messageCount";
+	public static final String PARSE_THREAD_HASATTACHMENT = "hasAttachment";
+	
+	
 	public static final String PARSE_INSTALLATION_ID = "installation_id";
 
 	public static final String TABLET = "TABLET";

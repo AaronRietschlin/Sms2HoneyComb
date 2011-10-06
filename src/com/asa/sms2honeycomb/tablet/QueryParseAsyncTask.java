@@ -50,10 +50,10 @@ public class QueryParseAsyncTask extends
 				for (ParseObject messageObject : objects) {
 					MessageItem messageItem = new MessageItem();
 					messageItem.setMessageBody(messageObject
-							.getString(Preferences.PARSE_SMS_BODY));
-					messageItem.setMessageFrom(messageObject
+							.getString(Preferences.PARSE_SMS_SUBJECT));
+					messageItem.setMessageUsername(messageObject
 							.getString(username));
-					messageItem.setMessageTo(messageObject
+					messageItem.setMessageAddress(messageObject
 							.getString(Preferences.PARSE_SMS_ADDRESS));
 					messageItem.setMessageTime(messageObject.createdAt()
 							.toLocaleString());

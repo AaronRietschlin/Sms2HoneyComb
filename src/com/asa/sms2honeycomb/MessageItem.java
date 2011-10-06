@@ -2,64 +2,105 @@ package com.asa.sms2honeycomb;
 
 public class MessageItem {
 
-	String mAddress;
-	String mTime;
-	String mBody;
-	String mRead;
-	String mSmsId;
-	String mSubject;
-	String mThreadId;
-	String mType;
-	String mUsername;
+	String messageAddress;
+	String messageTime;
+	String messageBody;
+	String messageRead;
+	String messageSmsId;
+	String messageSubject;
+	String messageThreadId;
+	String messageType;
+	String messageUsername;
 
 	public MessageItem(String address, String time, String body, String read,
 			String smsId, String subject, String threadId, String type,
 			String username) {
 		
-		mAddress = address;
-		mTime = time;
-		mBody = body;
-		mRead = read;
-		mSmsId = smsId;
-		mSubject = subject;
-		mThreadId = threadId;
-		mType = type;
-		mUsername = username;
+		messageAddress = address;
+		messageTime = time;
+		messageBody = body;
+		messageRead = read;
+		messageSmsId = smsId;
+		messageSubject = subject;
+		messageThreadId = threadId;
+		messageType = type;
+		messageUsername = username;
 	}
 
-	public String getAddress() {
-		return mAddress;
+	public MessageItem(){
+		
+	}
+	
+	public String getMessageAddress() {
+		return messageAddress;
 	}
 
-	public String getTime() {
-		return mTime;
+	public void setMessageAddress(String messageAddress) {
+		this.messageAddress = messageAddress;
 	}
 
-	public String getBody() {
-		return mBody;
+	public String getMessageTime() {
+		return messageTime;
 	}
 
-	public String getRead() {
-		return mRead;
+	public void setMessageTime(String messageTime) {
+		this.messageTime = messageTime;
 	}
 
-	public String getSmsId() {
-		return mSmsId;
+	public String getMessageBody() {
+		return messageBody;
 	}
 
-	public String getSubject() {
-		return mSubject;
+	public void setMessageBody(String messageBody) {
+		this.messageBody = messageBody;
 	}
 
-	public String getThreadId() {
-		return mThreadId;
+	public String getMessageRead() {
+		return messageRead;
 	}
 
-	public String getType() {
-		return mType;
+	public void setMessageRead(String messageRead) {
+		this.messageRead = messageRead;
 	}
 
-	public String getUsername() {
-		return mUsername;
+	public String getMessageSmsId() {
+		return messageSmsId;
 	}
+
+	public void setMessageSmsId(String messageSmsId) {
+		this.messageSmsId = messageSmsId;
+	}
+
+	public String getMessageSubject() {
+		return messageSubject;
+	}
+
+	public void setMessageSubject(String messageSubject) {
+		this.messageSubject = messageSubject;
+	}
+
+	public String getMessageThreadId() {
+		return messageThreadId;
+	}
+
+	public void setMessageThreadId(String messageThreadId) {
+		this.messageThreadId = messageThreadId;
+	}
+
+	public String getMessageType() {
+		return messageType;
+	}
+
+	public void setMessageType(String messageType) {
+		this.messageType = messageType;
+	}
+
+	public String getMessageUsername() {
+		return messageUsername;
+	}
+
+	public void setMessageUsername(String messageUsername) {
+		this.messageUsername = messageUsername;
+	}
+
 }

@@ -1,4 +1,4 @@
-package com.asa.sms2honeycomb.util;
+package com.asa.sms2honeycomb.Util;
 
 import java.util.Date;
 import java.util.List;

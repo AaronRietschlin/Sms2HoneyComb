@@ -3,7 +3,7 @@ package com.asa.sms2honeycomb.tablet;
 import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
-import com.asa.sms2honeycomb.util.Util;
+import com.asa.sms2honeycomb.Util.Util;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;

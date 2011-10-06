@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
-import com.asa.sms2honeycomb.util.Util;
+import com.asa.sms2honeycomb.Util.Util;
 
 public class ConversationActivity extends ListActivity {
 

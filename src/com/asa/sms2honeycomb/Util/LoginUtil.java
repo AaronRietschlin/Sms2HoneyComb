@@ -1,4 +1,4 @@
-package com.asa.sms2honeycomb.util;
+package com.asa.sms2honeycomb.Util;
 
 import android.content.Context;
 import android.util.Log;
