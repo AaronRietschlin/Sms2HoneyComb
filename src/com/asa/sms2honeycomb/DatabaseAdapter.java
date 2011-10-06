@@ -20,7 +20,7 @@ public class DatabaseAdapter {
 	private final String TAG = "DatabaseHandler";
 
 	// Basic Database information
-	private static final String DATABASE_NAME = "texttotab.db";
+	private static final String DATABASE_NAME = "texttotab2.db";
 	private static final String MESSAGE_TABLE = "messageTable";
 	private static final String THREAD_TABLE = "threadTable";
 	private static final int DATABASE_VERSION = 1;
@@ -79,9 +79,9 @@ public class DatabaseAdapter {
 
 	private static final String DATABASE_CREATE_THREAD = "create table "
 			+ THREAD_TABLE + " (" + KEY_ID
-			+ " integer primary key autoincrement, " + HAS_ATTACHMENT
-			+ " int, " + MESSAGE_COUNT + " int, " + READ_T + " int, "
-			+ THREADID_T + " int, " + KEY_USERNAME_T + " string);";
+			+ " integer primary key autoincrement, " + KEY_HAS_ATTACHMENT
+			+ " int, " + KEY_MESSAGE_COUNT + " int, " + KEY_READ_T + " int, "
+			+ KEY_THREADID_T + " int, " + KEY_USERNAME_T + " string);";
 
 	// Variables to hold the database instance
 	private SQLiteDatabase db;
@@ -225,6 +225,8 @@ public class DatabaseAdapter {
 
 	// TODO update
 	public ArrayList<String> getConversationList() {
+		db.execSQL("DROP TABLE IF EXISTS " + MESSAGE_TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + THREAD_TABLE);
 		ArrayList<String> list = new ArrayList<String>();
 		// TODO get the cursor to query the db and get the number of entries for
 		// both the to and from that are from the same person MAKE IT WORK
@@ -236,7 +238,6 @@ public class DatabaseAdapter {
 				KEY_HAS_ATTACHMENT, KEY_BODY, KEY_MESSAGE_COUNT, KEY_READ_T,
 				KEY_THREADID_T, KEY_USERNAME_T }, null, null, null, null, null,
 				null);
-
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
 			Log.d(TAG, "No conversations.");
 			list.add("Start a new conversation");
@@ -280,9 +281,21 @@ public class DatabaseAdapter {
 		// to create a new one.
 		@Override
 		public void onCreate(SQLiteDatabase _db) {
-			Log.d(TAG, "Created: " + DATABASE_CREATE_SMS);
+			try{
+				Log.d(TAG, "Creation: Trying to create SMS table");
+				Log.d(TAG, "Creation: " + DATABASE_CREATE_SMS);
 			_db.execSQL(DATABASE_CREATE_SMS);
-			_db.execSQL(DATABASE_CREATE_THREAD);
+			}catch(SQLException e){
+				Log.d(TAG, "Creation: Failed trying to create SMS table");
+			}
+			try{
+				// TODO : It's failing in the creation of this table.
+				Log.d(TAG, "Creation: Trying to create thread table");
+				_db.execSQL(DATABASE_CREATE_THREAD);
+				Log.d(TAG, "Creation: " + DATABASE_CREATE_THREAD);
+			}catch(SQLException e){
+				Log.d(TAG, "Creation: Failed trying to create thread table");
+			}
 		}
 
 		/*
@@ -297,7 +310,7 @@ public class DatabaseAdapter {
 			Log.w("TaskDBAdapter", "Upgrade from version " + _oldVersion
 					+ " to " + _newVersion
 					+ ", which will destroy all old data");
-
+			
 			/*
 			 * Upgrade the existing database to conform to the new version.
 			 * Multiple previous version can be handled by comparing _oldVersion
