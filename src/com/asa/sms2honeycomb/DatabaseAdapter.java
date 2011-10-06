@@ -111,15 +111,15 @@ public class DatabaseAdapter {
 	// Insert a new MessageItem into Database
 	public long insertMessageItem(MessageItem item) {
 		ContentValues newMessageValues = new ContentValues();
-		newMessageValues.put(KEY_ADDRESS, item.getAddress());
-		newMessageValues.put(KEY_TIME, item.getTime());
-		newMessageValues.put(KEY_BODY, item.getBody());
-		newMessageValues.put(KEY_READ_S, item.getRead());
-		newMessageValues.put(KEY_SMSID, item.getSmsId());
-		newMessageValues.put(KEY_SUBJECT, item.getSubject());
-		newMessageValues.put(KEY_THREADID_S, item.getThreadId());
-		newMessageValues.put(KEY_TYPE, item.getType());
-		newMessageValues.put(KEY_USERNAME_S, item.getUsername());
+		newMessageValues.put(KEY_ADDRESS, item.getMessageAddress());
+		newMessageValues.put(KEY_TIME, item.getMessageTime());
+		newMessageValues.put(KEY_BODY, item.getMessageBody());
+		newMessageValues.put(KEY_READ_S, item.getMessageRead());
+		newMessageValues.put(KEY_SMSID, item.getMessageSmsId());
+		newMessageValues.put(KEY_SUBJECT, item.getMessageSubject());
+		newMessageValues.put(KEY_THREADID_S, item.getMessageThreadId());
+		newMessageValues.put(KEY_TYPE, item.getMessageType());
+		newMessageValues.put(KEY_USERNAME_S, item.getMessageUsername());
 		// Inserts the new row into the database
 		Log.d(TAG, "Values: " + " have been put in to: " + DATABASE_NAME);
 		return db.insert(MESSAGE_TABLE, null, newMessageValues);

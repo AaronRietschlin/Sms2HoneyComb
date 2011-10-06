@@ -68,7 +68,7 @@ public class ContactsDialogFragment extends DialogFragment {
 
 		contactsList.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
+			
 			public void onItemClick(AdapterView<?> arg0, View v, int postion,
 					long id) {
 
