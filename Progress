@@ -111,6 +111,9 @@ Looked into StackMob. I really like StackMob because of some of their features: 
 	- Made a phone ConversationActivity with a new conversation button
 	- I did not get the db quering working though
 	- I also added when you click the listviews it will pull the number out of the string and then use them in the intents
+
+10-5-2011 (Parker)
+	- Updated to the new databases and updates the quries, threads do not work yet.
 	
 	TODO: 		
 		•Encrypt passwords

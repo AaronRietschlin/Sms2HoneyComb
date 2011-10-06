@@ -156,7 +156,7 @@ public class MainPhoneActivity extends ListActivity {
 				});
 				// TODO this is for testing the querying and pulling the info
 				// off of the server
-				final ParseQuery query = new ParseQuery("OutgoingMessage");
+/*				final ParseQuery query = new ParseQuery("OutgoingMessage");
 				query.whereEqualTo(Preferences.PARSE_USERNAME_ROW, "TestName");
 				query.orderByDescending("createdAt");
 				query.setLimit(1);
@@ -191,7 +191,7 @@ public class MainPhoneActivity extends ListActivity {
 							Log.d(TAG, "Error: " + e.getMessage());
 						}
 					}
-				});
+				});*/
 			}
 		});
 

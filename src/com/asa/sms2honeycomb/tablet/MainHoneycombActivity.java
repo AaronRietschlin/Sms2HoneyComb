@@ -94,26 +94,25 @@ public class MainHoneycombActivity extends ListActivity {
 	}
 
 	public void showDialog() {
-	    // DialogFragment.show() will take care of adding the fragment
-	    // in a transaction.  We also want to remove any currently showing
-	    // dialog, so make our own transaction and take care of that here.
-	    FragmentTransaction ft = getFragmentManager().beginTransaction();
-	    Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-	    if (prev != null) {
-	        ft.remove(prev);
-	    }
-	    ft.addToBackStack(null);
+		// DialogFragment.show() will take care of adding the fragment
+		// in a transaction. We also want to remove any currently showing
+		// dialog, so make our own transaction and take care of that here.
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
 
-	    // Create and show the dialog.
-	    DialogFragment newFragment = ContactsDialogFragment.newInstance(0);
-	    newFragment.show(ft, "dialog");
-
+		// Create and show the dialog.
+		DialogFragment newFragment = ContactsDialogFragment.newInstance(0);
+		newFragment.show(ft, "dialog");
 
 	}
-	
+
 	// TODO TESTING
 	public void QueryMessages() {
-		final ParseQuery query = new ParseQuery("OutgoingMessage");
+		final ParseQuery query = new ParseQuery("sms");
 		query.whereEqualTo(Preferences.PARSE_USERNAME_ROW, "TestName");
 		query.orderByDescending("createdAt");
 		query.setLimit(10);
@@ -127,16 +126,22 @@ public class MainHoneycombActivity extends ListActivity {
 							ParseObject message = query.get(objectId);
 							Date time = message.createdAt();
 							String timeDB = time.toString();
-							String toDB = message.getString("messageTo");
-							String fromDB = message.getString("messageFrom");
-							String bodyDB = message.getString("messageBody");
+							String addressDB = message.getString("address");
+							String bodyDB = message.getString("body");
+							String readDB = message.getString("read");
+							String smsIdDB = message.getString("smsId");
+							String subjectDB = message.getString("subject");
+							String threadIdDB = message.getString("threadId");
+							String typeDB = message.getString("type");
+							String usernameDB = message.getString("username");
 							String totalMessage = "Sent: " + timeDB + "\n"
-									+ "To: " + toDB + "\n" + "Message : "
-									+ bodyDB + "\n";
+									+ "Address: " + addressDB + "\n"
+									+ "Message : " + bodyDB + "\n";
 							System.out.println(totalMessage);
 							// add the shit to the sqlitedb
-							MessageItem item = new MessageItem(timeDB, toDB,
-									fromDB, bodyDB);
+							MessageItem item = new MessageItem(timeDB,
+									addressDB, bodyDB, readDB, smsIdDB,
+									subjectDB, threadIdDB, typeDB, usernameDB);
 							dbAdapter.insertMessageItem(item);
 						} catch (ParseException e1) {
 							Log.e(TAG, e1.getMessage());
@@ -148,7 +153,8 @@ public class MainHoneycombActivity extends ListActivity {
 			}
 		});
 	}
-
+	
+	// TODO this is old and doesnt work bitchs
 	public ArrayList<String> getCotactArrayList() {
 		// Get the cursor over every aggregated contact data.
 		Cursor dataCursor = this.getContentResolver().query(

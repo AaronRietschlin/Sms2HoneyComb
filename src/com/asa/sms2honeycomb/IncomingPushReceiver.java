@@ -25,11 +25,6 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 
 	private DatabaseAdapter dbAdapter;
 
-	public static String timeDB;
-	public static String toDB;
-	public static String fromDB;
-	public static String bodyDB;
-
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// Get the context from the onReceive
@@ -80,18 +75,19 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 									SimpleDateFormat sdf = new SimpleDateFormat(
 											"E MMM dd hh:mm");
 									String formatedTime = sdf.format(time);
-									timeDB = formatedTime.toString();
-									// Do not need this since it will be null
-									toDB = message.getString("messageTo");
-									// Get who the message is from
-									// (phonenumber).
-									fromDB = message.getString("messageFrom");
-									// Get the body of the message
-									bodyDB = message.getString("messageBody");
+									String timeDB = formatedTime.toString();
+									String addressDB = message.getString("address");
+									String bodyDB = message.getString("body");
+									String readDB = message.getString("read");
+									String smsIdDB = message.getString("smsId");
+									String subjectDB = message.getString("subject");
+									String threadIdDB = message.getString("threadId");
+									String typeDB = message.getString("type");
+									String usernameDB = message.getString("username");
 									// Display the total message queryed for
 									// logging
 									String totalMessage = "Sent: " + timeDB
-											+ "\n" + "To: " + fromDB + "\n"
+											+ "\n" + "Address: " + addressDB + "\n"
 											+ "Message : " + bodyDB + "\n";
 									Log.d(TAG, "New message is: "
 											+ totalMessage);
@@ -99,7 +95,8 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 									// create
 									// the db entry.
 									MessageItem item = new MessageItem(timeDB,
-											toDB, fromDB, bodyDB);
+											addressDB, bodyDB, readDB, smsIdDB,
+											subjectDB, threadIdDB, typeDB, usernameDB);
 									// Insert the MessageItem into the
 									// sms2honeycomb.db.
 									dbAdapter.insertMessageItem(item);
