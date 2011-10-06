@@ -1,13 +1,16 @@
 package com.asa.sms2honeycomb.Util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 
-import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
-import com.asa.sms2honeycomb.DatabaseAdapter;
-import com.asa.sms2honeycomb.MessageItem;
 import com.asa.sms2honeycomb.Preferences;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -137,4 +140,32 @@ public class Util {
 	public static String getUsernameString() {
 		return ParseUser.getCurrentUser().getUsername();
 	}
+	
+	/**
+	 * Method that pushes the database to a file on the SDCard since the Galaxy Tab is not rooted.
+	 * 
+	 */
+    public static void backupDatabase() throws IOException {
+    	Log.e(TAG, "Backing up database...");
+        //Open your local db as the input stream
+        String inFileName = "/data/data/com.asa.sms2honeycomb/databases/texttotab.db";
+        File dbFile = new File(inFileName);
+        FileInputStream fis = new FileInputStream(dbFile);
+
+        String outFileName = Environment.getExternalStorageDirectory()+"/texttotab.db";
+        Log.e(TAG, "FileName: " + outFileName);
+        //Open the empty db as the output stream
+        OutputStream output = new FileOutputStream(outFileName);
+        //transfer bytes from the inputfile to the outputfile
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = fis.read(buffer))>0){
+            output.write(buffer, 0, length);
+        }
+        Log.e(TAG, "FileName:" + output.toString());
+        //Close the streams
+        output.flush();
+        output.close();
+        fis.close();
+    }
 }

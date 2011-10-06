@@ -10,6 +10,5 @@ public class LauncherActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.launcher_activity_tablet);
-		
 	}
 }

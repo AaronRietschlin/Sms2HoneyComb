@@ -1,6 +1,9 @@
 package com.asa.sms2honeycomb;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import com.asa.sms2honeycomb.Util.Util;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -66,20 +69,19 @@ public class DatabaseAdapter {
 	public static final int USERNAME_T = 5;
 
 	// SQL Statement to create a new database.
-	private static final String DATABASE_CREATE = "create table "
+	private static final String DATABASE_CREATE_SMS = "create table "
 			+ MESSAGE_TABLE + " (" + KEY_ID
 			+ " integer primary key autoincrement, " + KEY_TIME + " date, "
 			+ KEY_ADDRESS + " string, " + KEY_BODY + " String, " + KEY_READ_S
 			+ " int, " + KEY_SMSID + " int, " + KEY_SUBJECT + " String, "
-			+ KEY_THREADID_S + " int, " + KEY_TYPE
-			+ " int, "
-			+ KEY_USERNAME_S
-			+ " String);"
-			// creating a new table
-			+ "create table " + THREAD_TABLE + " (" + KEY_ID
+			+ KEY_THREADID_S + " int, " + KEY_TYPE + " int, " + KEY_USERNAME_S
+			+ " String);";
+
+	private static final String DATABASE_CREATE_THREAD = "create table "
+			+ THREAD_TABLE + " (" + KEY_ID
 			+ " integer primary key autoincrement, " + HAS_ATTACHMENT
 			+ " int, " + MESSAGE_COUNT + " int, " + READ_T + " int, "
-			+ THREADID_T + " int, " + KEY_USERNAME_T + " String);";
+			+ THREADID_T + " int, " + KEY_USERNAME_T + " string);";
 
 	// Variables to hold the database instance
 	private SQLiteDatabase db;
@@ -90,6 +92,14 @@ public class DatabaseAdapter {
 
 	public DatabaseAdapter(Context _context) {
 		Log.d(TAG, "DatabaseHandler constructor is working");
+
+		// Backup database
+		try {
+			Util.backupDatabase();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			Log.e(TAG, "Failed backing up database.");
+		}
 		context = _context;
 		dbHelper = new myDbHelper(context, DATABASE_NAME, null,
 				DATABASE_VERSION);
@@ -270,8 +280,9 @@ public class DatabaseAdapter {
 		// to create a new one.
 		@Override
 		public void onCreate(SQLiteDatabase _db) {
-			Log.d(TAG, "Created: " + DATABASE_CREATE);
-			_db.execSQL(DATABASE_CREATE);
+			Log.d(TAG, "Created: " + DATABASE_CREATE_SMS);
+			_db.execSQL(DATABASE_CREATE_SMS);
+			_db.execSQL(DATABASE_CREATE_THREAD);
 		}
 
 		/*

@@ -1,14 +1,6 @@
 package com.asa.sms2honeycomb.tablet;
 
-import com.asa.sms2honeycomb.DatabaseAdapter;
-import com.asa.sms2honeycomb.Preferences;
-import com.asa.sms2honeycomb.R;
-import com.asa.sms2honeycomb.Util.Util;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParsePush;
-import com.parse.SaveCallback;
-import com.parse.SendCallback;
+import java.io.IOException;
 
 import android.app.ListFragment;
 import android.content.Context;
@@ -24,6 +16,16 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.asa.sms2honeycomb.DatabaseAdapter;
+import com.asa.sms2honeycomb.Preferences;
+import com.asa.sms2honeycomb.R;
+import com.asa.sms2honeycomb.Util.Util;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParsePush;
+import com.parse.SaveCallback;
+import com.parse.SendCallback;
 
 public class MessageFragment extends ListFragment {
 	LayoutInflater inflater;
@@ -45,7 +47,7 @@ public class MessageFragment extends ListFragment {
 			Bundle savedInstanceState) {
 		// inflates the main.xml resource, but the default ListView is still
 		// generated on top of this view.
-
+		
 		inflater.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.fragment_message_view, container);
 		View view = inflater.inflate(R.layout.fragment_message_view, null);
