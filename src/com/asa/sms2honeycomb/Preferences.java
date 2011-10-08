@@ -10,21 +10,28 @@ public class Preferences {
 	public static final String PARSE_PASSWORD_ROW = "password";
 	// TODO: END Get rid of...
 
-	public static final String PARSE_TABLE_SMS = "SMS";
-	public static final String PARSE_SMS_ID = "smsId";
-	public static final String PARSE_SMS_SUBJECT = "subject";
-	public static final String PARSE_SMS_THREADID = "threadId";
-	public static final String PARSE_SMS_TYPE = "type";
+	// BEGIN Parse database object names
+	// SMS table
+	public static final String PARSE_TABLE_SMS = "sms";
+	public static final String PARSE_SMS_SMSID = "smsId";
+	public static final String PARSE_SMS_THREAD_ID = "threadId";
 	public static final String PARSE_SMS_ADDRESS = "address";
+	public static final String PARSE_SMS_CREATEDAT = "createdAt";
 	public static final String PARSE_SMS_READ = "read";
+	public static final String PARSE_SMS_TYPE = "type";
+	public static final String PARSE_SMS_SUBJECT = "subject";
+	public static final String PARSE_SMS_BODY = "body";
 	
-	public static final String PARSE_TABLE_THREAD = "THREAD";
-	public static final String PARSE_THREAD_ID = "threadId";
+	// Thread Table
+	public static final String PARSE_TABLE_THREAD = "thread";
+	public static final String PARSE_THREAD_THREADID = "threadId";
+	public static final String PARSE_THREAD_CREATEDAT = "createdAt";
+	public static final String PARSE_THREAD_MESSAGE_COUNT = "messageCount";
 	public static final String PARSE_THREAD_SNIPPET = "snippet";
 	public static final String PARSE_THREAD_READ = "read";
-	public static final String PARSE_THREAD_MESSAGECOUNT = "messageCount";
-	public static final String PARSE_THREAD_HASATTACHMENT = "hasAttachment";
+	public static final String PARSE_THREAD_HAS_ATTACHMENT = "hasAttachment";
 	
+	// END Parse database object names
 	
 	public static final String PARSE_INSTALLATION_ID = "installation_id";
 
@@ -52,5 +59,9 @@ public class Preferences {
 
 	public static final int MENU_LOGOUT = 0;
 
+	
+	public static boolean LAUNCH_FROM_LOGIN = true;
+	
+	
 	public static boolean DEBUG = true;
 }

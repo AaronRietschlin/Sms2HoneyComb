@@ -21,7 +21,7 @@ public class DatabaseAdapter {
 	private final String TAG = "DatabaseHandler";
 
 	// Basic Database information
-	private static final String DATABASE_NAME = "texttotab2.db";
+	private static final String DATABASE_NAME = "texttotab.db";
 	private static final String MESSAGE_TABLE = "messageTable";
 	private static final String THREAD_TABLE = "threadTable";
 	private static final int DATABASE_VERSION = 1;
@@ -46,8 +46,9 @@ public class DatabaseAdapter {
 	public static final String KEY_HAS_ATTACHMENT = "_hasattachment";
 	public static final String KEY_MESSAGE_COUNT = "_messagecount";
 	public static final String KEY_READ_T = "_readt";
-	public static final String KEY_THREADID_T = "_threadidt";
+	public static final String KEY_THREADID_T = "_thread_id";
 	public static final String KEY_USERNAME_T = "_usernamet";
+	public static final String KEY_CREATED_AT = "_created_at";
 
 	// Used to identify the columns in other classes.
 	// SMS table
@@ -61,6 +62,7 @@ public class DatabaseAdapter {
 	public static final int THREADID_S_COLUMN = 7;
 	public static final int TYPE_COLUMN = 8;
 	public static final int USERNAME_S_COLUMN = 9;
+	public static final int CREATED_AT_COLUMN_S = 10;
 	// THREAD table
 	public static final int ID_COLUMN_T = 0;
 	public static final int HAS_ATTACHMENT = 1;
@@ -94,13 +96,6 @@ public class DatabaseAdapter {
 	public DatabaseAdapter(Context _context) {
 		Log.d(TAG, "DatabaseHandler constructor is working");
 
-		// Backup database
-		try {
-			Util.backupDatabase();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			Log.e(TAG, "Failed backing up database.");
-		}
 		context = _context;
 		dbHelper = new myDbHelper(context, DATABASE_NAME, null,
 				DATABASE_VERSION);

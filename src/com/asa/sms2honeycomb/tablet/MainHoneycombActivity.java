@@ -1,29 +1,21 @@
 package com.asa.sms2honeycomb.tablet;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,10 +24,6 @@ import com.asa.sms2honeycomb.MessageItem;
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
 import com.asa.sms2honeycomb.Util.Util;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.PushService;
 
 public class MainHoneycombActivity extends ListActivity {
@@ -45,6 +33,8 @@ public class MainHoneycombActivity extends ListActivity {
 	Intent mIntent;
 	ListView list;
 	Dialog listDialog;
+
+	public static ArrayList<MessageItem> messageResults;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +48,27 @@ public class MainHoneycombActivity extends ListActivity {
 		PushService.subscribe(this, Util.getPushChannel(
 				Util.getUsernameString(), Preferences.TABLET),
 				MainHoneycombActivity.class);
+
+		// If the user had been logged out, pull in ALL the users convo data.
+		if (Preferences.LAUNCH_FROM_LOGIN) {
+			String userName = Util.getUsernameString();
+			QueryParseAsyncTask task = new QueryParseAsyncTask(0, userName);
+			AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
+					.execute();
+			try {
+				messageResults = asyncTask.get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			for (MessageItem item : messageResults) {
+				Log.e(TAG, item.toString());
+			}
+			// Preferences.LAUNCH_FROM_LOGIN = false;
+		}
 	}
 
 	@Override
@@ -82,7 +93,7 @@ public class MainHoneycombActivity extends ListActivity {
 			// TODO add query fuction
 			Toast.makeText(this, "Querying server...", Toast.LENGTH_LONG)
 					.show();
-			QueryMessages();
+			
 			return (true);
 
 		case R.id.contacts:
@@ -111,51 +122,6 @@ public class MainHoneycombActivity extends ListActivity {
 
 	}
 
-	// TODO TESTING
-	public void QueryMessages() {
-		final ParseQuery query = new ParseQuery("sms");
-		query.whereEqualTo(Preferences.PARSE_USERNAME_ROW, "TestName");
-		query.orderByDescending("createdAt");
-		query.setLimit(10);
-		query.findInBackground(new FindCallback() {
-			public void done(List<ParseObject> messageList, ParseException e) {
-				if (e == null) {
-					Log.d(TAG, "Retrieved " + messageList.size() + " messages.");
-					for (ParseObject messageObject : messageList) {
-						String objectId = messageObject.objectId();
-						try {
-							ParseObject message = query.get(objectId);
-							Date time = message.createdAt();
-							String timeDB = time.toString();
-							String addressDB = message.getString("address");
-							String bodyDB = message.getString("body");
-							String readDB = message.getString("read");
-							String smsIdDB = message.getString("smsId");
-							String subjectDB = message.getString("subject");
-							String threadIdDB = message.getString("threadId");
-							String typeDB = message.getString("type");
-							String usernameDB = message.getString("username");
-							String totalMessage = "Sent: " + timeDB + "\n"
-									+ "Address: " + addressDB + "\n"
-									+ "Message : " + bodyDB + "\n";
-							System.out.println(totalMessage);
-							// add the shit to the sqlitedb
-							MessageItem item = new MessageItem(timeDB,
-									addressDB, bodyDB, readDB, smsIdDB,
-									subjectDB, threadIdDB, typeDB, usernameDB);
-							dbAdapter.insertMessageItem(item);
-						} catch (ParseException e1) {
-							Log.e(TAG, e1.getMessage());
-						}
-					}
-				} else {
-					Log.d(TAG, "Error: " + e.getMessage());
-				}
-			}
-		});
-	}
-	
-	// TODO this is old and doesnt work bitchs
 	public ArrayList<String> getCotactArrayList() {
 		// Get the cursor over every aggregated contact data.
 		Cursor dataCursor = this.getContentResolver().query(
@@ -193,6 +159,6 @@ public class MainHoneycombActivity extends ListActivity {
 			dataCursor.close();
 		}
 		return contacts;
-
 	}
+
 }

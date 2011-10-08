@@ -1,16 +1,15 @@
 package com.asa.sms2honeycomb.Util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.os.Environment;
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.asa.sms2honeycomb.MessageItem;
 import com.asa.sms2honeycomb.Preferences;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -102,6 +101,87 @@ public class Util {
 		return table;
 	}
 
+	private static ArrayList<MessageItem> outgoingMessageList;
+	private static ArrayList<MessageItem> incomingMessageList;
+	private static ArrayList<ArrayList<MessageItem>> results;
+
+	private static ArrayList<MessageItem> messageResults;
+
+	public static ArrayList<MessageItem> getAllMessages(final String username) {
+		ParseQuery querySms = new ParseQuery(Preferences.PARSE_TABLE_SMS);
+		ParseQuery queryThread = new ParseQuery(Preferences.PARSE_TABLE_THREAD);
+
+		querySms.whereEqualTo(Preferences.PARSE_USERNAME_ROW, username);
+		final String messageBody, messageAddress;
+		final Date outgoingMessageDate;
+		outgoingMessageList = new ArrayList<MessageItem>();
+		incomingMessageList = new ArrayList<MessageItem>();
+		results = new ArrayList<ArrayList<MessageItem>>();
+		messageResults = new ArrayList<MessageItem>();
+		// Begin query for messages.
+		querySms.findInBackground(new FindCallback() {
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				if (e == null) {
+					if (Preferences.DEBUG)
+						Log.d(TAG, "Message size: " + objects.size());
+					for (ParseObject messageObject : objects) {
+						MessageItem messageItem = new MessageItem();
+						messageItem.setMessageBody(messageObject
+								.getString(Preferences.PARSE_SMS_BODY));
+						messageItem.setMessageUsername(messageObject
+								.getString(username));
+						messageItem.setMessageAddress(messageObject
+								.getString(Preferences.PARSE_SMS_ADDRESS));
+						messageItem.setMessageTime(messageObject.createdAt()
+								.toLocaleString());
+						messageItem.setMessageSmsId(messageObject
+								.getString(Preferences.PARSE_SMS_SMSID));
+						messageItem.setMessageThreadId(messageObject
+								.getString(Preferences.PARSE_SMS_THREAD_ID));
+						messageItem.setMessageType(messageObject
+								.getString(Preferences.PARSE_SMS_TYPE));
+						messageItem.setMessageRead(messageObject
+								.getString(Preferences.PARSE_SMS_READ));
+						messageItem.setMessageSubject(messageObject
+								.getString(Preferences.PARSE_SMS_SUBJECT));
+						messageResults.add(messageItem);
+						Log.e(TAG,
+								"MessageItem - Size: " + messageResults.size());
+					}
+				} else {
+					// Error occurred finding ALL objects. TODO
+					Log.e(TAG, "Message Item:");
+				}
+			}
+		});
+
+		// TODO : This is commented out because I am only testing getting the
+		// messages for now.
+		// queryThread.whereEqualTo(Preferences.PARSE_EMAIL_ROW, username);
+		// queryThread.findInBackground(new FindCallback(){
+		// @Override
+		// public void done(List<ParseObject> objects, ParseException e) {
+		// if(e == null){
+		// for(ParseObject messageObject : objects){
+		// MessageItem messageItem = new MessageItem();
+		// messageItem.setMessageBody(messageObject.getString("messageBody"));
+		// messageItem.setMessageFrom(messageObject.getString(username));
+		// messageItem.setMessageTo(messageObject.getString("messageTo"));
+		// messageItem.setMessageTime(messageObject.createdAt().toLocaleString());
+		// messageResults.add(messageItem);
+		// }
+		//
+		// }else{
+		// // Error occurding finding objects TODO
+		// Log.e(TAG, "Error finding incoming messages.");
+		// }
+		//
+		// }
+		// });
+		return messageResults;
+	}
+
 	/**
 	 * Creates a string using the uername and a given name of the wanted push
 	 * channel. Returns a string "keyitem_nameOfPushChannel".
@@ -140,32 +220,24 @@ public class Util {
 	public static String getUsernameString() {
 		return ParseUser.getCurrentUser().getUsername();
 	}
-	
-	/**
-	 * Method that pushes the database to a file on the SDCard since the Galaxy Tab is not rooted.
-	 * 
-	 */
-    public static void backupDatabase() throws IOException {
-    	Log.e(TAG, "Backing up database...");
-        //Open your local db as the input stream
-        String inFileName = "/data/data/com.asa.sms2honeycomb/databases/texttotab.db";
-        File dbFile = new File(inFileName);
-        FileInputStream fis = new FileInputStream(dbFile);
 
-        String outFileName = Environment.getExternalStorageDirectory()+"/texttotab.db";
-        Log.e(TAG, "FileName: " + outFileName);
-        //Open the empty db as the output stream
-        OutputStream output = new FileOutputStream(outFileName);
-        //transfer bytes from the inputfile to the outputfile
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = fis.read(buffer))>0){
-            output.write(buffer, 0, length);
-        }
-        Log.e(TAG, "FileName:" + output.toString());
-        //Close the streams
-        output.flush();
-        output.close();
-        fis.close();
-    }
+	public static Date formatStringToDate(String stringDate) {
+		SimpleDateFormat formatter = new SimpleDateFormat(
+				"MMM dd, yyyy HH:mm:ss a");
+		Date date = null;
+		try {
+			date = formatter.parse(stringDate);
+		} catch (java.text.ParseException e) {
+			// TODO : Handle this exception
+			e.printStackTrace();
+		}
+		return date;
+	}
+
+	static Toast mToast;
+
+	public static void displayToast(Context context, String message) {
+		mToast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+		mToast.show();
+	}
 }
