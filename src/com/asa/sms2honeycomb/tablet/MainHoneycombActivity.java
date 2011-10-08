@@ -52,21 +52,21 @@ public class MainHoneycombActivity extends ListActivity {
 		// If the user had been logged out, pull in ALL the users convo data.
 		if (Preferences.LAUNCH_FROM_LOGIN) {
 			String userName = Util.getUsernameString();
-			QueryParseAsyncTask task = new QueryParseAsyncTask(0, userName);
-			AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
-					.execute();
-			try {
-				messageResults = asyncTask.get();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			for (MessageItem item : messageResults) {
-				Log.e(TAG, item.toString());
-			}
+//			QueryParseAsyncTask task = new QueryParseAsyncTask(0, userName);
+//			AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
+//					.execute();
+//			try {
+//				messageResults = asyncTask.get();
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (ExecutionException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			for (MessageItem item : messageResults) {
+//				Log.e(TAG, item.toString());
+//			}
 			// Preferences.LAUNCH_FROM_LOGIN = false;
 		}
 	}

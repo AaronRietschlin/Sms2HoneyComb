@@ -103,4 +103,15 @@ public class MessageItem {
 		this.messageUsername = messageUsername;
 	}
 
+	@Override
+	public String toString() {
+		return "MessageItem [messageAddress=" + messageAddress
+				+ ", messageTime=" + messageTime + ", messageBody="
+				+ messageBody + ", messageRead=" + messageRead
+				+ ", messageSmsId=" + messageSmsId + ", messageSubject="
+				+ messageSubject + ", messageThreadId=" + messageThreadId
+				+ ", messageType=" + messageType + ", messageUsername="
+				+ messageUsername + "]";
+	}
+
 }

@@ -58,6 +58,7 @@ public class QueryParseAsyncTask extends
 					messageItem.setMessageTime(messageObject.createdAt()
 							.toLocaleString());
 					messageResults.add(messageItem);
+					String str = messageItem.toString();
 					Log.e(TAG, "MessageItem - Size: " + messageResults.size());
 				}
 			} catch (ParseException e) {
@@ -67,5 +68,4 @@ public class QueryParseAsyncTask extends
 		}
 		return messageResults;
 	}
-
 }

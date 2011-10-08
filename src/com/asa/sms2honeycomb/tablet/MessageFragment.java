@@ -1,6 +1,9 @@
 package com.asa.sms2honeycomb.tablet;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.ListFragment;
@@ -8,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
@@ -32,6 +36,7 @@ import com.asa.sms2honeycomb.Util.Util;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.parse.SendCallback;
 
@@ -73,15 +78,15 @@ public class MessageFragment extends ListFragment {
 
 		// Get the Adapter for the list so iy can be updated separately
 		// I dont know why simple_list_item_1 works i copied it from an example
-		messageAdapter = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1,
-				dbAdapter.getMessageArrayList(phoneNumber));
-
-		messageAdapter.notifyDataSetChanged();
+		// messageAdapter = new ArrayAdapter<String>(getActivity(),
+		// android.R.layout.simple_list_item_1,
+		// dbAdapter.getMessageArrayList(phoneNumber));
+		//
+		// messageAdapter.notifyDataSetChanged();
 		
-		messageAdapter = new MessageListAdapter(getActivity(), R.layout.message_list_item, MainHoneycombActivity.messageResults);
-
-		setListAdapter(messageAdapter);
+		QueryParseAsyncTask task = new QueryParseAsyncTask(0, Util.getUsernameString());
+		AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
+				.execute();
 
 		// BEGIN Adding contact stuff
 		addContactButton = (Button) view
@@ -94,6 +99,7 @@ public class MessageFragment extends ListFragment {
 						CONTACT_PICKER_RESULT);
 			}
 		});
+		// END Adding contact stuff.
 
 		// IT FUCKING HAS TO BE andriod.R.id.list fucking POS differences
 		messageListView = (ListView) view.findViewById(android.R.id.list);
@@ -154,10 +160,10 @@ public class MessageFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		Log.d(TAG, "Item clicked: " + id);
-		// When clicked, show a toast with the TextView text
-		Toast.makeText(getActivity().getApplicationContext(),
-				((TextView) v).getText(), Toast.LENGTH_SHORT).show();
+//		Log.d(TAG, "Item clicked: " + id);
+//		// When clicked, show a toast with the TextView text
+//		Toast.makeText(getActivity().getApplicationContext(),
+//				((TextView) v).getText(), Toast.LENGTH_SHORT).show();
 
 	}
 
@@ -190,18 +196,28 @@ public class MessageFragment extends ListFragment {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View v = super.getView(position, convertView, parent);
+			View v = convertView;//super.getView(position, convertView, parent);
+
 			inflater = (LayoutInflater) mContext
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			if(convertView == null){
+				v = inflater.inflate(R.layout.message_list_item, null);
+			}
 			TextView nameTv = (TextView) v.findViewById(R.id.message_list_name);
 			nameTv.setText(mMessages.get(position).getMessageUsername());
-			TextView messageTv = (TextView) v.findViewById(R.id.message_list_body);
+			TextView messageTv = (TextView) v
+					.findViewById(R.id.message_list_body);
 			messageTv.setText(mMessages.get(position).getMessageBody());
 			TextView timeTv = (TextView) v.findViewById(R.id.message_list_sent);
 			timeTv.setText(mMessages.get(position).getMessageTime());
-			return convertView;
+			return v;
 		}
 
+		@Override
+		public int getCount(){
+			return mMessages.size();
+		}
+		
 	}
 
 	@Override
@@ -256,5 +272,72 @@ public class MessageFragment extends ListFragment {
 		} else {
 			Log.w(TAG, "Activity returned with no data.");
 		}
+	}
+
+	public class QueryParseAsyncTask extends
+			AsyncTask<Void, Void, ArrayList<MessageItem>> {
+		private final String TAG = "QueryParseAsyncTask";
+		private final int SMS = 0;
+		private final int THREAD = 1;
+
+		private int queryType;
+		private String username;
+
+		private ArrayList<MessageItem> messageResults;
+
+		public QueryParseAsyncTask(int type, String user) {
+			queryType = type;
+			username = user;
+		}
+
+		@Override
+		protected ArrayList<MessageItem> doInBackground(Void... arg0) {
+			if (queryType == SMS) {
+				ParseQuery querySms = new ParseQuery(
+						Preferences.PARSE_TABLE_SMS);
+				ParseQuery queryThread = new ParseQuery(
+						Preferences.PARSE_TABLE_THREAD);
+
+				querySms.whereEqualTo(Preferences.PARSE_USERNAME_ROW, username);
+				final String messageBody, messageAddress;
+				final Date outgoingMessageDate;
+				messageResults = new ArrayList<MessageItem>();
+				// Begin query for messages.
+				List<ParseObject> objects;
+				try {
+					objects = querySms.find();
+					if (Preferences.DEBUG)
+						Log.d(TAG, "Message size: " + objects.size());
+					for (ParseObject messageObject : objects) {
+						MessageItem messageItem = new MessageItem();
+						messageItem.setMessageBody(messageObject
+								.getString(Preferences.PARSE_SMS_SUBJECT));
+						messageItem.setMessageUsername(messageObject
+								.getString(username));
+						messageItem.setMessageAddress(messageObject
+								.getString(Preferences.PARSE_SMS_ADDRESS));
+						messageItem.setMessageTime(messageObject.createdAt()
+								.toLocaleString());
+						messageResults.add(messageItem);
+						String str = messageItem.toString();
+						Log.e(TAG,
+								"MessageItem - Size: " + messageResults.size());
+					}
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return messageResults;
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<MessageItem> messageList){
+			messageAdapter = new MessageListAdapter(getActivity(),
+					R.layout.message_list_item, messageList);
+
+			setListAdapter(messageAdapter);
+		}
+		
 	}
 }
