@@ -226,8 +226,6 @@ public class DatabaseAdapter {
 
 	// TODO update
 	public ArrayList<String> getConversationList() {
-		db.execSQL("DROP TABLE IF EXISTS " + MESSAGE_TABLE);
-		db.execSQL("DROP TABLE IF EXISTS " + THREAD_TABLE);
 		ArrayList<String> list = new ArrayList<String>();
 		// TODO get the cursor to query the db and get the number of entries for
 		// both the to and from that are from the same person MAKE IT WORK
@@ -236,7 +234,7 @@ public class DatabaseAdapter {
 		// columns, String selection, String[] selectionArgs, String groupBy,
 		// String having, String orderBy, String limit)
 		Cursor cursor = db.query(true, THREAD_TABLE, new String[] { KEY_ID,
-				KEY_HAS_ATTACHMENT, KEY_BODY, KEY_MESSAGE_COUNT, KEY_READ_T,
+				KEY_HAS_ATTACHMENT, KEY_MESSAGE_COUNT, KEY_READ_T,
 				KEY_THREADID_T, KEY_USERNAME_T }, null, null, null, null, null,
 				null);
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
@@ -282,27 +280,28 @@ public class DatabaseAdapter {
 		// to create a new one.
 		@Override
 		public void onCreate(SQLiteDatabase _db) {
-			try{
+			try {
 				Log.d(TAG, "Creation: Trying to create SMS table");
 				Log.d(TAG, "Creation: " + DATABASE_CREATE_SMS);
-			_db.execSQL(DATABASE_CREATE_SMS);
-			Map<String, String> map = _db.getSyncedTables();
-			if(map.size() == 0){
-				Log.d(TAG, "Creation: Empty.");
-			}
-			for (Map.Entry<String, String> entry : map.entrySet())
-			{
-				Log.d(TAG, "Creation: " + entry.getKey() + "/" + entry.getValue());
-			}
-			}catch(SQLException e){
+				_db.execSQL(DATABASE_CREATE_SMS);
+				Map<String, String> map = _db.getSyncedTables();
+				if (map.size() == 0) {
+					Log.d(TAG, "Creation: Empty.");
+				}
+				for (Map.Entry<String, String> entry : map.entrySet()) {
+					Log.d(TAG,
+							"Creation: " + entry.getKey() + "/"
+									+ entry.getValue());
+				}
+			} catch (SQLException e) {
 				Log.d(TAG, "Creation: Failed trying to create SMS table");
 			}
-			try{
+			try {
 				// TODO : It's failing in the creation of this table.
 				Log.d(TAG, "Creation: Trying to create thread table");
 				_db.execSQL(DATABASE_CREATE_THREAD);
 				Log.d(TAG, "Creation: " + DATABASE_CREATE_THREAD);
-			}catch(SQLException e){
+			} catch (SQLException e) {
 				Log.d(TAG, "Creation: Failed trying to create thread table");
 			}
 		}
@@ -319,7 +318,7 @@ public class DatabaseAdapter {
 			Log.w("TaskDBAdapter", "Upgrade from version " + _oldVersion
 					+ " to " + _newVersion
 					+ ", which will destroy all old data");
-			
+
 			/*
 			 * Upgrade the existing database to conform to the new version.
 			 * Multiple previous version can be handled by comparing _oldVersion
