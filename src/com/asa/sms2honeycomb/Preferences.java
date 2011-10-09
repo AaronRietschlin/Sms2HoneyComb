@@ -1,9 +1,13 @@
 package com.asa.sms2honeycomb;
 
+import android.net.Uri;
+
 public class Preferences {
 
 	public static boolean DEVICE_IS_HONEYCOMB = false;
 
+	public static Uri URI;
+	
 	// TODO: BEGIN Get rid of these...
 	public static final String PARSE_EMAIL_ROW = "email";
 	public static final String PARSE_USERNAME_ROW = "username";

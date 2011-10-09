@@ -3,7 +3,6 @@ package com.asa.sms2honeycomb.tablet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.ListFragment;
@@ -13,9 +12,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.ContactsContract.PhoneLookup;
+import android.provider.ContactsContract.Contacts;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +23,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.QuickContactBadge;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.MessageItem;
@@ -83,8 +81,9 @@ public class MessageFragment extends ListFragment {
 		// dbAdapter.getMessageArrayList(phoneNumber));
 		//
 		// messageAdapter.notifyDataSetChanged();
-		
-		QueryParseAsyncTask task = new QueryParseAsyncTask(0, Util.getUsernameString());
+
+		QueryParseAsyncTask task = new QueryParseAsyncTask(0,
+				Util.getUsernameString());
 		AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
 				.execute();
 
@@ -160,10 +159,10 @@ public class MessageFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-//		Log.d(TAG, "Item clicked: " + id);
-//		// When clicked, show a toast with the TextView text
-//		Toast.makeText(getActivity().getApplicationContext(),
-//				((TextView) v).getText(), Toast.LENGTH_SHORT).show();
+		// Log.d(TAG, "Item clicked: " + id);
+		// // When clicked, show a toast with the TextView text
+		// Toast.makeText(getActivity().getApplicationContext(),
+		// ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
 
 	}
 
@@ -196,28 +195,30 @@ public class MessageFragment extends ListFragment {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View v = convertView;//super.getView(position, convertView, parent);
+			View v = convertView;// super.getView(position, convertView,
+									// parent);
+			MessageItem item = mMessages.get(position);
 
 			inflater = (LayoutInflater) mContext
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			if(convertView == null){
+			if (convertView == null) {
 				v = inflater.inflate(R.layout.message_list_item, null);
 			}
 			TextView nameTv = (TextView) v.findViewById(R.id.message_list_name);
-			nameTv.setText(mMessages.get(position).getMessageUsername());
+			nameTv.setText("Me");
 			TextView messageTv = (TextView) v
 					.findViewById(R.id.message_list_body);
-			messageTv.setText(mMessages.get(position).getMessageBody());
-			TextView timeTv = (TextView) v.findViewById(R.id.message_list_sent);
-			timeTv.setText(mMessages.get(position).getMessageTime());
+			messageTv.setText(item.getMessageBody());
+			TextView timeTv = (TextView) v.findViewById(R.id.message_list_time);
+			timeTv.setText(item.getMessageTime());
 			return v;
 		}
 
 		@Override
-		public int getCount(){
+		public int getCount() {
 			return mMessages.size();
 		}
-		
+
 	}
 
 	@Override
@@ -228,6 +229,7 @@ public class MessageFragment extends ListFragment {
 			case CONTACT_PICKER_RESULT:
 				Cursor cursor = null;
 				Uri uri = data.getData();
+				Preferences.URI = uri;
 				Log.d(TAG, "Contact Info - URI: " + uri);
 				// Get the contactId from the URI
 				String contactId = uri.getLastPathSegment();
@@ -311,17 +313,17 @@ public class MessageFragment extends ListFragment {
 					for (ParseObject messageObject : objects) {
 						MessageItem messageItem = new MessageItem();
 						messageItem.setMessageBody(messageObject
-								.getString(Preferences.PARSE_SMS_SUBJECT));
+								.getString(Preferences.PARSE_SMS_BODY));
 						messageItem.setMessageUsername(messageObject
 								.getString(username));
 						messageItem.setMessageAddress(messageObject
 								.getString(Preferences.PARSE_SMS_ADDRESS));
 						messageItem.setMessageTime(messageObject.createdAt()
 								.toLocaleString());
+						messageItem.setMessageType(messageObject
+								.getString(Preferences.PARSE_SMS_TYPE));
 						messageResults.add(messageItem);
-						String str = messageItem.toString();
-						Log.e(TAG,
-								"MessageItem - Size: " + messageResults.size());
+						String str = messageObject.toString();
 					}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
@@ -330,14 +332,14 @@ public class MessageFragment extends ListFragment {
 			}
 			return messageResults;
 		}
-		
+
 		@Override
-		protected void onPostExecute(ArrayList<MessageItem> messageList){
+		protected void onPostExecute(ArrayList<MessageItem> messageList) {
 			messageAdapter = new MessageListAdapter(getActivity(),
 					R.layout.message_list_item, messageList);
 
 			setListAdapter(messageAdapter);
 		}
-		
+
 	}
 }

@@ -27,7 +27,7 @@
 		android:layout_height="wrap_content" android:layout_below="@+id/message_list_body"
 		android:layout_toRightOf="@id/contactBadgeMessageList"></TextView>
 	<TextView android:text="TextView" android:textAppearance="?android:attr/textAppearanceSmall"
-		android:id="@+id/textView1" android:layout_width="wrap_content"
+		android:id="@+id/message_list_time" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:layout_alignBaseline="@+id/message_list_sent"
 		android:layout_alignBottom="@+id/message_list_sent"
 		android:layout_toRightOf="@+id/message_list_sent"></TextView>
