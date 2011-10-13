@@ -55,7 +55,10 @@ public class MessageFragment extends ListFragment {
 	private Context mContext;
 
 	private String phoneNumber;
+
 	private final int CONTACT_PICKER_RESULT = 0;
+	private final int RECEIVED = 1;
+	private final int SENT = 2;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -205,12 +208,19 @@ public class MessageFragment extends ListFragment {
 				v = inflater.inflate(R.layout.message_list_item, null);
 			}
 			TextView nameTv = (TextView) v.findViewById(R.id.message_list_name);
-			nameTv.setText("Me");
 			TextView messageTv = (TextView) v
 					.findViewById(R.id.message_list_body);
 			messageTv.setText(item.getMessageBody());
 			TextView timeTv = (TextView) v.findViewById(R.id.message_list_time);
 			timeTv.setText(item.getMessageTime());
+			switch (item.getMessageType()) {
+			case RECEIVED:
+				nameTv.setText(item.getMessageAddress());
+				break;
+			case SENT:
+				nameTv.setText("Me");
+				break;
+			}
 			return v;
 		}
 
@@ -219,8 +229,37 @@ public class MessageFragment extends ListFragment {
 			return mMessages.size();
 		}
 
+//		/**
+//		 * Tells how many types of pools of messages to keep. Read:
+//		 * http://logc.at/2011/10/10/handling-listviews-with-multiple-row-types/
+//		 * 
+//		 * @return
+//		 */
+//		@Override
+//		public int getViewTypeCount() {
+//			return Preferences.NUM_TYPE_OF_MESSAGES;
+//		}
+//
+//		/**
+//		 * Tells the list view which pool the view belongs to. Read:
+//		 * http://logc.at/2011/10/10/handling-listviews-with-multiple-row-types/
+//		 * 
+//		 * @param position
+//		 * @return
+//		 */
+//		@Override
+//		public int getItemViewType(int position) {
+//			if (mMessages.get(position).getMessageType() == RECEIVED) {
+//				return RECEIVED;
+//			}
+//			return SENT;
+//		}
+
 	}
 
+	/**
+	 * This is called after the user selects a contact.
+	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Activity activity = (Activity) mContext;
@@ -297,12 +336,8 @@ public class MessageFragment extends ListFragment {
 			if (queryType == SMS) {
 				ParseQuery querySms = new ParseQuery(
 						Preferences.PARSE_TABLE_SMS);
-				ParseQuery queryThread = new ParseQuery(
-						Preferences.PARSE_TABLE_THREAD);
 
 				querySms.whereEqualTo(Preferences.PARSE_USERNAME_ROW, username);
-				final String messageBody, messageAddress;
-				final Date outgoingMessageDate;
 				messageResults = new ArrayList<MessageItem>();
 				// Begin query for messages.
 				List<ParseObject> objects;
@@ -311,6 +346,7 @@ public class MessageFragment extends ListFragment {
 					if (Preferences.DEBUG)
 						Log.d(TAG, "Message size: " + objects.size());
 					for (ParseObject messageObject : objects) {
+						// TODO: Add the rest of the db items.
 						MessageItem messageItem = new MessageItem();
 						messageItem.setMessageBody(messageObject
 								.getString(Preferences.PARSE_SMS_BODY));
@@ -321,7 +357,7 @@ public class MessageFragment extends ListFragment {
 						messageItem.setMessageTime(messageObject.createdAt()
 								.toLocaleString());
 						messageItem.setMessageType(messageObject
-								.getString(Preferences.PARSE_SMS_TYPE));
+								.getInt(Preferences.PARSE_SMS_TYPE));
 						messageResults.add(messageItem);
 						String str = messageObject.toString();
 					}

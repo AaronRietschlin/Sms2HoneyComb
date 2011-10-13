@@ -9,11 +9,11 @@ public class MessageItem {
 	String messageSmsId;
 	String messageSubject;
 	String messageThreadId;
-	String messageType;
+	int messageType;
 	String messageUsername;
 
 	public MessageItem(String address, String time, String body, String read,
-			String smsId, String subject, String threadId, String type,
+			String smsId, String subject, String threadId, int type,
 			String username) {
 		
 		messageAddress = address;
@@ -87,11 +87,11 @@ public class MessageItem {
 		this.messageThreadId = messageThreadId;
 	}
 
-	public String getMessageType() {
+	public int getMessageType() {
 		return messageType;
 	}
 
-	public void setMessageType(String messageType) {
+	public void setMessageType(int messageType) {
 		this.messageType = messageType;
 	}
 

@@ -140,7 +140,7 @@ public class Util {
 						messageItem.setMessageThreadId(messageObject
 								.getString(Preferences.PARSE_SMS_THREAD_ID));
 						messageItem.setMessageType(messageObject
-								.getString(Preferences.PARSE_SMS_TYPE));
+								.getInt(Preferences.PARSE_SMS_TYPE));
 						messageItem.setMessageRead(messageObject
 								.getString(Preferences.PARSE_SMS_READ));
 						messageItem.setMessageSubject(messageObject

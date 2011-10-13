@@ -82,7 +82,7 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 									String smsIdDB = message.getString("smsId");
 									String subjectDB = message.getString("subject");
 									String threadIdDB = message.getString("threadId");
-									String typeDB = message.getString("type");
+									int typeDB = message.getInt("type");
 									String usernameDB = message.getString("username");
 									// Display the total message queryed for
 									// logging

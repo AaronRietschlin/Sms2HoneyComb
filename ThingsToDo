@@ -1,0 +1,12 @@
+We need to:
+	1.) Implement Threads
+	2.) Push from tablet to server
+	3.) Retrieve from server to phone
+	4.) Make EditText widths stay the same
+	5.) Reverse the order of the list (make oldest item on bottom, newest item added to top)
+		-May have to implement our own ListView class. 
+	6.) Distinguish between Sent message and recieved message
+		-Change color? 
+		-Move the sent items to the right side of screen
+			-Will need a new message row item
+	7.) Add a Progress bar in the actionbar that is only visible when loading from the server.
