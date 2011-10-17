@@ -32,9 +32,9 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 		// Open the database
 		dbAdapter.open();
 		if (intent.equals(PUSH_RECEIVED)) {
-			Log.d(TAG, "IncomingPushReceiver has been triggered");
+			Log.e(TAG, "IncomingPushReceiver has been triggered");
 			if (Preferences.DEVICE_IS_HONEYCOMB) {
-				Log.d(TAG, "The device is honeycomb");
+				Log.e(TAG, "The device is honeycomb");
 				/*
 				 * If device is a tablet it will query the server on the
 				 * receving of the push intent. When this happends the message
@@ -42,7 +42,8 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 				 * sms2honeycomb.db so it can later be used in the application.
 				 * We what to query the IncommingMessage table
 				 */
-				final ParseQuery query = new ParseQuery("IncommingMessage");
+				
+				final ParseQuery query = new ParseQuery(Preferences.PARSE_TABLE_SMS);
 				// Sort the Parse Object so only the username of the current
 				// user
 				// can be accessed.
@@ -82,14 +83,14 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 									String smsIdDB = message.getString("smsId");
 									String subjectDB = message.getString("subject");
 									String threadIdDB = message.getString("threadId");
-									int typeDB = message.getInt("type");
+									String typeDB = message.getString("type");
 									String usernameDB = message.getString("username");
 									// Display the total message queryed for
 									// logging
 									String totalMessage = "Sent: " + timeDB
 											+ "\n" + "Address: " + addressDB + "\n"
 											+ "Message : " + bodyDB + "\n";
-									Log.d(TAG, "New message is: "
+									Log.e(TAG, "New message is: "
 											+ totalMessage);
 									// Get the MessageItem object so you can
 									// create
@@ -110,12 +111,12 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 					}
 				});
 			} else {
-				Log.d(TAG, "The device is not honeycomb is its a phone");
+				Log.d(TAG, "The device is not honeycomb is its a phone.");
 				// If the device is not a tablet it is a phone so you pull from
 				// the
 				// server, but then send a sms message from the data recived.
 				// We want to query the OutgoingMessage table
-				final ParseQuery query = new ParseQuery("OutgoingMessage");
+				final ParseQuery query = new ParseQuery(Preferences.PARSE_TABLE_SMS);
 				// Sort the Parse Object so only the username of the current
 				// user
 				// can be accessed.
@@ -149,14 +150,14 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 									String timeString = time.toString();
 									// Get who the message is coming from
 									// (phonenumber).
-									String to = message.getString("messageTo");
+									String address = message.getString(Preferences.PARSE_SMS_ADDRESS);
 									// Get the body of the message
 									String body = message
-											.getString("messageBody");
+											.getString(Preferences.PARSE_SMS_BODY);
 									// Display the total message queryed for
 									// logging
 									String totalMessage = "Sent: " + timeString
-											+ "\n" + "To: " + to + "\n"
+											+ "\n" + "To: " + address + "\n"
 											+ "Message : " + body + "\n";
 									Log.d(TAG, "New message is: "
 											+ totalMessage);
@@ -169,12 +170,12 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 										// Chops up the message
 										sms.divideMessage(body);
 										// Send the sms message in its parts
-										sms.sendMultipartTextMessage(to, null,
+										sms.sendMultipartTextMessage(address, null,
 												sms.divideMessage(body), null,
 												null);
 									} else {
 										// Sends the message without cutting it
-										sms.sendTextMessage(to, null, body,
+										sms.sendTextMessage(address, null, body,
 												null, null);
 									}
 
