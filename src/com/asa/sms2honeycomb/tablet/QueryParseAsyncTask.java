@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.asa.sms2honeycomb.MessageItem;
 import com.asa.sms2honeycomb.Preferences;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -50,14 +49,15 @@ public class QueryParseAsyncTask extends
 				for (ParseObject messageObject : objects) {
 					MessageItem messageItem = new MessageItem();
 					messageItem.setMessageBody(messageObject
-							.getString(Preferences.PARSE_SMS_BODY));
-					messageItem.setMessageFrom(messageObject
+							.getString(Preferences.PARSE_SMS_SUBJECT));
+					messageItem.setMessageUsername(messageObject
 							.getString(username));
-					messageItem.setMessageTo(messageObject
+					messageItem.setMessageAddress(messageObject
 							.getString(Preferences.PARSE_SMS_ADDRESS));
 					messageItem.setMessageTime(messageObject.createdAt()
 							.toLocaleString());
 					messageResults.add(messageItem);
+					String str = messageItem.toString();
 					Log.e(TAG, "MessageItem - Size: " + messageResults.size());
 				}
 			} catch (ParseException e) {
@@ -67,5 +67,4 @@ public class QueryParseAsyncTask extends
 		}
 		return messageResults;
 	}
-
 }

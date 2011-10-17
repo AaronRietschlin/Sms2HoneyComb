@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
-import com.asa.sms2honeycomb.util.Util;
+import com.asa.sms2honeycomb.Util.Util;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -48,7 +48,7 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.login_phone);
 
 		if(ParseUser.getCurrentUser() != null){
-			mIntent = new Intent(LoginActivity.this, ConversationActivity.class);
+			mIntent = new Intent(LoginActivity.this, SettingsActivity.class);
 			startActivity(mIntent);
 			finish();
 		}
@@ -159,7 +159,7 @@ public class LoginActivity extends Activity {
 						if (e == null && user != null) {
 							// Successful login.
 							mIntent = new Intent(LoginActivity.this,
-									ConversationActivity.class);
+									SettingsActivity.class);
 							startActivity(mIntent);
 							
 							finish();

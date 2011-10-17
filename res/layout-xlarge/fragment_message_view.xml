@@ -8,9 +8,7 @@
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent" 
 		android:id="@+id/phone_to_layout"
-		android:weightSum="1"
-		android:gravity="center|center_vertical"
-		android:layout_alignParentTop="true">
+		android:layout_alignParentTop="true" android:weightSum="1">
 		<TextView 
 		android:text="To:" 
 		android:id="@+id/to_text" 
@@ -19,12 +17,17 @@
 		</TextView>
 		<EditText 
 			android:layout_height="wrap_content" 
-			android:layout_width="fill_parent" 
 			android:id="@+id/phone_to_field"
-			android:inputType="phone">
+			android:inputType="phone" android:layout_width="522dp" android:layout_weight="0.99">
 			<requestFocus>
 			</requestFocus>
 		</EditText>
+		<Button 
+			android:text="Button" 
+			android:id="@+id/message_add_contact_button" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content">
+		</Button>
 	</LinearLayout>
 	<ListView
 	android:layout_height="match_parent" 

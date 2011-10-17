@@ -64,8 +64,10 @@
 		  </intent-filter>
 		</receiver>
 		<receiver android:name=".IncomingPushReceiver"></receiver>
-		<activity android:name=".phone.ContactsActivity" android:icon="@drawable/icon"></activity>
-		<activity android:icon="@drawable/icon" android:name=".phone.ConversationActivity"></activity>
+			<intent-filter>
+				<action android:name="com.parse.StandardPushCallback.PUSH_RECEIVED" />
+			</intent-filter>
+		<activity android:name=".phone.SettingsActivity"></activity>
 
     </application>
 </manifest>

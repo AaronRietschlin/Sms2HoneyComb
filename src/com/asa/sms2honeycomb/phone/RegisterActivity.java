@@ -13,8 +13,8 @@ import android.widget.EditText;
 
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
-import com.asa.sms2honeycomb.util.LoginUtil;
-import com.asa.sms2honeycomb.util.Util;
+import com.asa.sms2honeycomb.Util.LoginUtil;
+import com.asa.sms2honeycomb.Util.Util;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -140,7 +140,7 @@ public class RegisterActivity extends Activity {
 					editor.commit();
 					validRegistration = true;
 
-					mIntent = new Intent(mContext, ContactsActivity.class);
+					mIntent = new Intent(mContext, SettingsActivity.class);
 					startActivity(mIntent);
 					finish();
 				} else {

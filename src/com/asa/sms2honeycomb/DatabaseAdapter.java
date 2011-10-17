@@ -1,6 +1,7 @@
 package com.asa.sms2honeycomb;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -42,8 +43,9 @@ public class DatabaseAdapter {
 	public static final String KEY_HAS_ATTACHMENT = "_hasattachment";
 	public static final String KEY_MESSAGE_COUNT = "_messagecount";
 	public static final String KEY_READ_T = "_readt";
-	public static final String KEY_THREADID_T = "_threadidt";
+	public static final String KEY_THREADID_T = "_thread_id";
 	public static final String KEY_USERNAME_T = "_usernamet";
+	public static final String KEY_CREATED_AT = "_created_at";
 
 	// Used to identify the columns in other classes.
 	// SMS table
@@ -57,6 +59,7 @@ public class DatabaseAdapter {
 	public static final int THREADID_S_COLUMN = 7;
 	public static final int TYPE_COLUMN = 8;
 	public static final int USERNAME_S_COLUMN = 9;
+	public static final int CREATED_AT_COLUMN_S = 10;
 	// THREAD table
 	public static final int ID_COLUMN_T = 0;
 	public static final int HAS_ATTACHMENT = 1;
@@ -66,20 +69,19 @@ public class DatabaseAdapter {
 	public static final int USERNAME_T = 5;
 
 	// SQL Statement to create a new database.
-	private static final String DATABASE_CREATE = "create table "
+	private static final String DATABASE_CREATE_SMS = "create table "
 			+ MESSAGE_TABLE + " (" + KEY_ID
 			+ " integer primary key autoincrement, " + KEY_TIME + " date, "
 			+ KEY_ADDRESS + " string, " + KEY_BODY + " String, " + KEY_READ_S
 			+ " int, " + KEY_SMSID + " int, " + KEY_SUBJECT + " String, "
-			+ KEY_THREADID_S + " int, " + KEY_TYPE
-			+ " int, "
-			+ KEY_USERNAME_S
-			+ " String);"
-			// creating a new table
-			+ "create table " + THREAD_TABLE + " (" + KEY_ID
-			+ " integer primary key autoincrement, " + HAS_ATTACHMENT
-			+ " int, " + MESSAGE_COUNT + " int, " + READ_T + " int, "
-			+ THREADID_T + " int, " + KEY_USERNAME_T + " String);";
+			+ KEY_THREADID_S + " int, " + KEY_TYPE + " int, " + KEY_USERNAME_S
+			+ " String);";
+
+	private static final String DATABASE_CREATE_THREAD = "create table "
+			+ THREAD_TABLE + " (" + KEY_ID
+			+ " integer primary key autoincrement, " + KEY_HAS_ATTACHMENT
+			+ " int, " + KEY_MESSAGE_COUNT + " int, " + KEY_READ_T + " int, "
+			+ KEY_THREADID_T + " int, " + KEY_USERNAME_T + " string);";
 
 	// Variables to hold the database instance
 	private SQLiteDatabase db;
@@ -90,6 +92,7 @@ public class DatabaseAdapter {
 
 	public DatabaseAdapter(Context _context) {
 		Log.d(TAG, "DatabaseHandler constructor is working");
+
 		context = _context;
 		dbHelper = new myDbHelper(context, DATABASE_NAME, null,
 				DATABASE_VERSION);
@@ -111,15 +114,15 @@ public class DatabaseAdapter {
 	// Insert a new MessageItem into Database
 	public long insertMessageItem(MessageItem item) {
 		ContentValues newMessageValues = new ContentValues();
-		newMessageValues.put(KEY_ADDRESS, item.getAddress());
-		newMessageValues.put(KEY_TIME, item.getTime());
-		newMessageValues.put(KEY_BODY, item.getBody());
-		newMessageValues.put(KEY_READ_S, item.getRead());
-		newMessageValues.put(KEY_SMSID, item.getSmsId());
-		newMessageValues.put(KEY_SUBJECT, item.getSubject());
-		newMessageValues.put(KEY_THREADID_S, item.getThreadId());
-		newMessageValues.put(KEY_TYPE, item.getType());
-		newMessageValues.put(KEY_USERNAME_S, item.getUsername());
+		newMessageValues.put(KEY_ADDRESS, item.getMessageAddress());
+		newMessageValues.put(KEY_TIME, item.getMessageTime());
+		newMessageValues.put(KEY_BODY, item.getMessageBody());
+		newMessageValues.put(KEY_READ_S, item.getMessageRead());
+		newMessageValues.put(KEY_SMSID, item.getMessageSmsId());
+		newMessageValues.put(KEY_SUBJECT, item.getMessageSubject());
+		newMessageValues.put(KEY_THREADID_S, item.getMessageThreadId());
+		newMessageValues.put(KEY_TYPE, item.getMessageType());
+		newMessageValues.put(KEY_USERNAME_S, item.getMessageUsername());
 		// Inserts the new row into the database
 		Log.d(TAG, "Values: " + " have been put in to: " + DATABASE_NAME);
 		return db.insert(MESSAGE_TABLE, null, newMessageValues);
@@ -223,10 +226,9 @@ public class DatabaseAdapter {
 		// columns, String selection, String[] selectionArgs, String groupBy,
 		// String having, String orderBy, String limit)
 		Cursor cursor = db.query(true, THREAD_TABLE, new String[] { KEY_ID,
-				KEY_HAS_ATTACHMENT, KEY_BODY, KEY_MESSAGE_COUNT, KEY_READ_T,
+				KEY_HAS_ATTACHMENT, KEY_MESSAGE_COUNT, KEY_READ_T,
 				KEY_THREADID_T, KEY_USERNAME_T }, null, null, null, null, null,
 				null);
-
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
 			Log.d(TAG, "No conversations.");
 			list.add("Start a new conversation");
@@ -270,8 +272,30 @@ public class DatabaseAdapter {
 		// to create a new one.
 		@Override
 		public void onCreate(SQLiteDatabase _db) {
-			Log.d(TAG, "Created: " + DATABASE_CREATE);
-			_db.execSQL(DATABASE_CREATE);
+			try {
+				Log.d(TAG, "Creation: Trying to create SMS table");
+				Log.d(TAG, "Creation: " + DATABASE_CREATE_SMS);
+				_db.execSQL(DATABASE_CREATE_SMS);
+				Map<String, String> map = _db.getSyncedTables();
+				if (map.size() == 0) {
+					Log.d(TAG, "Creation: Empty.");
+				}
+				for (Map.Entry<String, String> entry : map.entrySet()) {
+					Log.d(TAG,
+							"Creation: " + entry.getKey() + "/"
+									+ entry.getValue());
+				}
+			} catch (SQLException e) {
+				Log.d(TAG, "Creation: Failed trying to create SMS table");
+			}
+			try {
+				// TODO : It's failing in the creation of this table.
+				Log.d(TAG, "Creation: Trying to create thread table");
+				_db.execSQL(DATABASE_CREATE_THREAD);
+				Log.d(TAG, "Creation: " + DATABASE_CREATE_THREAD);
+			} catch (SQLException e) {
+				Log.d(TAG, "Creation: Failed trying to create thread table");
+			}
 		}
 
 		/*

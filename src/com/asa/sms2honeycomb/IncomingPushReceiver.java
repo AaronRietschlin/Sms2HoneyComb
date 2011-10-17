@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.asa.sms2honeycomb.util.Util;
+import com.asa.sms2honeycomb.Util.Util;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -19,8 +19,8 @@ import android.util.Log;
 public class IncomingPushReceiver extends BroadcastReceiver {
 
 	// TODO: The intent to listen for
-	public static final String PUSH_RECEIVED = "com.asa.IncomingPushReceiver.PUSH_RECEIVED";
-
+	public static final String PUSH_RECEIVED = "com.parse.StandardPushCallback.PUSH_RECEIVED";
+	
 	private final String TAG = "IncomingPushReceiver";
 
 	private DatabaseAdapter dbAdapter;
@@ -42,7 +42,8 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 				 * sms2honeycomb.db so it can later be used in the application.
 				 * We what to query the IncommingMessage table
 				 */
-				final ParseQuery query = new ParseQuery("IncommingMessage");
+				
+				final ParseQuery query = new ParseQuery(Preferences.PARSE_TABLE_SMS);
 				// Sort the Parse Object so only the username of the current
 				// user
 				// can be accessed.
@@ -82,7 +83,7 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 									String smsIdDB = message.getString("smsId");
 									String subjectDB = message.getString("subject");
 									String threadIdDB = message.getString("threadId");
-									String typeDB = message.getString("type");
+									int typeDB = message.getInt("type");
 									String usernameDB = message.getString("username");
 									// Display the total message queryed for
 									// logging
@@ -105,17 +106,17 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 								}
 							}
 						} else {
-							Log.d(TAG, "Error: " + e.getMessage());
+							Log.e(TAG, "Error: " + e.getMessage());
 						}
 					}
 				});
 			} else {
-				Log.d(TAG, "The device is not honeycomb is its a phone");
+				Log.d(TAG, "The device is not honeycomb is its a phone.");
 				// If the device is not a tablet it is a phone so you pull from
 				// the
 				// server, but then send a sms message from the data recived.
 				// We want to query the OutgoingMessage table
-				final ParseQuery query = new ParseQuery("OutgoingMessage");
+				final ParseQuery query = new ParseQuery(Preferences.PARSE_TABLE_SMS);
 				// Sort the Parse Object so only the username of the current
 				// user
 				// can be accessed.
@@ -149,14 +150,14 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 									String timeString = time.toString();
 									// Get who the message is coming from
 									// (phonenumber).
-									String to = message.getString("messageTo");
+									String address = message.getString(Preferences.PARSE_SMS_ADDRESS);
 									// Get the body of the message
 									String body = message
-											.getString("messageBody");
+											.getString(Preferences.PARSE_SMS_BODY);
 									// Display the total message queryed for
 									// logging
 									String totalMessage = "Sent: " + timeString
-											+ "\n" + "To: " + to + "\n"
+											+ "\n" + "To: " + address + "\n"
 											+ "Message : " + body + "\n";
 									Log.d(TAG, "New message is: "
 											+ totalMessage);
@@ -169,12 +170,12 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 										// Chops up the message
 										sms.divideMessage(body);
 										// Send the sms message in its parts
-										sms.sendMultipartTextMessage(to, null,
+										sms.sendMultipartTextMessage(address, null,
 												sms.divideMessage(body), null,
 												null);
 									} else {
 										// Sends the message without cutting it
-										sms.sendTextMessage(to, null, body,
+										sms.sendTextMessage(address, null, body,
 												null, null);
 									}
 
@@ -183,7 +184,7 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 								}
 							}
 						} else {
-							Log.d(TAG, "Error: " + e.getMessage());
+							Log.e(TAG, "Error: " + e.getMessage());
 						}
 					}
 				});
@@ -191,5 +192,4 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 		}
 
 	}
-
 }

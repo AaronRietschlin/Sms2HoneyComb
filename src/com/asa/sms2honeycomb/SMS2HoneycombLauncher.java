@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.asa.sms2honeycomb.phone.LauncherActivity;
 import com.asa.sms2honeycomb.tablet.MainHoneycombActivity;
 import com.parse.Parse;
 import com.parse.PushService;

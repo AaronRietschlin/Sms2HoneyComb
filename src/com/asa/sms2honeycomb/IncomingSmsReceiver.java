@@ -9,7 +9,7 @@ import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.asa.sms2honeycomb.util.Util;
+import com.asa.sms2honeycomb.Util.Util;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
@@ -45,26 +45,33 @@ public class IncomingSmsReceiver extends BroadcastReceiver {
 				}
 
 				String body = "";
-				String from = "";
+				String address = "";
 				for (SmsMessage message : smsMessages) {
 					body = message.getMessageBody();
-					from = message.getOriginatingAddress();
+					address = message.getOriginatingAddress();
 				}
-				Log.i(TAG, from + " ~ " + body);
+				Log.i(TAG, address + " ~ " + body);
 
 				// Retrieve the device id.
 				TelephonyManager manager = (TelephonyManager) context
 						.getSystemService(Context.TELEPHONY_SERVICE);
-				String deviceId = manager.getDeviceId();
 
 				// Send to server.
-				ParseObject incomingMessage = new ParseObject("IncomingMessage");
-				// Need the username for sorting
-				incomingMessage.put("username", Util.getUsernameString());
-				incomingMessage.put("messageBody", body);
-				incomingMessage.put("messageFrom", from);
-				// TODO: Get device number? incomingMessage.put("messageTo", );
-				incomingMessage.put("deviceId", deviceId);
+				ParseObject incomingMessage = new ParseObject(
+						Preferences.PARSE_TABLE_SMS);
+				// send the address to parse
+				incomingMessage.put(Preferences.PARSE_SMS_ADDRESS, address);
+				// send the sms body to parse
+				incomingMessage.put(Preferences.PARSE_SMS_BODY, body);
+				// send the type to parse outgoing
+				int type = 1;
+				incomingMessage.put(Preferences.PARSE_SMS_TYPE, type);
+				// get and send the username
+				int threadId = 1;
+				incomingMessage.put(Preferences.PARSE_SMS_THREAD_ID, threadId);
+				incomingMessage.put(Preferences.PARSE_USERNAME_ROW,
+						Util.getUsernameString());
+
 				final String pushBody = body;
 				incomingMessage.saveInBackground(new SaveCallback() {
 					@Override
@@ -75,8 +82,11 @@ public class IncomingSmsReceiver extends BroadcastReceiver {
 						} else {
 							// Saved to server correctly.
 							ParsePush push = new ParsePush();
-							// Set the channel to tablet channel.
-							push.setChannel("tabletChannel");
+							// Set the channel to tablet channel. Because we
+							// want to send to the tablet.
+							push.setChannel(Util.getPushChannel(
+									Util.getUsernameString(),
+									Preferences.TABLET));
 							push.setMessage(pushBody);
 							push.sendInBackground(new SendCallback() {
 								@Override
@@ -85,9 +95,10 @@ public class IncomingSmsReceiver extends BroadcastReceiver {
 										// Did not send push notification
 										// correctly.
 										Log.e(TAG,
-												"Push notification did not send correctly.", e);
+												"Push notification did not send correctly.",
+												e);
 										e.printStackTrace();
-									}else{
+									} else {
 										Log.d(TAG, "Push sent.");
 									}
 								}
