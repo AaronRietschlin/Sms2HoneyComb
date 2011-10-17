@@ -1,5 +1,6 @@
 package com.asa.sms2honeycomb;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -12,6 +13,8 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.asa.sms2honeycomb.Util.Util;
 
 public class DatabaseAdapter {
 	// TAG for debugging

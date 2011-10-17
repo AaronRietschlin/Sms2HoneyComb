@@ -18,7 +18,11 @@ import android.widget.TextView;
 
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
+<<<<<<< HEAD
 import com.asa.sms2honeycomb.Util;
+=======
+import com.asa.sms2honeycomb.Util.Util;
+>>>>>>> origin/master
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
