@@ -33,6 +33,7 @@ public class SettingsActivity extends Activity {
 		
 		logoutButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
+				Util.logoutUser();
 				mIntent = new Intent(SettingsActivity.this,
 						LoginActivity.class);
 				startActivity(mIntent);
