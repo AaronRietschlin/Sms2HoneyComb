@@ -1,10 +1,6 @@
 package com.asa.sms2honeycomb.tablet;
 
 import java.util.ArrayList;
-<<<<<<< HEAD
-=======
-import java.util.Date;
->>>>>>> origin/master
 import java.util.List;
 
 import android.app.Activity;
@@ -26,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.QuickContactBadge;
 import android.widget.TextView;
 
 import com.asa.sms2honeycomb.DatabaseAdapter;

@@ -32,9 +32,9 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 		// Open the database
 		dbAdapter.open();
 		if (intent.equals(PUSH_RECEIVED)) {
-			Log.e(TAG, "IncomingPushReceiver has been triggered");
+			Log.d(TAG, "IncomingPushReceiver has been triggered");
 			if (Preferences.DEVICE_IS_HONEYCOMB) {
-				Log.e(TAG, "The device is honeycomb");
+				Log.d(TAG, "The device is honeycomb");
 				/*
 				 * If device is a tablet it will query the server on the
 				 * receving of the push intent. When this happends the message
@@ -90,7 +90,7 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 									String totalMessage = "Sent: " + timeDB
 											+ "\n" + "Address: " + addressDB + "\n"
 											+ "Message : " + bodyDB + "\n";
-									Log.e(TAG, "New message is: "
+									Log.d(TAG, "New message is: "
 											+ totalMessage);
 									// Get the MessageItem object so you can
 									// create

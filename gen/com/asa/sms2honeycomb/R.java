@@ -42,10 +42,7 @@ public final class R {
         public static final int login_username_field_tablet=0x7f070013;
         public static final int login_username_title_phone=0x7f070017;
         public static final int logout=0x7f070022;
-<<<<<<< HEAD
         public static final int logout_button1=0x7f070034;
-=======
->>>>>>> origin/master
         public static final int main_message_felid=0x7f07000c;
         public static final int main_send_btn=0x7f07000d;
         public static final int message_add_contact_button=0x7f07000a;
@@ -96,10 +93,7 @@ public final class R {
         public static final int register_activity_phone=0x7f030011;
         public static final int register_activity_tablet=0x7f030012;
         public static final int register_phone=0x7f030013;
-<<<<<<< HEAD
         public static final int settings_phone=0x7f030014;
-=======
->>>>>>> origin/master
     }
     public static final class string {
         public static final int app_name=0x7f050001;
