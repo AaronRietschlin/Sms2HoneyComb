@@ -11,6 +11,9 @@
     <string name="button_signup">Sign Up</string>
     <string name="button_okay">Okay</string>
     
+    <string name="menu_logout">Logout</string>
+    <string name="menu_new_message">New Message</string>
+    
     <string name="dialog_login_message">Logging in...</string>
     <string name="dialog_register_message">Registering...</string>
     

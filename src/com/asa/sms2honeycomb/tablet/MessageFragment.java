@@ -143,7 +143,7 @@ public class MessageFragment extends ListFragment {
 					outgoingMessage.put(Preferences.PARSE_USERNAME_ROW,
 							Util.getUsernameString());
 					// Always mark the message as read.
-					outgoingMessage.put(Preferences.PARSE_SMS_READ, 1);
+					outgoingMessage.put(Preferences.PARSE_SMS_READ, Preferences.READ);
 					outgoingMessage.put(Preferences.PARSE_SMS_THREAD_ID,
 							threadId);
 					// Always mark the message type as a sent type.
@@ -395,6 +395,7 @@ public class MessageFragment extends ListFragment {
 								.getInt(Preferences.PARSE_SMS_TYPE));
 						messageResults.add(messageItem);
 						String str = messageObject.toString();
+						Log.e(TAG, "TextToTab - " + messageItem.toString());
 
 					}
 				} catch (ParseException e) {

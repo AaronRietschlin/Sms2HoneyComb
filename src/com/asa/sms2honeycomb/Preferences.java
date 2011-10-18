@@ -65,8 +65,8 @@ public class Preferences {
 	
 	public static final int READ = 1;
 	public static final int UNREAD = 0;
-	public static final int SENT = 1;
-	public static final int RECEIVED = 2;
+	public static final int SENT = 2;
+	public static final int RECEIVED = 1;
 
 	/**
 	 * For message list. Tells how many types of messages there are. There are
