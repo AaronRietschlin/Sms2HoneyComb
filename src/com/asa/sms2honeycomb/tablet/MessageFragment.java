@@ -67,8 +67,8 @@ public class MessageFragment extends ListFragment {
 		// generated on top of this view.
 		mContext = inflater.getContext();
 		inflater.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		inflater.inflate(R.layout.fragment_message_view, container);
-		View view = inflater.inflate(R.layout.fragment_message_view, null);
+		//inflater.inflate(R.layout.fragment_message_view_new, container);
+		View view = inflater.inflate(R.layout.fragment_message_view_new, null);
 
 		// Open up the database needs to be above the conversationAdapter
 		dbAdapter = new DatabaseAdapter(getActivity());
@@ -136,7 +136,7 @@ public class MessageFragment extends ListFragment {
 					messageResults.add(item);
 					messageAdapter.notifyDataSetChanged();
 					ParseObject outgoingMessage = new ParseObject(
-							Preferences.PARSE_TABLE_SMS	);
+							Preferences.PARSE_TABLE_SMS);
 					outgoingMessage.put(Preferences.PARSE_SMS_ADDRESS,
 							phoneNumber);
 					outgoingMessage.put(Preferences.PARSE_SMS_BODY, body);
@@ -359,7 +359,7 @@ public class MessageFragment extends ListFragment {
 		private int queryType;
 		private String username;
 
-//		private ArrayList<MessageItem> messageResults;
+		// private ArrayList<MessageItem> messageResults;
 
 		public QueryParseAsyncTask(int type, String user) {
 			queryType = type;
@@ -395,7 +395,7 @@ public class MessageFragment extends ListFragment {
 								.getInt(Preferences.PARSE_SMS_TYPE));
 						messageResults.add(messageItem);
 						String str = messageObject.toString();
-						
+
 					}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
