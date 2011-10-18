@@ -67,7 +67,7 @@ public class MessageFragment extends ListFragment {
 		// generated on top of this view.
 		mContext = inflater.getContext();
 		inflater.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		//inflater.inflate(R.layout.fragment_message_view_new, container);
+		// inflater.inflate(R.layout.fragment_message_view_new, container);
 		View view = inflater.inflate(R.layout.fragment_message_view_new, null);
 
 		// Open up the database needs to be above the conversationAdapter
@@ -105,7 +105,6 @@ public class MessageFragment extends ListFragment {
 		toField = (EditText) view.findViewById(R.id.phone_to_field);
 		messageField = (EditText) view.findViewById(R.id.main_message_felid);
 		sendButton = (Button) view.findViewById(R.id.main_send_btn);
-
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -132,6 +131,7 @@ public class MessageFragment extends ListFragment {
 					item.setMessageThreadId(threadId);
 					item.setMessageType(Preferences.SENT);
 					item.setMessageUsername(Util.getUsernameString());
+					item.setMessageTime(Util.getCurrentDate());
 					// Adds the Message to the list
 					messageResults.add(item);
 					messageAdapter.notifyDataSetChanged();
@@ -187,9 +187,9 @@ public class MessageFragment extends ListFragment {
 							}
 						}
 					});
+					// clear the messageField when the text is send
+					messageField.setText("");
 				}
-				// clear the messageField when the text is send
-				messageField.setText("");
 			}
 		});
 		return view;

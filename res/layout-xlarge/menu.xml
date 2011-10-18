@@ -4,5 +4,6 @@
     android:title="Logout"/>  
   <item android:id="@+id/menu_new_message"
   	android:title="New Message" 
-  	android:showAsAction="ifRoom|withText"/>
+  	android:showAsAction="ifRoom|withText"
+  	android:icon="@drawable/new_conversation"/>
 </menu> 

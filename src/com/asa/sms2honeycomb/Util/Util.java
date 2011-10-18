@@ -2,6 +2,7 @@ package com.asa.sms2honeycomb.Util;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -239,5 +240,12 @@ public class Util {
 	public static void displayToast(Context context, String message) {
 		mToast = Toast.makeText(context, message, Toast.LENGTH_LONG);
 		mToast.show();
+	}
+
+	public static String getCurrentDate() {
+		Calendar currentDate = Calendar.getInstance();
+		SimpleDateFormat formatter = new SimpleDateFormat(
+				"yyyy/MMM/dd HH:mm:ss");
+		return currentDate.getTime().toLocaleString();
 	}
 }
