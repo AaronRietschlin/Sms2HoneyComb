@@ -9,6 +9,7 @@
     <string name="button_login">Sign In</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_signup">Sign Up</string>
+    <string name="button_okay">Okay</string>
     
     <string name="dialog_login_message">Logging in...</string>
     <string name="dialog_register_message">Registering...</string>
@@ -43,5 +44,7 @@
     <string name="message_list_text">Messages</string>
     <string name="conversation_new_btn_text">New Conversation</string>
     
+    <string name="message_list_empty_target">You must specify someone to text before sending a message.</string>
+    <string name="message_list_unsuccessful">The message was not sent. Please try again.</string>
     
 </resources>

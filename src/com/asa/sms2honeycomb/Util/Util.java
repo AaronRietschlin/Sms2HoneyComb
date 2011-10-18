@@ -136,13 +136,13 @@ public class Util {
 						messageItem.setMessageTime(messageObject.createdAt()
 								.toLocaleString());
 						messageItem.setMessageSmsId(messageObject
-								.getString(Preferences.PARSE_SMS_SMSID));
+								.getInt(Preferences.PARSE_SMS_SMSID));
 						messageItem.setMessageThreadId(messageObject
-								.getString(Preferences.PARSE_SMS_THREAD_ID));
+								.getInt(Preferences.PARSE_SMS_THREAD_ID));
 						messageItem.setMessageType(messageObject
 								.getInt(Preferences.PARSE_SMS_TYPE));
 						messageItem.setMessageRead(messageObject
-								.getString(Preferences.PARSE_SMS_READ));
+								.getInt(Preferences.PARSE_SMS_READ));
 						messageItem.setMessageSubject(messageObject
 								.getString(Preferences.PARSE_SMS_SUBJECT));
 						messageResults.add(messageItem);

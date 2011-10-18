@@ -62,6 +62,11 @@ public class Preferences {
 	public static final int REG_IN_TABLE = 2;
 
 	public static final int MENU_LOGOUT = 0;
+	
+	public static final int READ = 1;
+	public static final int UNREAD = 0;
+	public static final int SENT = 1;
+	public static final int RECEIVED = 2;
 
 	/**
 	 * For message list. Tells how many types of messages there are. There are

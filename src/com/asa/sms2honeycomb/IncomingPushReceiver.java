@@ -20,7 +20,7 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 
 	// TODO: The intent to listen for
 	public static final String PUSH_RECEIVED = "com.parse.StandardPushCallback.PUSH_RECEIVED";
-	
+
 	private final String TAG = "IncomingPushReceiver";
 
 	private DatabaseAdapter dbAdapter;
@@ -42,8 +42,9 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 				 * sms2honeycomb.db so it can later be used in the application.
 				 * We what to query the IncommingMessage table
 				 */
-				
-				final ParseQuery query = new ParseQuery(Preferences.PARSE_TABLE_SMS);
+
+				final ParseQuery query = new ParseQuery(
+						Preferences.PARSE_TABLE_SMS);
 				// Sort the Parse Object so only the username of the current
 				// user
 				// can be accessed.
@@ -77,19 +78,23 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 											"E MMM dd hh:mm");
 									String formatedTime = sdf.format(time);
 									String timeDB = formatedTime.toString();
-									String addressDB = message.getString("address");
+									String addressDB = message
+											.getString("address");
 									String bodyDB = message.getString("body");
-									String readDB = message.getString("read");
-									String smsIdDB = message.getString("smsId");
-									String subjectDB = message.getString("subject");
-									String threadIdDB = message.getString("threadId");
+									int readDB = message.getInt("read");
+									int smsIdDB = message.getInt("smsId");
+									String subjectDB = message
+											.getString("subject");
+									int threadIdDB = message.getInt("threadId");
 									int typeDB = message.getInt("type");
-									String usernameDB = message.getString("username");
+									String usernameDB = message
+											.getString("username");
 									// Display the total message queryed for
 									// logging
 									String totalMessage = "Sent: " + timeDB
-											+ "\n" + "Address: " + addressDB + "\n"
-											+ "Message : " + bodyDB + "\n";
+											+ "\n" + "Address: " + addressDB
+											+ "\n" + "Message : " + bodyDB
+											+ "\n";
 									Log.d(TAG, "New message is: "
 											+ totalMessage);
 									// Get the MessageItem object so you can
@@ -97,7 +102,8 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 									// the db entry.
 									MessageItem item = new MessageItem(timeDB,
 											addressDB, bodyDB, readDB, smsIdDB,
-											subjectDB, threadIdDB, typeDB, usernameDB);
+											subjectDB, threadIdDB, typeDB,
+											usernameDB);
 									// Insert the MessageItem into the
 									// sms2honeycomb.db.
 									dbAdapter.insertMessageItem(item);
@@ -116,7 +122,8 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 				// the
 				// server, but then send a sms message from the data recived.
 				// We want to query the OutgoingMessage table
-				final ParseQuery query = new ParseQuery(Preferences.PARSE_TABLE_SMS);
+				final ParseQuery query = new ParseQuery(
+						Preferences.PARSE_TABLE_SMS);
 				// Sort the Parse Object so only the username of the current
 				// user
 				// can be accessed.
@@ -150,7 +157,8 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 									String timeString = time.toString();
 									// Get who the message is coming from
 									// (phonenumber).
-									String address = message.getString(Preferences.PARSE_SMS_ADDRESS);
+									String address = message
+											.getString(Preferences.PARSE_SMS_ADDRESS);
 									// Get the body of the message
 									String body = message
 											.getString(Preferences.PARSE_SMS_BODY);
@@ -170,13 +178,13 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 										// Chops up the message
 										sms.divideMessage(body);
 										// Send the sms message in its parts
-										sms.sendMultipartTextMessage(address, null,
-												sms.divideMessage(body), null,
-												null);
+										sms.sendMultipartTextMessage(address,
+												null, sms.divideMessage(body),
+												null, null);
 									} else {
 										// Sends the message without cutting it
-										sms.sendTextMessage(address, null, body,
-												null, null);
+										sms.sendTextMessage(address, null,
+												body, null, null);
 									}
 
 								} catch (ParseException e1) {

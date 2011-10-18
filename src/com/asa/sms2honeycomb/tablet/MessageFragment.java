@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.MessageItem;
@@ -43,6 +45,7 @@ public class MessageFragment extends ListFragment {
 	private final String TAG = "MessageFragment";
 	private DatabaseAdapter dbAdapter;
 	private ArrayAdapter<String> messageAdapter;
+	private ArrayList<MessageItem> messageResults;
 
 	private ListView messageListView;
 	private EditText toField;
@@ -53,10 +56,9 @@ public class MessageFragment extends ListFragment {
 	private Context mContext;
 
 	private String phoneNumber;
+	private int threadId = 1;
 
 	private final int CONTACT_PICKER_RESULT = 0;
-	private final int RECEIVED = 1;
-	private final int SENT = 2;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,9 +69,6 @@ public class MessageFragment extends ListFragment {
 		inflater.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.fragment_message_view, container);
 		View view = inflater.inflate(R.layout.fragment_message_view, null);
-
-		// TODO TESTING SHIT
-		phoneNumber = "1234567";
 
 		// Open up the database needs to be above the conversationAdapter
 		dbAdapter = new DatabaseAdapter(getActivity());
@@ -114,45 +113,81 @@ public class MessageFragment extends ListFragment {
 				// then send them on to parse and to the push channel(phone)
 				// on then on the phone send the messages via a sms message to
 				// the to number
-				toField.setText(phoneNumber);
 				final String to = toField.getText().toString().trim();
 				final String body = messageField.getText().toString().trim();
-
-				ParseObject outgoingMessage = new ParseObject("OutgoingMessage");
-				outgoingMessage.put("messageTo", to);
-				outgoingMessage.put("messageBody", body);
-				outgoingMessage.put(Preferences.PARSE_USERNAME_ROW,
-						Util.getUsernameString());
-				outgoingMessage.saveInBackground(new SaveCallback() {
-					@Override
-					public void done(ParseException e) {
-						if (e != null) {
-							// Did not save correctly.
-							Log.e(TAG, "Message not successfully saved.");
-						} else {
-							ParsePush push = new ParsePush();
-							push.setChannel(Util.getPushChannel(
-									Util.getUsernameString(),
-									Preferences.TABLET));
-							push.setMessage("To: " + to + " Message: " + body);
-							push.sendInBackground(new SendCallback() {
-								@Override
-								public void done(ParseException e) {
-									if (e != null) {
-										// Did not send push notification
-										// correctly.
-										Log.e(TAG,
-												"Push notification did not send correctly.",
-												e);
-										e.printStackTrace();
-									} else {
-										Log.d(TAG, "Push sent.");
-									}
-								}
-							});
-						}
+				if (to.length() == 0) {
+					// User has not specified a user, thus, nothing happens.
+					Toast toast = Toast.makeText(getActivity(),
+							R.string.message_list_empty_target,
+							Toast.LENGTH_LONG);
+					toast.show();
+				} else {
+					if (phoneNumber.length() == 0) {
+						phoneNumber = to;
 					}
-				});
+					MessageItem item = new MessageItem();
+					item.setMessageAddress(phoneNumber);
+					item.setMessageBody(body);
+					item.setMessageRead(Preferences.READ);
+					item.setMessageThreadId(threadId);
+					item.setMessageType(Preferences.SENT);
+					item.setMessageUsername(Util.getUsernameString());
+					// Adds the Message to the list
+					messageResults.add(item);
+					messageAdapter.notifyDataSetChanged();
+					ParseObject outgoingMessage = new ParseObject(
+							Preferences.PARSE_TABLE_SMS	);
+					outgoingMessage.put(Preferences.PARSE_SMS_ADDRESS,
+							phoneNumber);
+					outgoingMessage.put(Preferences.PARSE_SMS_BODY, body);
+					outgoingMessage.put(Preferences.PARSE_USERNAME_ROW,
+							Util.getUsernameString());
+					// Always mark the message as read.
+					outgoingMessage.put(Preferences.PARSE_SMS_READ, 1);
+					outgoingMessage.put(Preferences.PARSE_SMS_THREAD_ID,
+							threadId);
+					// Always mark the message type as a sent type.
+					outgoingMessage.put(Preferences.PARSE_SMS_TYPE,
+							Preferences.SENT);
+					outgoingMessage.saveInBackground(new SaveCallback() {
+						@Override
+						public void done(ParseException e) {
+							if (e != null) {
+								/*
+								 * Did not save correctly. Informing user
+								 * through toast
+								 */
+								Log.e(TAG, "Message not successfully saved.");
+								Toast toast = Toast.makeText(getActivity(),
+										R.string.message_list_unsuccessful,
+										Toast.LENGTH_LONG);
+								toast.show();
+							} else {
+								ParsePush push = new ParsePush();
+								push.setChannel(Util.getPushChannel(
+										Util.getUsernameString(),
+										Preferences.TABLET));
+								push.setMessage("To: " + to + " Message: "
+										+ body);
+								push.sendInBackground(new SendCallback() {
+									@Override
+									public void done(ParseException e) {
+										if (e != null) {
+											// Did not send push notification
+											// correctly.
+											Log.e(TAG,
+													"Push notification did not send correctly.",
+													e);
+											e.printStackTrace();
+										} else {
+											Log.d(TAG, "Push sent.");
+										}
+									}
+								});
+							}
+						}
+					});
+				}
 				// clear the messageField when the text is send
 				messageField.setText("");
 			}
@@ -214,11 +249,10 @@ public class MessageFragment extends ListFragment {
 			TextView timeTv = (TextView) v.findViewById(R.id.message_list_time);
 			timeTv.setText(item.getMessageTime());
 			switch (item.getMessageType()) {
-			case RECEIVED:
-
+			case Preferences.RECEIVED:
 				nameTv.setText(item.getMessageAddress());
 				break;
-			case SENT:
+			case Preferences.SENT:
 				nameTv.setText("Me");
 				break;
 			}
@@ -230,31 +264,33 @@ public class MessageFragment extends ListFragment {
 			return mMessages.size();
 		}
 
-//		/**
-//		 * Tells how many types of pools of messages to keep. Read:
-//		 * http://logc.at/2011/10/10/handling-listviews-with-multiple-row-types/
-//		 * 
-//		 * @return
-//		 */
-//		@Override
-//		public int getViewTypeCount() {
-//			return Preferences.NUM_TYPE_OF_MESSAGES;
-//		}
-//
-//		/**
-//		 * Tells the list view which pool the view belongs to. Read:
-//		 * http://logc.at/2011/10/10/handling-listviews-with-multiple-row-types/
-//		 * 
-//		 * @param position
-//		 * @return
-//		 */
-//		@Override
-//		public int getItemViewType(int position) {
-//			if (mMessages.get(position).getMessageType() == RECEIVED) {
-//				return RECEIVED;
-//			}
-//			return SENT;
-//		}
+		// /**
+		// * Tells how many types of pools of messages to keep. Read:
+		// *
+		// http://logc.at/2011/10/10/handling-listviews-with-multiple-row-types/
+		// *
+		// * @return
+		// */
+		// @Override
+		// public int getViewTypeCount() {
+		// return Preferences.NUM_TYPE_OF_MESSAGES;
+		// }
+		//
+		// /**
+		// * Tells the list view which pool the view belongs to. Read:
+		// *
+		// http://logc.at/2011/10/10/handling-listviews-with-multiple-row-types/
+		// *
+		// * @param position
+		// * @return
+		// */
+		// @Override
+		// public int getItemViewType(int position) {
+		// if (mMessages.get(position).getMessageType() == RECEIVED) {
+		// return RECEIVED;
+		// }
+		// return SENT;
+		// }
 
 	}
 
@@ -270,10 +306,8 @@ public class MessageFragment extends ListFragment {
 				Cursor cursor = null;
 				Uri uri = data.getData();
 				Preferences.URI = uri;
-				Log.d(TAG, "Contact Info - URI: " + uri);
 				// Get the contactId from the URI
 				String contactId = uri.getLastPathSegment();
-				Log.d(TAG, "Contact Info - ID: " + contactId);
 
 				/*
 				 * Query the Contacts database with the Phone content_uri. The
@@ -325,7 +359,7 @@ public class MessageFragment extends ListFragment {
 		private int queryType;
 		private String username;
 
-		private ArrayList<MessageItem> messageResults;
+//		private ArrayList<MessageItem> messageResults;
 
 		public QueryParseAsyncTask(int type, String user) {
 			queryType = type;
@@ -361,6 +395,7 @@ public class MessageFragment extends ListFragment {
 								.getInt(Preferences.PARSE_SMS_TYPE));
 						messageResults.add(messageItem);
 						String str = messageObject.toString();
+						
 					}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
