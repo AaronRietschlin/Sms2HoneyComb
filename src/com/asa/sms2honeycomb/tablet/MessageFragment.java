@@ -215,6 +215,7 @@ public class MessageFragment extends ListFragment {
 			timeTv.setText(item.getMessageTime());
 			switch (item.getMessageType()) {
 			case RECEIVED:
+
 				nameTv.setText(item.getMessageAddress());
 				break;
 			case SENT:
