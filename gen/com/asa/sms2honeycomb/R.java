@@ -82,22 +82,21 @@ public final class R {
         public static final int fragment_contacts_view=0x7f030004;
         public static final int fragment_conversations=0x7f030005;
         public static final int fragment_conversations_view=0x7f030006;
-        public static final int fragment_message_list=0x7f030007;
-        public static final int fragment_message_view=0x7f030008;
-        public static final int fragment_message_view_new=0x7f030009;
-        public static final int launcher_activity_tablet=0x7f03000a;
-        public static final int launcher_phone=0x7f03000b;
-        public static final int list_item=0x7f03000c;
-        public static final int login_activity_tablet=0x7f03000d;
-        public static final int login_phone=0x7f03000e;
-        public static final int main_phone=0x7f03000f;
-        public static final int menu=0x7f030010;
-        public static final int message_list=0x7f030011;
-        public static final int message_list_item=0x7f030012;
-        public static final int register_activity_phone=0x7f030013;
-        public static final int register_activity_tablet=0x7f030014;
-        public static final int register_phone=0x7f030015;
-        public static final int settings_phone=0x7f030016;
+        public static final int fragment_message_view=0x7f030007;
+        public static final int fragment_message_view_new=0x7f030008;
+        public static final int launcher_activity_tablet=0x7f030009;
+        public static final int launcher_phone=0x7f03000a;
+        public static final int list_item=0x7f03000b;
+        public static final int login_activity_tablet=0x7f03000c;
+        public static final int login_phone=0x7f03000d;
+        public static final int main_phone=0x7f03000e;
+        public static final int menu=0x7f03000f;
+        public static final int message_list=0x7f030010;
+        public static final int message_list_item=0x7f030011;
+        public static final int register_activity_phone=0x7f030012;
+        public static final int register_activity_tablet=0x7f030013;
+        public static final int register_phone=0x7f030014;
+        public static final int settings_phone=0x7f030015;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
