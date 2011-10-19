@@ -5,15 +5,15 @@ public class MessageItem {
 	String messageAddress;
 	String messageTime;
 	String messageBody;
-	String messageRead;
-	String messageSmsId;
+	int messageRead;
+	int messageSmsId;
 	String messageSubject;
-	String messageThreadId;
+	int messageThreadId;
 	int messageType;
 	String messageUsername;
 
-	public MessageItem(String address, String time, String body, String read,
-			String smsId, String subject, String threadId, int type,
+	public MessageItem(String address, String time, String body, int read,
+			int smsId, String subject, int threadId, int type,
 			String username) {
 		
 		messageAddress = address;
@@ -55,19 +55,19 @@ public class MessageItem {
 		this.messageBody = messageBody;
 	}
 
-	public String getMessageRead() {
+	public int getMessageRead() {
 		return messageRead;
 	}
 
-	public void setMessageRead(String messageRead) {
+	public void setMessageRead(int messageRead) {
 		this.messageRead = messageRead;
 	}
 
-	public String getMessageSmsId() {
+	public int getMessageSmsId() {
 		return messageSmsId;
 	}
 
-	public void setMessageSmsId(String messageSmsId) {
+	public void setMessageSmsId(int messageSmsId) {
 		this.messageSmsId = messageSmsId;
 	}
 
@@ -79,11 +79,11 @@ public class MessageItem {
 		this.messageSubject = messageSubject;
 	}
 
-	public String getMessageThreadId() {
+	public int getMessageThreadId() {
 		return messageThreadId;
 	}
 
-	public void setMessageThreadId(String messageThreadId) {
+	public void setMessageThreadId(int messageThreadId) {
 		this.messageThreadId = messageThreadId;
 	}
 

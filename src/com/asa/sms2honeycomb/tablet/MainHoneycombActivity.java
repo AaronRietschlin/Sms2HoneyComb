@@ -1,10 +1,13 @@
 package com.asa.sms2honeycomb.tablet;
 
 import java.util.ArrayList;
+
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -43,21 +46,21 @@ public class MainHoneycombActivity extends ListActivity {
 		// If the user had been logged out, pull in ALL the users convo data.
 		if (Preferences.LAUNCH_FROM_LOGIN) {
 			String userName = Util.getUsernameString();
-//			QueryParseAsyncTask task = new QueryParseAsyncTask(0, userName);
-//			AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
-//					.execute();
-//			try {
-//				messageResults = asyncTask.get();
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (ExecutionException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			for (MessageItem item : messageResults) {
-//				Log.e(TAG, item.toString());
-//			}
+			// QueryParseAsyncTask task = new QueryParseAsyncTask(0, userName);
+			// AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
+			// .execute();
+			// try {
+			// messageResults = asyncTask.get();
+			// } catch (InterruptedException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// } catch (ExecutionException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
+			// for (MessageItem item : messageResults) {
+			// Log.e(TAG, item.toString());
+			// }
 			// Preferences.LAUNCH_FROM_LOGIN = false;
 		}
 	}
@@ -79,25 +82,8 @@ public class MainHoneycombActivity extends ListActivity {
 			startActivity(mIntent);
 			finish();
 			return (true);
-
-		case R.id.query:
-			// TODO add query fuction
-			Toast.makeText(this, "Querying server...", Toast.LENGTH_LONG)
-					.show();
-			
-			return (true);
-
-		case R.id.contacts:
-			showDialog();
-			Toast.makeText(this, "Contact list", Toast.LENGTH_LONG).show();
-			return (true);
 		}
 
 		return (super.onOptionsItemSelected(item));
-	}
-
-	public void showDialog() {
-		// TODO delete
-
 	}
 }

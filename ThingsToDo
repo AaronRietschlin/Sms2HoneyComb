@@ -1,5 +1,5 @@
 We need to:
-	1.) Implement Threads
+	1.) Implement Thread conversation
 	2.) Push from tablet to server
 	3.) Retrieve from server to phone
 	4.) Make EditText widths stay the same

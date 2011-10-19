@@ -62,6 +62,11 @@ public class Preferences {
 	public static final int REG_IN_TABLE = 2;
 
 	public static final int MENU_LOGOUT = 0;
+	
+	public static final int READ = 1;
+	public static final int UNREAD = 0;
+	public static final int SENT = 2;
+	public static final int RECEIVED = 1;
 
 	/**
 	 * For message list. Tells how many types of messages there are. There are
@@ -76,4 +81,9 @@ public class Preferences {
 	public static boolean LAUNCH_FROM_LOGIN = true;
 
 	public static boolean DEBUG = true;
+	
+	/*
+	 * This is the intent the the IncommingPushReceiver is Listening for.
+	 */
+	public static String PUSH_RECEIVED= "com.asa.sms2honeycomb.PUSH_RECEIVED";
 }

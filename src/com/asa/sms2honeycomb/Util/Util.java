@@ -2,6 +2,7 @@ package com.asa.sms2honeycomb.Util;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -136,13 +137,13 @@ public class Util {
 						messageItem.setMessageTime(messageObject.createdAt()
 								.toLocaleString());
 						messageItem.setMessageSmsId(messageObject
-								.getString(Preferences.PARSE_SMS_SMSID));
+								.getInt(Preferences.PARSE_SMS_SMSID));
 						messageItem.setMessageThreadId(messageObject
-								.getString(Preferences.PARSE_SMS_THREAD_ID));
+								.getInt(Preferences.PARSE_SMS_THREAD_ID));
 						messageItem.setMessageType(messageObject
 								.getInt(Preferences.PARSE_SMS_TYPE));
 						messageItem.setMessageRead(messageObject
-								.getString(Preferences.PARSE_SMS_READ));
+								.getInt(Preferences.PARSE_SMS_READ));
 						messageItem.setMessageSubject(messageObject
 								.getString(Preferences.PARSE_SMS_SUBJECT));
 						messageResults.add(messageItem);
@@ -239,5 +240,12 @@ public class Util {
 	public static void displayToast(Context context, String message) {
 		mToast = Toast.makeText(context, message, Toast.LENGTH_LONG);
 		mToast.show();
+	}
+
+	public static String getCurrentDate() {
+		Calendar currentDate = Calendar.getInstance();
+		SimpleDateFormat formatter = new SimpleDateFormat(
+				"yyyy/MMM/dd HH:mm:ss");
+		return currentDate.getTime().toLocaleString();
 	}
 }
