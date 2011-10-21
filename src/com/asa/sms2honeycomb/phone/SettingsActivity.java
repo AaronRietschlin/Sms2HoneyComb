@@ -15,6 +15,7 @@ import android.widget.Button;
 public class SettingsActivity extends Activity {
 	Button logoutButton;
 	Intent mIntent;
+	IncomingPushReceiver pushReceiver;
 	
 	private final String TAG = "SettingsActvity";
 	
@@ -34,6 +35,9 @@ public class SettingsActivity extends Activity {
 		logoutButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Util.logoutUser();
+				
+				unregisterReceiver(pushReceiver);
+				
 				mIntent = new Intent(SettingsActivity.this,
 						LoginActivity.class);
 				startActivity(mIntent);
