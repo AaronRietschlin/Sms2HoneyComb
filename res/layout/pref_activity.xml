@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:admob="http://schemas.android.com/apk/res/com.asa.easysal">
+  
+   
+   <PreferenceCategory android:title="@string/settings_options_title">
+        <Preference
+           android:title="@string/main_logout_btn_text"
+           android:summary="@string/settings_logout_description"
+           android:key="prefLogout"/>
+                
+    </PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/settings_about_title">
+    
+     <Preference
+                android:title="@string/settings_homepage_title"
+                android:summary="settings_homepage_title_summary"
+                android:key="prefHomepage" /> 
+      <Preference
+                android:title="@string/settings_about_title"
+                android:summary="@string/settings_about_summary"
+                android:key="aboutPref" />                   
+
+                              
+                                                              
+    </PreferenceCategory>
+  
+</PreferenceScreen>

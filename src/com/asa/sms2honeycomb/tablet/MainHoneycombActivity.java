@@ -2,21 +2,20 @@ package com.asa.sms2honeycomb.tablet;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.asa.sms2honeycomb.DatabaseAdapter;
+import com.asa.sms2honeycomb.IncomingPushReceiver;
 import com.asa.sms2honeycomb.MessageItem;
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
+import com.asa.sms2honeycomb.SettingsActivity;
 import com.asa.sms2honeycomb.Util.Util;
 import com.parse.PushService;
 
@@ -78,14 +77,22 @@ public class MainHoneycombActivity extends ListActivity {
 		switch (item.getItemId()) {
 		case R.id.logout:
 			Util.logoutUser();
-			
+
 			unregisterReceiver(pushReceiver);
-			
+
 			mIntent = new Intent(MainHoneycombActivity.this,
 					LoginActivityTab.class);
 			startActivity(mIntent);
 			finish();
 			return (true);
+		case R.id.settings:
+			mIntent = new Intent(MainHoneycombActivity.this,
+					SettingsActivity.class);
+			Bundle extras = new Bundle();
+			extras.putBoolean("isTablet", true);
+			mIntent.putExtras(extras);
+			startActivity(mIntent);
+			return true;
 		}
 
 		return (super.onOptionsItemSelected(item));

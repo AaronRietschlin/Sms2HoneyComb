@@ -2,6 +2,7 @@ package com.asa.sms2honeycomb;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.asa.sms2honeycomb.tablet.MainHoneycombActivity;
@@ -14,7 +15,14 @@ public class SMS2HoneycombLauncher extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);// Checks the version number of the
 											// phone.
-		Preferences.DEVICE_IS_HONEYCOMB = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
+		if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+			// on a large screen device ...
+			Preferences.DEVICE_IS_HONEYCOMB = true;
+		} else {
+			Preferences.DEVICE_IS_HONEYCOMB = false;
+		}
+		// Preferences.DEVICE_IS_HONEYCOMB = android.os.Build.VERSION.SDK_INT >=
+		// android.os.Build.VERSION_CODES.HONEYCOMB;
 
 		// Initialize Parse to allow server access.
 		Parse.initialize(this, "CDu0jepIuQQrZBJwIItLNYs7B2RntnwdqvjmsFB0",
