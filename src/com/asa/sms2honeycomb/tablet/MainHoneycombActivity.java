@@ -27,7 +27,6 @@ public class MainHoneycombActivity extends ListActivity {
 	Intent mIntent;
 	ListView list;
 	Dialog listDialog;
-	
 	IncomingPushReceiver pushReceiver;
 
 	public static ArrayList<MessageItem> messageResults;
