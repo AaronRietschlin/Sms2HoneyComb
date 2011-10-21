@@ -27,6 +27,8 @@ public class MainHoneycombActivity extends ListActivity {
 	Intent mIntent;
 	ListView list;
 	Dialog listDialog;
+	
+	IncomingPushReceiver pushReceiver;
 
 	public static ArrayList<MessageItem> messageResults;
 
@@ -77,6 +79,9 @@ public class MainHoneycombActivity extends ListActivity {
 		switch (item.getItemId()) {
 		case R.id.logout:
 			Util.logoutUser();
+			
+			unregisterReceiver(pushReceiver);
+			
 			mIntent = new Intent(MainHoneycombActivity.this,
 					LoginActivityTab.class);
 			startActivity(mIntent);
