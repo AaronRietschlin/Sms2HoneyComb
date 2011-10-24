@@ -25,7 +25,7 @@ public class ConversationListFragment extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 		contactNames = new ArrayList<String>();
 		contactPhoneNumbers = new ArrayList<String>();
-		getContactArrayList();
+		//getContactArrayList();
 	}
 
 	@Override

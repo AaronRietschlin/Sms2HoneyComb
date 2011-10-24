@@ -2,7 +2,6 @@ package com.asa.sms2honeycomb.tablet;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -10,7 +9,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -32,6 +30,7 @@ public class MainHoneycombActivity extends Activity {
 	Intent mIntent;
 	ListView list;
 	Dialog listDialog;
+	IncomingPushReceiver pushReceiver;
 
 	public static ArrayList<MessageItem> messageResults;
 
@@ -123,15 +122,24 @@ public class MainHoneycombActivity extends Activity {
 					Util.getUsernameString(), Preferences.TABLET));
 			
 			Util.logoutUser();
+<<<<<<< HEAD
 			
+=======
+
+			unregisterReceiver(pushReceiver);
+
+>>>>>>> origin/master
 			mIntent = new Intent(MainHoneycombActivity.this,
 					LoginActivityTab.class);
 			startActivity(mIntent);
 			finish();
 			return (true);
+<<<<<<< HEAD
 		case R.id.menu_new_message:
 			showMessageFragment(0);
 			return (true);
+=======
+>>>>>>> origin/master
 		case R.id.settings:
 			mIntent = new Intent(MainHoneycombActivity.this,
 					SettingsActivity.class);
