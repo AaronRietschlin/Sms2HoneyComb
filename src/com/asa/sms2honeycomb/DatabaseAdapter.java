@@ -225,29 +225,24 @@ public class DatabaseAdapter {
 		// public Cursor query (boolean distinct, String table, String[]
 		// columns, String selection, String[] selectionArgs, String groupBy,
 		// String having, String orderBy, String limit)
-		Cursor cursor = db.query(true, THREAD_TABLE, new String[] { KEY_ID,
-				KEY_HAS_ATTACHMENT, KEY_MESSAGE_COUNT, KEY_READ_T,
-				KEY_THREADID_T, KEY_USERNAME_T }, null, null, null, null, null,
-				null);
+		Cursor cursor = db.query(true, MESSAGE_TABLE, new String[] { KEY_ID,
+				KEY_ADDRESS, KEY_TIME, KEY_BODY, KEY_READ_S, KEY_SMSID,
+				KEY_SUBJECT, KEY_THREADID_S, KEY_TYPE, KEY_USERNAME_S }, null,
+				null, null, null, null, null);
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
 			Log.d(TAG, "No conversations.");
-			list.add("Start a new conversation");
-			list.add("The conversation list is not working yet bitch. I do not know how the threads are going to work.");
 		}
 
 		if (cursor.moveToFirst()) {
 			// This will be used to start the new conversations within the
 			// ConversationFragment
 			do {
-				String threadId = cursor.getString(THREADID_T);
-				String messageCount = cursor.getString(MESSAGE_COUNT);
-				Log.d(TAG, "Conversations from threadId: " + threadId
-						+ " with the count of " + messageCount
-						+ " have been found");
+				String address = cursor.getString(ADDRESS_COLUMN);
+				//String messageCount = cursor.getString(MESSAGE_COUNT);
+				Log.d(TAG, "Conversations from: " + address);
 				// TODO relate the thread id with the messages and get the
 				// address and relate that to the contacts
-				String conversationItem = " " + threadId + " (" + messageCount
-						+ ")";
+				String conversationItem = address;
 				list.add(conversationItem);
 			} while (cursor.moveToNext());
 			{

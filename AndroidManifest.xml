@@ -67,7 +67,7 @@
 				<action android:name="com.asa.sms2honeycomb.PUSH_RECEIVED"></action>
 			</intent-filter></receiver>
 			
-		<activity android:name=".phone.SettingsActivity"></activity>
+		<activity android:label="Settings" android:name=".SettingsActivity"></activity>
 
     </application>
 </manifest>

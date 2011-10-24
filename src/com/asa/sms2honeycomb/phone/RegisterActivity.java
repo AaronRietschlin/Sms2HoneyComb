@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
+import com.asa.sms2honeycomb.SettingsActivity;
 import com.asa.sms2honeycomb.Util.LoginUtil;
 import com.asa.sms2honeycomb.Util.Util;
 import com.parse.ParseException;

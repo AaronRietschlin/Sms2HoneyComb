@@ -14,6 +14,15 @@
     <string name="menu_logout">Logout</string>
     <string name="menu_new_message">New Message</string>
     
+    <string name="settings_settings_title">Settings</string>
+	<string name="settings_about_title">About</string>
+	<string name="settings_about_summary">About Text To Tab</string>
+	<string name="settings_homepage_summary">Text To Tabs main web site.</string>
+	<string name="settings_homepage_title">Homepage</string>
+	<string name="settings_logout_description">Logout of Text To Tab</string>
+	<string name="settings_reset_password_descrip">Reset your current password.</string>
+	<string name="settings_options_title">Options</string>
+    
     <string name="dialog_login_message">Logging in...</string>
     <string name="dialog_register_message">Registering...</string>
     
@@ -49,5 +58,6 @@
     
     <string name="message_list_empty_target">You must specify someone to text before sending a message.</string>
     <string name="message_list_unsuccessful">The message was not sent. Please try again.</string>
+    <string name="message_add_contact_button_txt">Contacts</string>
     
 </resources>

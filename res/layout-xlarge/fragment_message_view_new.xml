@@ -22,11 +22,13 @@
 			<requestFocus>
 			</requestFocus>
 		</EditText>
-		<Button 
-			android:text="Button" 
-			android:id="@+id/message_add_contact_button" 
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content">
+
+		<Button
+		    android:id="@+id/message_add_contact_button"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="@string/message_add_contact_button_txt" >
+
 		</Button>
 	</LinearLayout>
 	<ListView

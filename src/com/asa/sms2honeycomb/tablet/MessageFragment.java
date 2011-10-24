@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.MessageItem;
+import com.asa.sms2honeycomb.MessageListAdapter;
 import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
 import com.asa.sms2honeycomb.Util.Util;
@@ -54,23 +55,67 @@ public class MessageFragment extends ListFragment {
 	private Button addContactButton;
 
 	private Context mContext;
+	private ListView mMessageListView;
 
 	private String phoneNumber;
 	private int threadId = 1;
 
 	private final int CONTACT_PICKER_RESULT = 0;
 
+	private int mIndex = 0;
+
+	public static MessageFragment newInstance(int index) {
+		Log.d(MainHoneycombActivity.TAG, "in MessageFragment newInstance("
+				+ index + ")");
+
+		MessageFragment mf = new MessageFragment();
+
+		// Supply index input as an argument.
+		Bundle args = new Bundle();
+		args.putInt("index", index);
+		mf.setArguments(args);
+		return mf;
+	}
+
+	public static MessageFragment newInstance(Bundle bundle) {
+		int index = bundle.getInt("index", 0);
+		return newInstance(index);
+	}
+	
+	public int getShownIndex() {
+		return mIndex;
+	}
+
+	public void onCreate(Bundle myBundle) {
+		Log.d(TAG, "Bundle contains:");
+		if (myBundle != null) {
+			for (String key : myBundle.keySet()) {
+				Log.d(TAG, "	" + key);
+			}
+		} else {
+			Log.d(TAG, "	myBundle is null");
+		}
+		super.onCreate(myBundle);
+
+		mIndex = getArguments().getInt("index", 0);
+	}
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// inflates the main.xml resource, but the default ListView is still
-		// generated on top of this view.
-		mContext = inflater.getContext();
-		inflater.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		// inflater.inflate(R.layout.fragment_message_view_new, container);
-		View view = inflater.inflate(R.layout.fragment_message_view_new, null);
+		Log.d(TAG, " onCreateView. container = " + container);
 
-		// Open up the database needs to be above the conversationAdapter
+		// DONT tie this fragment to anytinh through the inflater. Andriod takes
+		// care of attaching fragments for us. The container isonly passed in so
+		// you can know about the container where this View hierarchy is going
+		// to go.
+		
+		View v = inflater.inflate(R.layout.fragment_message_view_new, container, false);
+		// inflater.inflate(R.layout.fragment_message_view_new, container);
+		mMessageListView = (ListView) v.findViewById(android.R.id.list);
+
+		// Open up the database
 		dbAdapter = new DatabaseAdapter(getActivity());
 		dbAdapter.open();
 
@@ -88,7 +133,7 @@ public class MessageFragment extends ListFragment {
 				.execute();
 
 		// BEGIN Adding contact stuff
-		addContactButton = (Button) view
+		addContactButton = (Button) v
 				.findViewById(R.id.message_add_contact_button);
 		addContactButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
@@ -101,10 +146,10 @@ public class MessageFragment extends ListFragment {
 		// END Adding contact stuff.
 
 		// IT FUCKING HAS TO BE andriod.R.id.list fucking POS differences
-		messageListView = (ListView) view.findViewById(android.R.id.list);
-		toField = (EditText) view.findViewById(R.id.phone_to_field);
-		messageField = (EditText) view.findViewById(R.id.main_message_felid);
-		sendButton = (Button) view.findViewById(R.id.main_send_btn);
+		messageListView = (ListView) v.findViewById(android.R.id.list);
+		toField = (EditText) v.findViewById(R.id.phone_to_field);
+		messageField = (EditText) v.findViewById(R.id.main_message_felid);
+		sendButton = (Button) v.findViewById(R.id.main_send_btn);
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -143,7 +188,8 @@ public class MessageFragment extends ListFragment {
 					outgoingMessage.put(Preferences.PARSE_USERNAME_ROW,
 							Util.getUsernameString());
 					// Always mark the message as read.
-					outgoingMessage.put(Preferences.PARSE_SMS_READ, Preferences.READ);
+					outgoingMessage.put(Preferences.PARSE_SMS_READ,
+							Preferences.READ);
 					outgoingMessage.put(Preferences.PARSE_SMS_THREAD_ID,
 							threadId);
 					// Always mark the message type as a sent type.
@@ -192,7 +238,7 @@ public class MessageFragment extends ListFragment {
 				}
 			}
 		});
-		return view;
+		return v;
 	}
 
 	@Override
@@ -212,94 +258,11 @@ public class MessageFragment extends ListFragment {
 	}
 
 	/**
-	 * A custom adapter that populates the Message ListView. We are going to be
-	 * using a custom list view (message_list_item). Thus need to create a
-	 * custom list adapter to accommodate the custom list view.
-	 * 
-	 * @author Aaron
-	 * 
-	 */
-	public class MessageListAdapter extends ArrayAdapter<String> {
-		private ArrayList<MessageItem> mMessages;
-		private Context mContext;
-		private LayoutInflater inflater;
-
-		public MessageListAdapter(Context context, int textViewResourceId,
-				ArrayList<MessageItem> messages) {
-			super(context, textViewResourceId);
-			mMessages = messages;
-			mContext = context;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View v = convertView;// super.getView(position, convertView,
-									// parent);
-			MessageItem item = mMessages.get(position);
-
-			inflater = (LayoutInflater) mContext
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			if (convertView == null) {
-				v = inflater.inflate(R.layout.message_list_item, null);
-			}
-			TextView nameTv = (TextView) v.findViewById(R.id.message_list_name);
-			TextView messageTv = (TextView) v
-					.findViewById(R.id.message_list_body);
-			messageTv.setText(item.getMessageBody());
-			TextView timeTv = (TextView) v.findViewById(R.id.message_list_time);
-			timeTv.setText(item.getMessageTime());
-			switch (item.getMessageType()) {
-			case Preferences.RECEIVED:
-				nameTv.setText(item.getMessageAddress());
-				break;
-			case Preferences.SENT:
-				nameTv.setText("Me");
-				break;
-			}
-			return v;
-		}
-
-		@Override
-		public int getCount() {
-			return mMessages.size();
-		}
-
-		// /**
-		// * Tells how many types of pools of messages to keep. Read:
-		// *
-		// http://logc.at/2011/10/10/handling-listviews-with-multiple-row-types/
-		// *
-		// * @return
-		// */
-		// @Override
-		// public int getViewTypeCount() {
-		// return Preferences.NUM_TYPE_OF_MESSAGES;
-		// }
-		//
-		// /**
-		// * Tells the list view which pool the view belongs to. Read:
-		// *
-		// http://logc.at/2011/10/10/handling-listviews-with-multiple-row-types/
-		// *
-		// * @param position
-		// * @return
-		// */
-		// @Override
-		// public int getItemViewType(int position) {
-		// if (mMessages.get(position).getMessageType() == RECEIVED) {
-		// return RECEIVED;
-		// }
-		// return SENT;
-		// }
-
-	}
-
-	/**
 	 * This is called after the user selects a contact.
 	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Activity activity = (Activity) mContext;
+		Activity activity = getActivity();
 		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
 			case CONTACT_PICKER_RESULT:
@@ -395,7 +358,7 @@ public class MessageFragment extends ListFragment {
 								.getInt(Preferences.PARSE_SMS_TYPE));
 						messageResults.add(messageItem);
 						String str = messageObject.toString();
-						Log.e(TAG, "TextToTab - " + messageItem.toString());
+						Log.d(TAG, "TextToTab - " + messageItem.toString());
 
 					}
 				} catch (ParseException e) {
@@ -409,8 +372,7 @@ public class MessageFragment extends ListFragment {
 		@Override
 		protected void onPostExecute(ArrayList<MessageItem> messageList) {
 			messageAdapter = new MessageListAdapter(getActivity(),
-					R.layout.message_list_item, messageList);
-
+					R.layout.message_list_item, mMessageListView, messageList);
 			setListAdapter(messageAdapter);
 		}
 

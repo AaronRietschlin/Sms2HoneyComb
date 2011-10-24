@@ -1,5 +1,9 @@
 package com.asa.sms2honeycomb.Util;
 
+import com.asa.sms2honeycomb.tablet.MainHoneycombActivity;
+import com.parse.PushService;
+
+import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
