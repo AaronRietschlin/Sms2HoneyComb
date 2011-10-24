@@ -30,14 +30,6 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 
 		Preferences.DEVICE_IS_HONEYCOMB = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
 
-<<<<<<< HEAD
-=======
-		// Get the context from the onReceive
-		dbAdapter = new DatabaseAdapter(context);
-		// Open the database
-		dbAdapter.open();
-
->>>>>>> origin/master
 		QueryParseAsyncTask queryParse = new QueryParseAsyncTask(
 				Preferences.DEVICE_IS_HONEYCOMB);
 		queryParse.execute();

@@ -113,12 +113,7 @@ public class MessageFragment extends ListFragment {
 		
 		View v = inflater.inflate(R.layout.fragment_message_view_new, container, false);
 		// inflater.inflate(R.layout.fragment_message_view_new, container);
-<<<<<<< HEAD
 		mMessageListView = (ListView) v.findViewById(android.R.id.list);
-=======
-		View view = inflater.inflate(R.layout.fragment_message_view_new, null);
-		mMessageListView = (ListView) view.findViewById(android.R.id.list);
->>>>>>> origin/master
 
 		// Open up the database
 		dbAdapter = new DatabaseAdapter(getActivity());

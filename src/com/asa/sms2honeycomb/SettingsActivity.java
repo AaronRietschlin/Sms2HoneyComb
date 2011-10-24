@@ -1,10 +1,7 @@
 package com.asa.sms2honeycomb;
 
 import android.content.Intent;
-<<<<<<< HEAD
 import android.content.res.Configuration;
-=======
->>>>>>> origin/master
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -37,7 +34,6 @@ public class SettingsActivity extends PreferenceActivity {
 		// TODO subscribe to the tablet channel just for testing
 		// TODO change to phone? so when the tablet sends a message back the app
 		// will recivie the push
-<<<<<<< HEAD
 		
 
 		Bundle extras = getIntent().getExtras();
@@ -50,13 +46,6 @@ public class SettingsActivity extends PreferenceActivity {
 					SettingsActivity.class);
 		}
 		
-=======
-		PushService.subscribe(getApplicationContext(), Util.getPushChannel(
-				Util.getUsernameString(), Preferences.TABLET),
-				SettingsActivity.class);
-		Bundle extras = getIntent().getExtras();
-		isTablet = extras.getBoolean("isTablet");
->>>>>>> origin/master
 		// Takes the user to the Landing page of Text to tab
 		Preference homepagePreference = findPreference("prefHomepage");
 		homepagePreference
@@ -78,15 +67,10 @@ public class SettingsActivity extends PreferenceActivity {
 					// Launches homepage when clicked.
 					public boolean onPreferenceClick(Preference preference) {
 
-<<<<<<< HEAD
-=======
-						Util.logoutUser();
->>>>>>> origin/master
 						// TODO : Unregister!
 						if (isTablet) {
 							mIntent = new Intent(SettingsActivity.this,
 									LoginActivityTab.class);
-<<<<<<< HEAD
 							PushService.unsubscribe(getApplicationContext(), Util.getPushChannel(
 									Util.getUsernameString(), Preferences.TABLET));
 						} else {
@@ -96,12 +80,6 @@ public class SettingsActivity extends PreferenceActivity {
 									Util.getUsernameString(), Preferences.TABLET));
 						}
 						Util.logoutUser();
-=======
-						} else {
-							mIntent = new Intent(SettingsActivity.this,
-									LoginActivity.class);
-						}
->>>>>>> origin/master
 						startActivity(mIntent);
 						finish();
 						return true;
