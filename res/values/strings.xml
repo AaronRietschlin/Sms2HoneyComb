@@ -59,5 +59,6 @@
     <string name="message_list_empty_target">You must specify someone to text before sending a message.</string>
     <string name="message_list_unsuccessful">The message was not sent. Please try again.</string>
     <string name="message_add_contact_button_txt">Contacts</string>
+    <string name="menu_query_all">Query All</string>
     
 </resources>

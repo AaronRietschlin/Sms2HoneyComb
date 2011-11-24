@@ -25,6 +25,7 @@ public class Preferences {
 	public static final String PARSE_SMS_TYPE = "type";
 	public static final String PARSE_SMS_SUBJECT = "subject";
 	public static final String PARSE_SMS_BODY = "body";
+	public static final String PARSE_SMS_ONDEVICE = "ondevice";
 
 	// Thread Table
 	public static final String PARSE_TABLE_THREAD = "thread";
@@ -67,6 +68,8 @@ public class Preferences {
 	public static final int UNREAD = 0;
 	public static final int SENT = 2;
 	public static final int RECEIVED = 1;
+	public static final int ONDEVICE_TRUE = 1;
+	public static final int ONDEVICE_FALSE = 2;
 
 	/**
 	 * For message list. Tells how many types of messages there are. There are

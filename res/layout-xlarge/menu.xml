@@ -12,4 +12,6 @@
   	android:icon="@drawable/new_conversation"
     android:textColor="@color/tttgreen"/>
   
+  <item android:id="@+id/menu_query_all"
+      android:title="@string/menu_query_all"/>
 </menu> 

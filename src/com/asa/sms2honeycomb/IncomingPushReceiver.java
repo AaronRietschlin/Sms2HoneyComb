@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 public class IncomingPushReceiver extends BroadcastReceiver {
 
@@ -24,19 +25,25 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 
 	private DatabaseAdapter dbAdapter;
 
+	Context context;
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.e(TAG, "Received intent: " + Preferences.PUSH_RECEIVED);
 
 		Preferences.DEVICE_IS_HONEYCOMB = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB;
 
+		dbAdapter = new DatabaseAdapter(context);
+		dbAdapter.open();
+
 		QueryParseAsyncTask queryParse = new QueryParseAsyncTask(
 				Preferences.DEVICE_IS_HONEYCOMB);
 		queryParse.execute();
+
 	}
 
 	public class QueryParseAsyncTask extends AsyncTask<Void, Void, Void> {
-
+		private final String TAG = "IncommingPushReceiver.QueryParseAsyncTask";
 		private boolean isHoneycomb;
 
 		public QueryParseAsyncTask(boolean honeycomb) {
@@ -62,6 +69,7 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 				try {
 					List<ParseObject> messageList = query.find();
 					for (ParseObject messageObject : messageList) {
+						// Open up the database
 						// Get the parse object id
 						String objectId = messageObject.objectId();
 						// with the objectid you can query the
@@ -82,6 +90,7 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 						String subjectDB = message.getString("subject");
 						int threadIdDB = message.getInt("threadId");
 						int typeDB = message.getInt("type");
+						int onDeviceDB = message.getInt("onDevice");
 						String usernameDB = message.getString("username");
 						// Display the total message queryed for
 						// logging
@@ -94,22 +103,24 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 						// the db entry.
 						MessageItem item = new MessageItem(timeDB, addressDB,
 								bodyDB, readDB, smsIdDB, subjectDB, threadIdDB,
-								typeDB, usernameDB);
+								typeDB, onDeviceDB, usernameDB);
 						// Insert the MessageItem into the
 						// sms2honeycomb.db.
 						dbAdapter.insertMessageItem(item);
-
 					}
 				} catch (ParseException e) {
 					// TODO - Handle situation where querying server failed
+					dbAdapter.close();
+					Log.e(TAG, "querying server failed");
 					e.printStackTrace();
+					
 				}
 			} else {
 				Log.e(TAG, "The device is not honeycomb is its a phone.");
 				// If the device is not a tablet it is a phone so you pull from
 				// the
 				// server, but then send a sms message from the data recived.
-				// We want to query the OutgoingMessage table
+				// We want to query the sms table
 				final ParseQuery query = new ParseQuery(
 						Preferences.PARSE_TABLE_SMS);
 				// Sort the Parse Object so only the username of the current
@@ -177,12 +188,13 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 
 		@Override
 		protected void onPostExecute(Void params) {
+			dbAdapter.close();
+
 			if (isHoneycomb) {
 				Log.d(TAG,
-						"TextToTab - IncomingPushReceiver in honeycomb is done.");
+						"TextToTab - IncomingPushReceiver in tablet is done.");
 			} else {
-				Log.d(TAG,
-						"TextToTab - IncomingPushReceiver in honeycomb is done.");
+				Log.d(TAG, "TextToTab - IncomingPushReceiver in phone is done.");
 			}
 		}
 

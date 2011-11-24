@@ -11,11 +11,12 @@ public class MessageItem {
 	int messageThreadId;
 	int messageType;
 	String messageUsername;
+	int messageOnDevice;
 
-	public MessageItem(String address, String time, String body, int read,
-			int smsId, String subject, int threadId, int type,
+	public MessageItem(String time, String address, String body, int read,
+			int smsId, String subject, int threadId, int type, int onDevice,
 			String username) {
-		
+
 		messageAddress = address;
 		messageTime = time;
 		messageBody = body;
@@ -24,19 +25,13 @@ public class MessageItem {
 		messageSubject = subject;
 		messageThreadId = threadId;
 		messageType = type;
+		messageOnDevice = onDevice;
 		messageUsername = username;
+
 	}
 
-	public MessageItem(){
-		
-	}
-	
-	public String getMessageAddress() {
-		return messageAddress;
-	}
+	public MessageItem() {
 
-	public void setMessageAddress(String messageAddress) {
-		this.messageAddress = messageAddress;
 	}
 
 	public String getMessageTime() {
@@ -45,6 +40,14 @@ public class MessageItem {
 
 	public void setMessageTime(String messageTime) {
 		this.messageTime = messageTime;
+	}
+
+	public String getMessageAddress() {
+		return messageAddress;
+	}
+
+	public void setMessageAddress(String messageAddress) {
+		this.messageAddress = messageAddress;
 	}
 
 	public String getMessageBody() {
@@ -99,19 +102,27 @@ public class MessageItem {
 		return messageUsername;
 	}
 
+	public int getMessageOnDevice() {
+		return messageOnDevice;
+	}
+
+	public void setMessageOnDevice(int messageOnDevice) {
+		this.messageOnDevice = messageOnDevice;
+	}
+
 	public void setMessageUsername(String messageUsername) {
 		this.messageUsername = messageUsername;
 	}
 
 	@Override
 	public String toString() {
-		return "MessageItem [messageAddress=" + messageAddress
-				+ ", messageTime=" + messageTime + ", messageBody="
-				+ messageBody + ", messageRead=" + messageRead
-				+ ", messageSmsId=" + messageSmsId + ", messageSubject="
-				+ messageSubject + ", messageThreadId=" + messageThreadId
-				+ ", messageType=" + messageType + ", messageUsername="
-				+ messageUsername + "]";
+		return "MessageItem [messageTime=" + messageTime + ", messageTime="
+				+ messageAddress + ", messageBody=" + messageBody
+				+ ", messageRead=" + messageRead + ", messageSmsId="
+				+ messageSmsId + ", messageSubject=" + messageSubject
+				+ ", messageThreadId=" + messageThreadId + ", messageType="
+				+ messageType + ", messageOnDevice=" + messageOnDevice
+				+ ", messageUsername=" + messageUsername + "]";
 	}
 
 }

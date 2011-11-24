@@ -1,10 +1,7 @@
 package com.asa.sms2honeycomb.tablet;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.asa.sms2honeycomb.DatabaseAdapter;
@@ -35,7 +31,6 @@ import com.asa.sms2honeycomb.Util.Util;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 import com.parse.SendCallback;
 
@@ -45,8 +40,8 @@ public class MessageFragment extends ListFragment {
 
 	private final String TAG = "MessageFragment";
 	private DatabaseAdapter dbAdapter;
-	private ArrayAdapter<String> messageAdapter;
-	private ArrayList<MessageItem> messageResults;
+	ArrayAdapter<String> messageAdapter;
+	private ArrayList<String> messageResults;
 
 	private ListView messageListView;
 	private EditText toField;
@@ -81,7 +76,7 @@ public class MessageFragment extends ListFragment {
 		int index = bundle.getInt("index", 0);
 		return newInstance(index);
 	}
-	
+
 	public int getShownIndex() {
 		return mIndex;
 	}
@@ -100,18 +95,19 @@ public class MessageFragment extends ListFragment {
 		mIndex = getArguments().getInt("index", 0);
 	}
 
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
 		Log.d(TAG, " onCreateView. container = " + container);
 
-		// DONT tie this fragment to anytinh through the inflater. Andriod takes
+		// DONT tie this fragment to anyting through the inflater. Andriod takes
 		// care of attaching fragments for us. The container isonly passed in so
 		// you can know about the container where this View hierarchy is going
 		// to go.
-		
-		View v = inflater.inflate(R.layout.fragment_message_view_new, container, false);
+
+		View v = inflater.inflate(R.layout.fragment_message_view_new,
+				container, false);
 		// inflater.inflate(R.layout.fragment_message_view_new, container);
 		mMessageListView = (ListView) v.findViewById(android.R.id.list);
 
@@ -119,18 +115,13 @@ public class MessageFragment extends ListFragment {
 		dbAdapter = new DatabaseAdapter(getActivity());
 		dbAdapter.open();
 
-		// Get the Adapter for the list so iy can be updated separately
-		// I dont know why simple_list_item_1 works i copied it from an example
-		// messageAdapter = new ArrayAdapter<String>(getActivity(),
-		// android.R.layout.simple_list_item_1,
-		// dbAdapter.getMessageArrayList(phoneNumber));
-		//
-		// messageAdapter.notifyDataSetChanged();
+		// TODO for testing only
+		phoneNumber = "1234567890";
 
-		QueryParseAsyncTask task = new QueryParseAsyncTask(0,
-				Util.getUsernameString());
+		QueryParseAsyncTask task = new QueryParseAsyncTask(phoneNumber);
 		AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
 				.execute();
+		
 
 		// BEGIN Adding contact stuff
 		addContactButton = (Button) v
@@ -149,14 +140,13 @@ public class MessageFragment extends ListFragment {
 		messageListView = (ListView) v.findViewById(android.R.id.list);
 		toField = (EditText) v.findViewById(R.id.phone_to_field);
 		messageField = (EditText) v.findViewById(R.id.main_message_felid);
+
 		sendButton = (Button) v.findViewById(R.id.main_send_btn);
+		
+		// This is the send button
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				// TODO: get strings from the text feilds
-				// then send them on to parse and to the push channel(phone)
-				// on then on the phone send the messages via a sms message to
-				// the to number
 				final String to = toField.getText().toString().trim();
 				final String body = messageField.getText().toString().trim();
 				if (to.length() == 0) {
@@ -169,32 +159,39 @@ public class MessageFragment extends ListFragment {
 					if (phoneNumber.length() == 0) {
 						phoneNumber = to;
 					}
-					MessageItem item = new MessageItem();
-					item.setMessageAddress(phoneNumber);
-					item.setMessageBody(body);
-					item.setMessageRead(Preferences.READ);
-					item.setMessageThreadId(threadId);
-					item.setMessageType(Preferences.SENT);
-					item.setMessageUsername(Util.getUsernameString());
-					item.setMessageTime(Util.getCurrentDate());
-					// Adds the Message to the list
-					messageResults.add(item);
+					
+					// update the messageAdapter
 					messageAdapter.notifyDataSetChanged();
+
+					// Send the message though parse
 					ParseObject outgoingMessage = new ParseObject(
 							Preferences.PARSE_TABLE_SMS);
+					// Send the phoneNumber
 					outgoingMessage.put(Preferences.PARSE_SMS_ADDRESS,
 							phoneNumber);
+					// Send the messages body
 					outgoingMessage.put(Preferences.PARSE_SMS_BODY, body);
+					// Send the Username to sort out the messages
 					outgoingMessage.put(Preferences.PARSE_USERNAME_ROW,
 							Util.getUsernameString());
+					
 					// Always mark the message as read.
 					outgoingMessage.put(Preferences.PARSE_SMS_READ,
 							Preferences.READ);
+					
 					outgoingMessage.put(Preferences.PARSE_SMS_THREAD_ID,
 							threadId);
+					
 					// Always mark the message type as a sent type.
 					outgoingMessage.put(Preferences.PARSE_SMS_TYPE,
 							Preferences.SENT);
+					
+					// Always mark the message as not on the deivce since it
+					// will be put on when the push is recived.
+					outgoingMessage.put(Preferences.PARSE_SMS_ONDEVICE,
+							Preferences.ONDEVICE_FALSE);
+					
+					// Save (send) the message to parse.
 					outgoingMessage.saveInBackground(new SaveCallback() {
 						@Override
 						public void done(ParseException e) {
@@ -209,12 +206,21 @@ public class MessageFragment extends ListFragment {
 										Toast.LENGTH_LONG);
 								toast.show();
 							} else {
+								// Send the parsepush if the message was sent to
+								// the server right
 								ParsePush push = new ParsePush();
 								push.setChannel(Util.getPushChannel(
 										Util.getUsernameString(),
 										Preferences.TABLET));
-								push.setMessage("To: " + to + " Message: "
+								// put the address and message within the push
+								// message
+								push.setMessage("Address: " + to + " Message: "
 										+ body);
+								
+								// Clear the messageField if/when the text is send
+								// It will not clear if the message is not send right
+								messageField.setText("");
+								
 								push.sendInBackground(new SendCallback() {
 									@Override
 									public void done(ParseException e) {
@@ -233,8 +239,6 @@ public class MessageFragment extends ListFragment {
 							}
 						}
 					});
-					// clear the messageField when the text is send
-					messageField.setText("");
 				}
 			}
 		});
@@ -243,6 +247,7 @@ public class MessageFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
+		messageAdapter.notifyDataSetChanged();
 		// Log.d(TAG, "Item clicked: " + id);
 		// // When clicked, show a toast with the TextView text
 		// Toast.makeText(getActivity().getApplicationContext(),
@@ -255,6 +260,12 @@ public class MessageFragment extends ListFragment {
 		// Closing the database adapter when the activity gets destroyed.
 		super.onDestroy();
 		dbAdapter.close();
+	}
+	
+	public void onUpadate() {
+		// Update the message adapter
+		messageAdapter.notifyDataSetChanged();
+		
 	}
 
 	/**
@@ -315,57 +326,20 @@ public class MessageFragment extends ListFragment {
 
 	public class QueryParseAsyncTask extends
 			AsyncTask<Void, Void, ArrayList<MessageItem>> {
-		private final String TAG = "QueryParseAsyncTask";
-		private final int SMS = 0;
-		private final int THREAD = 1;
+		private final String TAG = "MessageFragment.QueryParseAsyncTask";
 
-		private int queryType;
-		private String username;
+		private String address;
 
-		// private ArrayList<MessageItem> messageResults;
+		private ArrayList<MessageItem> messageResults;
 
-		public QueryParseAsyncTask(int type, String user) {
-			queryType = type;
-			username = user;
+		public QueryParseAsyncTask(String number) {
+			address = number;
 		}
 
 		@Override
 		protected ArrayList<MessageItem> doInBackground(Void... arg0) {
-			if (queryType == SMS) {
-				ParseQuery querySms = new ParseQuery(
-						Preferences.PARSE_TABLE_SMS);
-
-				querySms.whereEqualTo(Preferences.PARSE_USERNAME_ROW, username);
-				messageResults = new ArrayList<MessageItem>();
-				// Begin query for messages.
-				List<ParseObject> objects;
-				try {
-					objects = querySms.find();
-					if (Preferences.DEBUG)
-						Log.d(TAG, "Message size: " + objects.size());
-					for (ParseObject messageObject : objects) {
-						// TODO: Add the rest of the db items.
-						MessageItem messageItem = new MessageItem();
-						messageItem.setMessageBody(messageObject
-								.getString(Preferences.PARSE_SMS_BODY));
-						messageItem.setMessageUsername(messageObject
-								.getString(username));
-						messageItem.setMessageAddress(messageObject
-								.getString(Preferences.PARSE_SMS_ADDRESS));
-						messageItem.setMessageTime(messageObject.createdAt()
-								.toLocaleString());
-						messageItem.setMessageType(messageObject
-								.getInt(Preferences.PARSE_SMS_TYPE));
-						messageResults.add(messageItem);
-						String str = messageObject.toString();
-						Log.d(TAG, "TextToTab - " + messageItem.toString());
-
-					}
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			messageResults = dbAdapter.getMessageArrayList(address);
+			Log.d(TAG + ".doInBackground", messageResults.toString());
 			return messageResults;
 		}
 
@@ -374,7 +348,9 @@ public class MessageFragment extends ListFragment {
 			messageAdapter = new MessageListAdapter(getActivity(),
 					R.layout.message_list_item, mMessageListView, messageList);
 			setListAdapter(messageAdapter);
+			messageAdapter.notifyDataSetChanged();
 		}
 
 	}
+
 }

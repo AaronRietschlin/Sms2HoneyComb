@@ -5,6 +5,7 @@
 	<QuickContactBadge android:layout_height="50dp"
 		android:layout_width="50dp" android:id="@+id/quickContactBadge1"
 		android:layout_alignParentTop="true" android:layout_alignParentLeft="true"></QuickContactBadge>
+	
 	<TextView android:text="TextView" android:layout_height="wrap_content"
 		android:layout_width="wrap_content" android:id="@+id/conversation_list_contact_name"
 		android:layout_centerVertical="true" android:layout_toRightOf="@+id/quickContactBadge1"

@@ -28,14 +28,15 @@ public class DatabaseAdapter {
 
 	// The index (key) column name for use in where clauses.
 	// Column names for SMS table:
-	public static final String KEY_ADDRESS = "_address";
 	public static final String KEY_TIME = "_time";
+	public static final String KEY_ADDRESS = "_address";
 	public static final String KEY_BODY = "_body";
 	public static final String KEY_READ_S = "_reads";
 	public static final String KEY_SMSID = "_smsid";
 	public static final String KEY_SUBJECT = "_subject";
 	public static final String KEY_THREADID_S = "_threadids";
 	public static final String KEY_TYPE = "_type";
+	public static final String KEY_ONDEVICE = "_ondevice";
 	public static final String KEY_USERNAME_S = "_usernames";
 
 	// The index (key) column name for use in where clauses.
@@ -58,8 +59,8 @@ public class DatabaseAdapter {
 	public static final int SUBJECT_COLUMN = 6;
 	public static final int THREADID_S_COLUMN = 7;
 	public static final int TYPE_COLUMN = 8;
-	public static final int USERNAME_S_COLUMN = 9;
-	public static final int CREATED_AT_COLUMN_S = 10;
+	public static final int ON_DEVICE_COLUMN = 9;
+	public static final int USERNAME_S_COLUMN = 10;
 	// THREAD table
 	public static final int ID_COLUMN_T = 0;
 	public static final int HAS_ATTACHMENT = 1;
@@ -72,16 +73,16 @@ public class DatabaseAdapter {
 	private static final String DATABASE_CREATE_SMS = "create table "
 			+ MESSAGE_TABLE + " (" + KEY_ID
 			+ " integer primary key autoincrement, " + KEY_TIME + " date, "
-			+ KEY_ADDRESS + " string, " + KEY_BODY + " String, " + KEY_READ_S
+			+ KEY_ADDRESS + " String, " + KEY_BODY + " String, " + KEY_READ_S
 			+ " int, " + KEY_SMSID + " int, " + KEY_SUBJECT + " String, "
-			+ KEY_THREADID_S + " int, " + KEY_TYPE + " int, " + KEY_USERNAME_S
-			+ " String);";
+			+ KEY_THREADID_S + " int, " + KEY_TYPE + " int, " + KEY_ONDEVICE
+			+ " int, " + KEY_USERNAME_S + " String);";
 
 	private static final String DATABASE_CREATE_THREAD = "create table "
 			+ THREAD_TABLE + " (" + KEY_ID
 			+ " integer primary key autoincrement, " + KEY_HAS_ATTACHMENT
 			+ " int, " + KEY_MESSAGE_COUNT + " int, " + KEY_READ_T + " int, "
-			+ KEY_THREADID_T + " int, " + KEY_USERNAME_T + " string);";
+			+ KEY_THREADID_T + " int, " + KEY_USERNAME_T + " String);";
 
 	// Variables to hold the database instance
 	private SQLiteDatabase db;
@@ -91,8 +92,6 @@ public class DatabaseAdapter {
 	private myDbHelper dbHelper;
 
 	public DatabaseAdapter(Context _context) {
-		Log.d(TAG, "DatabaseHandler constructor is working");
-
 		context = _context;
 		dbHelper = new myDbHelper(context, DATABASE_NAME, null,
 				DATABASE_VERSION);
@@ -114,17 +113,19 @@ public class DatabaseAdapter {
 	// Insert a new MessageItem into Database
 	public long insertMessageItem(MessageItem item) {
 		ContentValues newMessageValues = new ContentValues();
-		newMessageValues.put(KEY_ADDRESS, item.getMessageAddress());
 		newMessageValues.put(KEY_TIME, item.getMessageTime());
+		newMessageValues.put(KEY_ADDRESS, item.getMessageAddress());
 		newMessageValues.put(KEY_BODY, item.getMessageBody());
 		newMessageValues.put(KEY_READ_S, item.getMessageRead());
 		newMessageValues.put(KEY_SMSID, item.getMessageSmsId());
 		newMessageValues.put(KEY_SUBJECT, item.getMessageSubject());
 		newMessageValues.put(KEY_THREADID_S, item.getMessageThreadId());
 		newMessageValues.put(KEY_TYPE, item.getMessageType());
+		newMessageValues.put(KEY_ONDEVICE, item.getMessageOnDevice());
 		newMessageValues.put(KEY_USERNAME_S, item.getMessageUsername());
 		// Inserts the new row into the database
-		Log.d(TAG, "Values: " + " have been put in to: " + DATABASE_NAME);
+		Log.d(TAG, "Values: " + newMessageValues.toString()
+				+ " have been put in to: " + DATABASE_NAME);
 		return db.insert(MESSAGE_TABLE, null, newMessageValues);
 	}
 
@@ -134,7 +135,7 @@ public class DatabaseAdapter {
 		newThreadValues.put(KEY_MESSAGE_COUNT, item.getMessageCount());
 		newThreadValues.put(KEY_READ_T, item.getRead());
 		newThreadValues.put(KEY_USERNAME_T, item.getUsername());
-		Log.d(TAG, "Values: " + " have been put in to: ");
+		Log.d(TAG, "Values: " + newThreadValues.toString() +  " have been put in to: ");
 		return db.insert(THREAD_TABLE, null, newThreadValues);
 	}
 
@@ -147,8 +148,8 @@ public class DatabaseAdapter {
 		if (table == MESSAGE_TABLE) {
 			return db.query(table, new String[] { KEY_ID, KEY_ADDRESS,
 					KEY_TIME, KEY_BODY, KEY_READ_S, KEY_SMSID, KEY_SUBJECT,
-					KEY_THREADID_S, KEY_TYPE, KEY_USERNAME_S }, null, null,
-					null, null, null);
+					KEY_THREADID_S, KEY_TYPE, KEY_ONDEVICE, KEY_USERNAME_S },
+					null, null, null, null, null);
 		}
 		if (table == THREAD_TABLE) {
 			return db.query(table, new String[] { KEY_ID, KEY_HAS_ATTACHMENT,
@@ -168,7 +169,6 @@ public class DatabaseAdapter {
 		return db.delete(table, KEY_ID + "=" + _rowIndex, null) > 0;
 	}
 
-	// TODO delete or make work
 	public boolean updateEntry(long _rowIndex, MessageItem _messageItem,
 			ThreadItem _threadItem) {
 		// TODO: Create a new ContentValues based on the new object
@@ -176,7 +176,7 @@ public class DatabaseAdapter {
 		return true;
 	}
 
-	// TODO update
+	// TODO error mixing up time and address
 	/**
 	 * Querys the Database for the number given getting both the TO and the
 	 * FROM.
@@ -186,34 +186,50 @@ public class DatabaseAdapter {
 	 * 
 	 * @return ArrayList<String> list
 	 */
-	public ArrayList<String> getMessageArrayList(String number) {
-		ArrayList<String> list = new ArrayList<String>();
+	public ArrayList<MessageItem> getMessageArrayList(String number) {
+		ArrayList<MessageItem> messageItemList = new ArrayList<MessageItem>();
 		// Only get values from the to and from number given and sort by time
 		// oldest at
 		// the end of the list
 		Cursor cursor = db.query(true, MESSAGE_TABLE, new String[] { KEY_ID,
-				KEY_ADDRESS, KEY_TIME, KEY_BODY, KEY_READ_S, KEY_SMSID,
-				KEY_SUBJECT, KEY_THREADID_S, KEY_TYPE, KEY_USERNAME_S },
-				KEY_ADDRESS + "=" + number, null, null, null, KEY_TIME, null);
+				KEY_TIME, KEY_ADDRESS, KEY_BODY, KEY_READ_S, KEY_SMSID,
+				KEY_SUBJECT, KEY_THREADID_S, KEY_TYPE, KEY_ONDEVICE,
+				KEY_USERNAME_S }, KEY_ADDRESS + "=" + number, null, null, null,
+				KEY_TIME, null);
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
 			Log.e(TAG, "No messages for number: " + number);
-			list.add("No messages for: " + number + " Start a conversation.");
 		}
 		if (cursor.moveToFirst()) {
 			do {
-				String time = cursor.getString(TIME_COLUMN);
+				MessageItem messageItem = new MessageItem();
+
 				String address = cursor.getString(ADDRESS_COLUMN);
+				messageItem.setMessageAddress(address);
+
+				String time = cursor.getString(TIME_COLUMN);
+				messageItem.setMessageTime(time);
+
 				String body = cursor.getString(BODY_COLUMN);
+				messageItem.setMessageBody(body);
+
+				int type = cursor.getInt(TYPE_COLUMN);
+				messageItem.setMessageType(type);
+
+				int onDevice = cursor.getInt(ON_DEVICE_COLUMN);
+				messageItem.setMessageOnDevice(onDevice);
+
+				messageItemList.add(messageItem);
+
 				// add the message parts together
-				String message = "Received: " + time + "\n" + "Address: "
-						+ address + "\n" + "Message : " + body + "\n";
-				list.add(message);
+				String message = "Address: " + number + "\n" + "Time: " + time
+						+ "\n" + "Type: " + type + "\n" + "Body : " + body;
+				Log.d(TAG + ".getMessageArrayList", message);
 			} while (cursor.moveToNext());
 			{
 				cursor.close();
 			}
 		}
-		return list;
+		return messageItemList;
 	}
 
 	// TODO update
@@ -226,11 +242,11 @@ public class DatabaseAdapter {
 		// columns, String selection, String[] selectionArgs, String groupBy,
 		// String having, String orderBy, String limit)
 		Cursor cursor = db.query(true, MESSAGE_TABLE, new String[] { KEY_ID,
-				KEY_ADDRESS, KEY_TIME, KEY_BODY, KEY_READ_S, KEY_SMSID,
-				KEY_SUBJECT, KEY_THREADID_S, KEY_TYPE, KEY_USERNAME_S }, null,
-				null, null, null, null, null);
+				KEY_TIME, KEY_ADDRESS, KEY_BODY, KEY_READ_S, KEY_SMSID,
+				KEY_SUBJECT, KEY_THREADID_S, KEY_TYPE, KEY_ONDEVICE,
+				KEY_USERNAME_S }, null, null, null, null, null, null);
 		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
-			Log.d(TAG, "No conversations.");
+			Log.e(TAG, "No conversations.");
 		}
 
 		if (cursor.moveToFirst()) {
@@ -238,8 +254,13 @@ public class DatabaseAdapter {
 			// ConversationFragment
 			do {
 				String address = cursor.getString(ADDRESS_COLUMN);
-				//String messageCount = cursor.getString(MESSAGE_COUNT);
-				Log.d(TAG, "Conversations from: " + address);
+				String time = cursor.getString(TIME_COLUMN);
+
+				String messageCount = cursor.getString(MESSAGE_COUNT);
+
+				Log.d(TAG + ".getConversationList", "Conversations from: "
+						+ address + "\n" + "Time: " + time + "\n" + "Count: "
+						+ messageCount);
 				// TODO relate the thread id with the messages and get the
 				// address and relate that to the contacts
 				String conversationItem = address;
@@ -253,7 +274,46 @@ public class DatabaseAdapter {
 		return list;
 	}
 
-	// TODO make class work
+	/*
+	 * Check if the entry is on the device returns true if yes (1) false if no
+	 * (0)
+	 */
+	public boolean onDevice() {
+		Cursor cursor = db.query(true, MESSAGE_TABLE, new String[] { KEY_ID,
+				KEY_TIME, KEY_ADDRESS, KEY_BODY, KEY_READ_S, KEY_SMSID,
+				KEY_SUBJECT, KEY_THREADID_S, KEY_TYPE, KEY_ONDEVICE,
+				KEY_USERNAME_S }, null, null, null, null, null, null);
+
+		if ((cursor.getCount() == 0) || !cursor.moveToFirst()) {
+			Log.e(TAG, "onDevice: nothing in the table.");
+		}
+
+		if (cursor.moveToFirst()) {
+			// This will be used to start the new conversations within the
+			// ConversationFragment
+			do {
+				int onDevice = cursor.getInt(ON_DEVICE_COLUMN);
+				// if on device then dont pull it
+				if (onDevice == 1) {
+					return true;
+				} else {
+					// it is a 2 then pull it from the database and then chage
+					// the value to 1
+
+					// change the 2 to a 1
+					ContentValues newMessageValues = new ContentValues();
+					newMessageValues.put(KEY_ONDEVICE, 1);
+					db.insert(MESSAGE_TABLE, null, newMessageValues);
+				}
+
+			} while (cursor.moveToNext());
+			{
+				cursor.close();
+			}
+		}
+		return false;
+	}
+
 	private static class myDbHelper extends SQLiteOpenHelper {
 		private final String TAG = "myDbHelper";
 
