@@ -1,8 +1,13 @@
 package com.asa.sms2honeycomb;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 
+import android.content.ClipData.Item;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -234,7 +239,9 @@ public class DatabaseAdapter {
 
 	// TODO update
 	public ArrayList<String> getConversationList() {
-		ArrayList<String> list = new ArrayList<String>();
+		// use a set first becasue there can not be any duplicates
+		Set<String> set = new HashSet<String>();
+		
 		// TODO get the cursor to query the db and get the number of entries for
 		// both the to and from that are from the same person MAKE IT WORK
 		// TODO bug counts get number's conversation then adds that name entries
@@ -254,22 +261,30 @@ public class DatabaseAdapter {
 			// ConversationFragment
 			do {
 				String address = cursor.getString(ADDRESS_COLUMN);
-				String time = cursor.getString(TIME_COLUMN);
 
 				String messageCount = cursor.getString(MESSAGE_COUNT);
 
-				Log.d(TAG + ".getConversationList", "Conversations from: "
-						+ address + "\n" + "Time: " + time + "\n" + "Count: "
-						+ messageCount);
+/*				Log.d(TAG + ".getConversationList", "Conversations from: "
+						+ address + "\n" + "\n" + "Count: "
+						+ messageCount);*/
 				// TODO relate the thread id with the messages and get the
 				// address and relate that to the contacts
+				
 				String conversationItem = address;
-				list.add(conversationItem);
+				
+				set.add(address);
+				
+				//Log.d(TAG, set.toString());
+				
 			} while (cursor.moveToNext());
 			{
 				cursor.close();
 			}
+
 		}
+		ArrayList<String> list = new ArrayList<String>(set);
+		
+		Log.d(TAG, list.toString());
 
 		return list;
 	}
