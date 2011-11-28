@@ -261,20 +261,8 @@ public class DatabaseAdapter {
 			// ConversationFragment
 			do {
 				String address = cursor.getString(ADDRESS_COLUMN);
-
-				String messageCount = cursor.getString(MESSAGE_COUNT);
-
-/*				Log.d(TAG + ".getConversationList", "Conversations from: "
-						+ address + "\n" + "\n" + "Count: "
-						+ messageCount);*/
-				// TODO relate the thread id with the messages and get the
-				// address and relate that to the contacts
-				
-				String conversationItem = address;
 				
 				set.add(address);
-				
-				//Log.d(TAG, set.toString());
 				
 			} while (cursor.moveToNext());
 			{

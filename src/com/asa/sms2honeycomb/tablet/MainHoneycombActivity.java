@@ -92,8 +92,8 @@ public class MainHoneycombActivity extends Activity {
 
 	}
 
-	public void showMessageFragment(int index) {
-		Log.d(TAG, "showMessageFragment ( " + index + ")");
+	public void showMessageFragment(String phoneNumber) {
+		Log.d(TAG, "showMessageFragment ( " + phoneNumber + ")");
 
 		if (isMultiPane()) {
 			// Check what fragment is show
@@ -101,7 +101,7 @@ public class MainHoneycombActivity extends Activity {
 					.findFragmentById(R.id.message);
 			if (message == null) {
 				// Make a new fragment to show this selection.
-				message = MessageFragment.newInstance(index);
+				message = MessageFragment.newInstance(phoneNumber);
 
 				// Execute a transaction, replacing any existing fragment with
 				// this one inside the frame
@@ -118,7 +118,7 @@ public class MainHoneycombActivity extends Activity {
 			// the messageview
 			Intent intent = new Intent();
 			intent.setClass(this, MessageActivity.class);
-			intent.putExtra("index", index);
+			intent.putExtra("phoneNumber", phoneNumber);
 			startActivity(intent);
 		}
 	}
@@ -145,7 +145,8 @@ public class MainHoneycombActivity extends Activity {
 			finish();
 			return (true);
 		case R.id.menu_new_message:
-			showMessageFragment(0);
+			// TODO testing need to change this
+			showMessageFragment("1234567890");
 			return (true);
 		case R.id.settings:
 			mIntent = new Intent(MainHoneycombActivity.this,

@@ -52,29 +52,29 @@ public class MessageFragment extends ListFragment {
 	private Context mContext;
 	private ListView mMessageListView;
 
-	private String phoneNumber;
+	private static String phoneNumber;
 	private int threadId = 1;
 
 	private final int CONTACT_PICKER_RESULT = 0;
 
 	private int mIndex = 0;
 
-	public static MessageFragment newInstance(int index) {
+	public static MessageFragment newInstance(String phoneNumber) {
 		Log.d(MainHoneycombActivity.TAG, "in MessageFragment newInstance("
-				+ index + ")");
+				+ phoneNumber + ")");
 
 		MessageFragment mf = new MessageFragment();
 
 		// Supply index input as an argument.
 		Bundle args = new Bundle();
-		args.putInt("index", index);
+		args.putString("phoneNumber", phoneNumber);
 		mf.setArguments(args);
 		return mf;
 	}
 
 	public static MessageFragment newInstance(Bundle bundle) {
-		int index = bundle.getInt("index", 0);
-		return newInstance(index);
+		phoneNumber = bundle.getString("phoneNumber");
+		return newInstance(phoneNumber);
 	}
 
 	public int getShownIndex() {
@@ -82,13 +82,15 @@ public class MessageFragment extends ListFragment {
 	}
 
 	public void onCreate(Bundle myBundle) {
-		Log.d(TAG, "Bundle contains:");
 		if (myBundle != null) {
 			for (String key : myBundle.keySet()) {
 				Log.d(TAG, "	" + key);
 			}
+			// This is the phonenumber 
+			phoneNumber = myBundle.getString("phoneNumber");
+			Log.d(TAG, "Bundle contains:" + phoneNumber);
 		} else {
-			Log.d(TAG, "	myBundle is null");
+			Log.d(TAG, "myBundle is null");
 		}
 		super.onCreate(myBundle);
 
@@ -116,8 +118,11 @@ public class MessageFragment extends ListFragment {
 		dbAdapter.open();
 
 		// TODO for testing only
-		phoneNumber = "1234567890";
-
+		//phoneNumber = "1234567890";
+		if (phoneNumber == null) {
+			Log.e(TAG, "There is no phonenumber.");
+		}
+		
 		QueryParseAsyncTask task = new QueryParseAsyncTask(phoneNumber);
 		AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
 				.execute();
