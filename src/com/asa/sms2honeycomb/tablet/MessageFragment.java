@@ -40,7 +40,7 @@ public class MessageFragment extends ListFragment {
 
 	private final String TAG = "MessageFragment";
 	private DatabaseAdapter dbAdapter;
-	ArrayAdapter<String> messageAdapter;
+	static ArrayAdapter<String> messageAdapter;
 	private ArrayList<String> messageResults;
 
 	private ListView messageListView;
@@ -86,9 +86,10 @@ public class MessageFragment extends ListFragment {
 			for (String key : myBundle.keySet()) {
 				Log.d(TAG, "	" + key);
 			}
-			// This is the phonenumber 
+			// This is the phonenumber
 			phoneNumber = myBundle.getString("phoneNumber");
-			Log.d(TAG, "Bundle contains:" + phoneNumber);
+			// set the toField for the phoneNumber
+			Log.d(TAG, "myBundle contains:" + phoneNumber);
 		} else {
 			Log.d(TAG, "myBundle is null");
 		}
@@ -100,37 +101,47 @@ public class MessageFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
-		Log.d(TAG, " onCreateView. container = " + container);
+		
+		Log.d(TAG, " onCreateView.container = " + container);
 
 		// DONT tie this fragment to anyting through the inflater. Andriod takes
 		// care of attaching fragments for us. The container isonly passed in so
 		// you can know about the container where this View hierarchy is going
 		// to go.
+		
+		
 
 		View v = inflater.inflate(R.layout.fragment_message_view_new,
 				container, false);
 		// inflater.inflate(R.layout.fragment_message_view_new, container);
 		mMessageListView = (ListView) v.findViewById(android.R.id.list);
 
+		// IT FUCKING HAS TO BE andriod.R.id.list fucking POS differences
+		messageListView = (ListView) v.findViewById(android.R.id.list);
+		toField = (EditText) v.findViewById(R.id.phone_to_field);
+		messageField = (EditText) v.findViewById(R.id.main_message_felid);
+		
 		// Open up the database
 		dbAdapter = new DatabaseAdapter(getActivity());
 		dbAdapter.open();
 
 		// TODO for testing only
-		//phoneNumber = "1234567890";
+		// phoneNumber = "1234567890";
 		if (phoneNumber == null) {
 			Log.e(TAG, "There is no phonenumber.");
+		} else {
+			Log.d(TAG, "The phonenumber is: " + phoneNumber);
+			toField.setText(phoneNumber);
 		}
-		
+
 		QueryParseAsyncTask task = new QueryParseAsyncTask(phoneNumber);
 		AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
 				.execute();
 		
-
 		// BEGIN Adding contact stuff
 		addContactButton = (Button) v
 				.findViewById(R.id.message_add_contact_button);
+
 		addContactButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
@@ -141,13 +152,8 @@ public class MessageFragment extends ListFragment {
 		});
 		// END Adding contact stuff.
 
-		// IT FUCKING HAS TO BE andriod.R.id.list fucking POS differences
-		messageListView = (ListView) v.findViewById(android.R.id.list);
-		toField = (EditText) v.findViewById(R.id.phone_to_field);
-		messageField = (EditText) v.findViewById(R.id.main_message_felid);
-
 		sendButton = (Button) v.findViewById(R.id.main_send_btn);
-		
+
 		// This is the send button
 		sendButton.setOnClickListener(new OnClickListener() {
 
@@ -164,7 +170,7 @@ public class MessageFragment extends ListFragment {
 					if (phoneNumber.length() == 0) {
 						phoneNumber = to;
 					}
-					
+
 					// update the messageAdapter
 					messageAdapter.notifyDataSetChanged();
 
@@ -179,23 +185,23 @@ public class MessageFragment extends ListFragment {
 					// Send the Username to sort out the messages
 					outgoingMessage.put(Preferences.PARSE_USERNAME_ROW,
 							Util.getUsernameString());
-					
+
 					// Always mark the message as read.
 					outgoingMessage.put(Preferences.PARSE_SMS_READ,
 							Preferences.READ);
-					
+
 					outgoingMessage.put(Preferences.PARSE_SMS_THREAD_ID,
 							threadId);
-					
+
 					// Always mark the message type as a sent type.
 					outgoingMessage.put(Preferences.PARSE_SMS_TYPE,
 							Preferences.SENT);
-					
+
 					// Always mark the message as not on the deivce since it
 					// will be put on when the push is recived.
 					outgoingMessage.put(Preferences.PARSE_SMS_ONDEVICE,
 							Preferences.ONDEVICE_FALSE);
-					
+
 					// Save (send) the message to parse.
 					outgoingMessage.saveInBackground(new SaveCallback() {
 						@Override
@@ -221,11 +227,13 @@ public class MessageFragment extends ListFragment {
 								// message
 								push.setMessage("Address: " + to + " Message: "
 										+ body);
-								
-								// Clear the messageField if/when the text is send
-								// It will not clear if the message is not send right
+
+								// Clear the messageField if/when the text is
+								// send
+								// It will not clear if the message is not send
+								// right
 								messageField.setText("");
-								
+
 								push.sendInBackground(new SendCallback() {
 									@Override
 									public void done(ParseException e) {
@@ -252,7 +260,6 @@ public class MessageFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		messageAdapter.notifyDataSetChanged();
 		// Log.d(TAG, "Item clicked: " + id);
 		// // When clicked, show a toast with the TextView text
 		// Toast.makeText(getActivity().getApplicationContext(),
@@ -266,11 +273,10 @@ public class MessageFragment extends ListFragment {
 		super.onDestroy();
 		dbAdapter.close();
 	}
-	
-	public void onUpadate() {
+
+	public static void onUpadate() {
 		// Update the message adapter
 		messageAdapter.notifyDataSetChanged();
-		
 	}
 
 	/**

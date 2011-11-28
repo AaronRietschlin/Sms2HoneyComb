@@ -140,7 +140,8 @@ public class DatabaseAdapter {
 		newThreadValues.put(KEY_MESSAGE_COUNT, item.getMessageCount());
 		newThreadValues.put(KEY_READ_T, item.getRead());
 		newThreadValues.put(KEY_USERNAME_T, item.getUsername());
-		Log.d(TAG, "Values: " + newThreadValues.toString() +  " have been put in to: ");
+		Log.d(TAG, "Values: " + newThreadValues.toString()
+				+ " have been put in to: ");
 		return db.insert(THREAD_TABLE, null, newThreadValues);
 	}
 
@@ -241,7 +242,7 @@ public class DatabaseAdapter {
 	public ArrayList<String> getConversationList() {
 		// use a set first becasue there can not be any duplicates
 		Set<String> set = new HashSet<String>();
-		
+
 		// TODO get the cursor to query the db and get the number of entries for
 		// both the to and from that are from the same person MAKE IT WORK
 		// TODO bug counts get number's conversation then adds that name entries
@@ -261,9 +262,8 @@ public class DatabaseAdapter {
 			// ConversationFragment
 			do {
 				String address = cursor.getString(ADDRESS_COLUMN);
-				
 				set.add(address);
-				
+
 			} while (cursor.moveToNext());
 			{
 				cursor.close();
@@ -271,7 +271,7 @@ public class DatabaseAdapter {
 
 		}
 		ArrayList<String> list = new ArrayList<String>(set);
-		
+
 		Log.d(TAG, list.toString());
 
 		return list;

@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.asa.sms2honeycomb.Util.Util;
+import com.asa.sms2honeycomb.tablet.MessageFragment;
+import com.asa.sms2honeycomb.tablet.MessageFragment.QueryParseAsyncTask;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -26,6 +28,8 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 	private DatabaseAdapter dbAdapter;
 
 	Context context;
+	
+	MessageFragment messageFragment;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -36,17 +40,17 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 		dbAdapter = new DatabaseAdapter(context);
 		dbAdapter.open();
 
-		QueryParseAsyncTask queryParse = new QueryParseAsyncTask(
+		ReciverQueryParseAsyncTask queryParse = new ReciverQueryParseAsyncTask(
 				Preferences.DEVICE_IS_HONEYCOMB);
 		queryParse.execute();
 
 	}
 
-	public class QueryParseAsyncTask extends AsyncTask<Void, Void, Void> {
+	public class ReciverQueryParseAsyncTask extends AsyncTask<Void, Void, Void> {
 		private final String TAG = "IncommingPushReceiver.QueryParseAsyncTask";
 		private boolean isHoneycomb;
 
-		public QueryParseAsyncTask(boolean honeycomb) {
+		public ReciverQueryParseAsyncTask(boolean honeycomb) {
 			isHoneycomb = honeycomb;
 		}
 
@@ -107,6 +111,9 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 						// Insert the MessageItem into the
 						// sms2honeycomb.db.
 						dbAdapter.insertMessageItem(item);
+						
+						// TODO update the listadapter to display the new message
+						
 					}
 				} catch (ParseException e) {
 					// TODO - Handle situation where querying server failed

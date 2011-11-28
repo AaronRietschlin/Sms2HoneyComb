@@ -93,7 +93,7 @@ public class MessageListAdapter extends ArrayAdapter<String> {
 	// }
 	
 	@Override
-    public void notifyDataSetChanged() {
+	public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
         // Sets the selected list item to be the very last one.
         mListView.setSelection(mListView.getCount());

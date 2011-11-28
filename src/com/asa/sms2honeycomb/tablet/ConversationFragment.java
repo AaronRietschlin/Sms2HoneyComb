@@ -42,7 +42,7 @@ public class ConversationFragment extends ListFragment {
 		bundle.putString("phoneNumber", number.toString());
 
 		Util.displayToast(getActivity(),
-				"Displaying messaes from " + number.toString());
+				"Displaying messages from " + number.toString());
 
 		// Lauching a new fragment that will show all of the messages from the
 		// given numbers

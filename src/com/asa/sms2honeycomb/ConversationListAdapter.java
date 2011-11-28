@@ -17,7 +17,7 @@ public class ConversationListAdapter extends ArrayAdapter<String> {
 	private ListView mListView;
 	
 	public ConversationListAdapter(Context context, int textViewResourceId, ListView list,
-			ArrayList<MessageItem> messages) {
+			ArrayList<ConversationItem> messages) {
 		super(context, textViewResourceId);
 		mMessages = messages;
 		mContext = context;
