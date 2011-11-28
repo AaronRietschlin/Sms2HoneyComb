@@ -108,8 +108,7 @@ public class MessageFragment extends ListFragment {
 		// care of attaching fragments for us. The container isonly passed in so
 		// you can know about the container where this View hierarchy is going
 		// to go.
-		
-		
+	
 
 		View v = inflater.inflate(R.layout.fragment_message_view_new,
 				container, false);

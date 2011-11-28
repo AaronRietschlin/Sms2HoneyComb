@@ -11,15 +11,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ConversationListAdapter extends ArrayAdapter<String> {
-	private ArrayList<MessageItem> mMessages;
+	private ArrayList<String> mConversations;
 	private Context mContext;
 	private LayoutInflater inflater;
 	private ListView mListView;
 	
 	public ConversationListAdapter(Context context, int textViewResourceId, ListView list,
-			ArrayList<ConversationItem> messages) {
+			ArrayList<String> conversations) {
 		super(context, textViewResourceId);
-		mMessages = messages;
+		mConversations = conversations;
 		mContext = context;
 		mListView = list;
 	}
@@ -27,27 +27,28 @@ public class ConversationListAdapter extends ArrayAdapter<String> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = convertView;// super.getView(position, convertView,
 								// parent);
-		MessageItem item = mMessages.get(position);
+		String mPosition = mConversations.get(position);
 
 		inflater = (LayoutInflater) mContext
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		if (convertView == null) {
 			v = inflater.inflate(R.layout.conversation_list_item, null);
 		}
-		TextView nameTv = (TextView) v.findViewById(R.id.message_list_name);
-		TextView messageTv = (TextView) v.findViewById(R.id.message_list_body);
 		
-		messageTv.setText(item.getMessageBody());
-		TextView timeTv = (TextView) v.findViewById(R.id.message_list_time);
-		timeTv.setText(item.getMessageTime());
-		switch (item.getMessageType()) {
-		case Preferences.RECEIVED:
-			nameTv.setText(item.getMessageAddress());
-			break;
-		case Preferences.SENT:
-			nameTv.setText("Me");
-			break;
-		}
+		TextView nameTv = (TextView) v.findViewById(R.id.conversation_list_contact_name);
+		nameTv.setText("1234567890");
 		return v;
 	}
+	
+	@Override
+	public int getCount() {
+		return mConversations.size();
+	}
+	
+	@Override
+	public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        // Sets the selected list item to be the very last one.
+        mListView.setSelection(mListView.getCount());
+    }
 }
