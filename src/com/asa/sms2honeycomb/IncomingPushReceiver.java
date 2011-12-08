@@ -1,35 +1,36 @@
 package com.asa.sms2honeycomb;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import com.asa.sms2honeycomb.Util.Util;
 import com.asa.sms2honeycomb.tablet.MessageFragment;
-import com.asa.sms2honeycomb.tablet.MessageFragment.QueryParseAsyncTask;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class IncomingPushReceiver extends BroadcastReceiver {
 
 	private final String TAG = "IncomingPushReceiver";
 
 	private DatabaseAdapter dbAdapter;
-
-	Context context;
-	
-	MessageFragment messageFragment;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -41,17 +42,21 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 		dbAdapter.open();
 
 		ReciverQueryParseAsyncTask queryParse = new ReciverQueryParseAsyncTask(
-				Preferences.DEVICE_IS_HONEYCOMB);
+				Preferences.DEVICE_IS_HONEYCOMB, context);
 		queryParse.execute();
 
 	}
 
 	public class ReciverQueryParseAsyncTask extends AsyncTask<Void, Void, Void> {
+
+		Context mContext;
+
 		private final String TAG = "IncommingPushReceiver.QueryParseAsyncTask";
 		private boolean isHoneycomb;
 
-		public ReciverQueryParseAsyncTask(boolean honeycomb) {
+		public ReciverQueryParseAsyncTask(boolean honeycomb, Context context) {
 			isHoneycomb = honeycomb;
+			mContext = context; 
 		}
 
 		@Override
@@ -60,15 +65,13 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 				final ParseQuery query = new ParseQuery(
 						Preferences.PARSE_TABLE_SMS);
 				// Sort the Parse Object so only the username of the current
-				// user
-				// can be accessed.
+				// user can be accessed.
 				query.whereEqualTo(Preferences.PARSE_USERNAME_ROW,
 						Util.getUsernameString());
 				// The most recent message added will be on top.
 				query.orderByDescending("createdAt");
 				// Only need to get one message from the server, each message
-				// will
-				// be from a push
+				// will be from a push
 				query.setLimit(1);
 				try {
 					List<ParseObject> messageList = query.find();
@@ -76,11 +79,9 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 						// Open up the database
 						// Get the parse object id
 						String objectId = messageObject.objectId();
-						// with the objectid you can query the
-						// server
+						// with the objectid you can query the server
 						ParseObject message = query.get(objectId);
-						// Get the time the message was added to the
-						// server
+						// Get the time the message was added to the server
 						Date time = message.createdAt();
 						// Format the time to (Fri Jan 13 12:00)
 						SimpleDateFormat sdf = new SimpleDateFormat(
@@ -103,24 +104,29 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 								+ bodyDB + "\n";
 						Log.d(TAG, "New message is: " + totalMessage);
 						// Get the MessageItem object so you can
-						// create
-						// the db entry.
+						// create the db entry.
 						MessageItem item = new MessageItem(timeDB, addressDB,
 								bodyDB, readDB, smsIdDB, subjectDB, threadIdDB,
 								typeDB, onDeviceDB, usernameDB);
-						// Insert the MessageItem into the
-						// sms2honeycomb.db.
+						// Insert the MessageItem into the sms2honeycomb.db.
 						dbAdapter.insertMessageItem(item);
-						
-						// TODO update the listadapter to display the new message
-						
+
+						// TODO update the listadapter to display the new
+						// message via an intent/ service?
+
+						String intentString = "com.asa.sms2honeycomb.UPDATE_LIST";
+						Intent updateIntent = new Intent();
+						updateIntent.setAction(intentString);
+						mContext.sendBroadcast(updateIntent);
+
+						// TODO NOTICIFATIONS
 					}
 				} catch (ParseException e) {
 					// TODO - Handle situation where querying server failed
 					dbAdapter.close();
 					Log.e(TAG, "querying server failed");
 					e.printStackTrace();
-					
+
 				}
 			} else {
 				Log.e(TAG, "The device is not honeycomb is its a phone.");
@@ -204,7 +210,6 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 				Log.d(TAG, "TextToTab - IncomingPushReceiver in phone is done.");
 			}
 		}
-
+		
 	}
-
 }

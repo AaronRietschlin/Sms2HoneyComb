@@ -3,8 +3,10 @@ package com.asa.sms2honeycomb.tablet;
 import java.util.ArrayList;
 import android.app.Activity;
 import android.app.ListFragment;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -40,10 +42,8 @@ public class MessageFragment extends ListFragment {
 
 	private final String TAG = "MessageFragment";
 	private DatabaseAdapter dbAdapter;
-	static ArrayAdapter<String> messageAdapter;
-	private ArrayList<String> messageResults;
+	public static ArrayAdapter<String> messageAdapter;
 
-	private ListView messageListView;
 	private EditText toField;
 	private EditText messageField;
 	private Button sendButton;
@@ -96,19 +96,36 @@ public class MessageFragment extends ListFragment {
 		super.onCreate(myBundle);
 
 		mIndex = getArguments().getInt("index", 0);
+
+		// This will update the reciver when a broadcast is sent from the
+		// IncomingPushRecvier telling the listview to update and will only do
+		// it if
+		// the address is the same as the one being received
+
+		getActivity().registerReceiver(broadcastReceiver,
+				new IntentFilter("com.asa.sms2honeycomb.UPDATE_LIST"));
 	}
+
+	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.e(TAG, "BROADCAST TO UPDATE LIST RECEIVED");
+			QueryParseAsyncTask task = new QueryParseAsyncTask(phoneNumber);
+			AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
+					.execute();
+		}
+	};
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+
 		Log.d(TAG, " onCreateView.container = " + container);
 
 		// DONT tie this fragment to anyting through the inflater. Andriod takes
 		// care of attaching fragments for us. The container isonly passed in so
 		// you can know about the container where this View hierarchy is going
 		// to go.
-	
 
 		View v = inflater.inflate(R.layout.fragment_message_view_new,
 				container, false);
@@ -116,10 +133,9 @@ public class MessageFragment extends ListFragment {
 		mMessageListView = (ListView) v.findViewById(android.R.id.list);
 
 		// IT FUCKING HAS TO BE andriod.R.id.list fucking POS differences
-		messageListView = (ListView) v.findViewById(android.R.id.list);
 		toField = (EditText) v.findViewById(R.id.phone_to_field);
 		messageField = (EditText) v.findViewById(R.id.main_message_felid);
-		
+
 		// Open up the database
 		dbAdapter = new DatabaseAdapter(getActivity());
 		dbAdapter.open();
@@ -136,7 +152,7 @@ public class MessageFragment extends ListFragment {
 		QueryParseAsyncTask task = new QueryParseAsyncTask(phoneNumber);
 		AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
 				.execute();
-		
+
 		// BEGIN Adding contact stuff
 		addContactButton = (Button) v
 				.findViewById(R.id.message_add_contact_button);
@@ -268,14 +284,11 @@ public class MessageFragment extends ListFragment {
 
 	@Override
 	public void onDestroy() {
-		// Closing the database adapter when the activity gets destroyed.
+		// Closing the database adapter and the broadcastreciver when the
+		// activity gets destroyed.
 		super.onDestroy();
+		getActivity().unregisterReceiver(broadcastReceiver);
 		dbAdapter.close();
-	}
-
-	public static void onUpadate() {
-		// Update the message adapter
-		messageAdapter.notifyDataSetChanged();
 	}
 
 	/**
@@ -321,6 +334,13 @@ public class MessageFragment extends ListFragment {
 						displayName = currentText + displayName;
 					}
 					toField.setText(displayName);
+
+					// pull the contacts messages into the listview
+					QueryParseAsyncTask task = new QueryParseAsyncTask(
+							phoneNumber);
+					AsyncTask<Void, Void, ArrayList<MessageItem>> asyncTask = task
+							.execute();
+
 				} else {
 					// Contact has no phone information.
 					// TODO : Prompt user to input phone info?

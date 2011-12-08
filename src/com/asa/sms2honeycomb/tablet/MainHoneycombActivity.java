@@ -145,7 +145,7 @@ public class MainHoneycombActivity extends Activity {
 			finish();
 			return (true);
 		case R.id.menu_new_message:
-			// TODO testing need to change this
+			// TODO testing need to change this so it opens a blank fragment
 			showMessageFragment("1234567890");
 			return (true);
 		case R.id.settings:
@@ -156,7 +156,7 @@ public class MainHoneycombActivity extends Activity {
 			mIntent.putExtras(extras);
 			startActivity(mIntent);
 			return true;
-
+		// TODO testing
 		case R.id.menu_query_all:
 			QueryParseAsyncTask task = new QueryParseAsyncTask(0,
 					Util.getUsernameString());

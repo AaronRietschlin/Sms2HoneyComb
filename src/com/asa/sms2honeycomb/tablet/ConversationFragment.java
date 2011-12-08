@@ -38,6 +38,7 @@ public class ConversationFragment extends ListFragment {
 		
 		// Create the bundle so the phonenumber can be pushed on the MessageFragment
 		CharSequence number = ((TextView) v).getText();
+
 		Bundle bundle = new Bundle();
 		bundle.putString("phoneNumber", number.toString());
 
