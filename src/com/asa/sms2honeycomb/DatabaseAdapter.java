@@ -227,9 +227,11 @@ public class DatabaseAdapter {
 				messageItemList.add(messageItem);
 
 				// add the message parts together
+				/* 
 				String message = "Address: " + number + "\n" + "Time: " + time
 						+ "\n" + "Type: " + type + "\n" + "Body : " + body;
-				Log.d(TAG + ".getMessageArrayList", message);
+				Log.d(TAG + ".getMessageArrayList", message); 
+				*/
 			} while (cursor.moveToNext());
 			{
 				cursor.close();

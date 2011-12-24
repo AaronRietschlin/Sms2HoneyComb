@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.asa.sms2honeycomb.ConversationListAdapter;
 import com.asa.sms2honeycomb.DatabaseAdapter;
+import com.asa.sms2honeycomb.Preferences;
 import com.asa.sms2honeycomb.R;
 import com.asa.sms2honeycomb.Util.Util;
 
@@ -14,6 +15,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.RawContacts;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -49,11 +52,13 @@ public class ConversationFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		//Log.d("ConversationFragment", "Item clicked: " + id + l.toString());
+		// Log.d("ConversationFragment", "Item clicked: " + id + l.toString());
 
 		// Create the bundle so the phonenumber can be pushed on the
 		// MessageFragment
-		CharSequence number = ((TextView) v.findViewById(R.id.conversation_list_contact_number)).getText();
+		// gets the hidden phone number from the list item
+		CharSequence number = ((TextView) v
+				.findViewById(R.id.conversation_list_contact_number)).getText();
 
 		Bundle bundle = new Bundle();
 		bundle.putString("phoneNumber", number.toString());
