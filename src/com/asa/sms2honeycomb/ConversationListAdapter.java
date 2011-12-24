@@ -53,14 +53,13 @@ public class ConversationListAdapter extends ArrayAdapter<String> {
 		QuickContactBadge contactImage = (QuickContactBadge) v
 				.findViewById(R.id.conversation_list_contactBadge);
 
-		String name = getContactInfo(conversationNumber)
-				.get(0);
-		String photoURI = getContactInfo(
-				conversationNumber).get(1);
+		String name = getContactInfo(conversationNumber).get(0);
+		String photoURI = getContactInfo(conversationNumber).get(1);
 
 		nameTv.setText(name);
 		numberTv.setText(conversationNumber);
-		contactImage.setImageBitmap(getContactPhoto(openPhoto(photoURI.toString())));
+		contactImage.setImageBitmap(getContactPhoto(openPhoto(photoURI
+				.toString())));
 
 		return v;
 	}
@@ -78,55 +77,53 @@ public class ConversationListAdapter extends ArrayAdapter<String> {
 	}
 
 	public ArrayList<String> getContactInfo(String number) {
-		final ArrayList<String> namePhoto = new ArrayList<String>(); 
-		
-		//Activity activity = getActivity();
-		
+		final ArrayList<String> namePhoto = new ArrayList<String>();
+
+		// Activity activity = getActivity();
+
 		Cursor cursor = null;
 		// search by the phoneNumber
-		cursor = mContext.getContentResolver().query(
-				Phone.CONTENT_URI,
-				null, 
-				Phone.NUMBER + "=?",
-				new String[] { number }, null);
-		
-		if(cursor.moveToFirst()) {
-			String name = cursor.getString(
-					cursor.getColumnIndex(Contacts.DISPLAY_NAME));
+		cursor = mContext.getContentResolver().query(Phone.CONTENT_URI, null,
+				Phone.NUMBER + "=?", new String[] { number }, null);
+
+		if (cursor.moveToFirst()) {
+			String name = cursor.getString(cursor
+					.getColumnIndex(Contacts.DISPLAY_NAME));
 			namePhoto.add(name);
-			String photoURI = cursor.getString(
-						cursor.getColumnIndex(Contacts.PHOTO_URI));
+			String photoURI = cursor.getString(cursor
+					.getColumnIndex(Contacts.PHOTO_URI));
 			namePhoto.add(photoURI);
-				
-			}
+
+		}
 		cursor.close();
 		return namePhoto;
 	}
-	
-	// decodes the photoURI from the contacts shit
-	public Bitmap getContactPhoto(InputStream photoInputStream) {
-	    Bitmap photo = BitmapFactory.decodeStream(photoInputStream);
-	    return photo;
-	}
-	
-	 public InputStream openPhoto(String photoURI) {
-	     Cursor cursor = mContext.getContentResolver().query(Uri.parse(photoURI),
-	          new String[] {Contacts.Photo.PHOTO}, null, null, null);
-	     if (cursor == null) {
-	         return null;
-	     }
-	     try {
-	         if (cursor.moveToFirst()) {
-	             byte[] data = cursor.getBlob(0);
-	             if (data != null) {
-	                 return new ByteArrayInputStream(data);
-	             }
-	         }
-	     } finally {
-	         cursor.close();
-	     }
-	     return null;
-	 }
 
+	// decodes the photoURI from the contacts shit and gives an inputstream
+	public InputStream openPhoto(String photoURI) {
+		Cursor cursor = mContext.getContentResolver().query(
+				Uri.parse(photoURI), new String[] { Contacts.Photo.PHOTO },
+				null, null, null);
+		if (cursor == null) {
+			return null;
+		}
+		try {
+			if (cursor.moveToFirst()) {
+				byte[] data = cursor.getBlob(0);
+				if (data != null) {
+					return new ByteArrayInputStream(data);
+				}
+			}
+		} finally {
+			cursor.close();
+		}
+		return null;
+	}
+
+	// decodes the inputstream and returns the bitmap of the contact photo
+	public Bitmap getContactPhoto(InputStream photoInputStream) {
+		Bitmap photo = BitmapFactory.decodeStream(photoInputStream);
+		return photo;
+	}
 
 }
