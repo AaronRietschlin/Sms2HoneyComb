@@ -1,14 +1,19 @@
 package com.asa.sms2honeycomb.tablet;
 
+import java.util.ArrayList;
+
+import com.asa.sms2honeycomb.ConversationListAdapter;
 import com.asa.sms2honeycomb.DatabaseAdapter;
 import com.asa.sms2honeycomb.R;
 import com.asa.sms2honeycomb.Util.Util;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,7 +22,10 @@ import android.widget.TextView;
 
 public class ConversationFragment extends ListFragment {
 	DatabaseAdapter dbAdapter;
+
 	private static final String TAG = "CoverstationFragment";
+	private ArrayAdapter<String> conversationAdapter;
+	private ListView mConversationListView;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -27,17 +35,25 @@ public class ConversationFragment extends ListFragment {
 		dbAdapter = new DatabaseAdapter(getActivity());
 		dbAdapter.open();
 
-		setListAdapter(new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1,
-				dbAdapter.getConversationList()));
+		// Get the list of contact numbers
+		ArrayList<String> conversationList = dbAdapter.getConversationList();
+
+		// get the adapter
+		conversationAdapter = new ConversationListAdapter(getActivity(),
+				R.layout.conversation_list_item, mConversationListView,
+				conversationList);
+
+		// set the adapter
+		setListAdapter(conversationAdapter);
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		Log.d("FragmentList", "Item clicked: " + id + l.toString());
-		
-		// Create the bundle so the phonenumber can be pushed on the MessageFragment
-		CharSequence number = ((TextView) v).getText();
+		//Log.d("ConversationFragment", "Item clicked: " + id + l.toString());
+
+		// Create the bundle so the phonenumber can be pushed on the
+		// MessageFragment
+		CharSequence number = ((TextView) v.findViewById(R.id.conversation_list_contact_number)).getText();
 
 		Bundle bundle = new Bundle();
 		bundle.putString("phoneNumber", number.toString());
