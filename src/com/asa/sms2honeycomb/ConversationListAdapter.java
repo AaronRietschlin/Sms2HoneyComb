@@ -1,11 +1,15 @@
 package com.asa.sms2honeycomb;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts;
 import android.view.LayoutInflater;
@@ -56,7 +60,7 @@ public class ConversationListAdapter extends ArrayAdapter<String> {
 
 		nameTv.setText(name);
 		numberTv.setText(conversationNumber);
-		contactImage.setImageBitmap(getPhoto(photoURI));
+		contactImage.setImageBitmap(getContactPhoto(openPhoto(photoURI.toString())));
 
 		return v;
 	}
@@ -74,16 +78,11 @@ public class ConversationListAdapter extends ArrayAdapter<String> {
 	}
 
 	public ArrayList<String> getContactInfo(String number) {
-		ArrayList<String> namePhoto = new ArrayList<String>(); 
+		final ArrayList<String> namePhoto = new ArrayList<String>(); 
 		
 		//Activity activity = getActivity();
 		
 		Cursor cursor = null;
-		
-		final String[] projection = new String[] {
-				Contacts.DISPLAY_NAME,	// the name of the contact
-				Contacts.PHOTO_ID		// the id of the column in the data table for the image
-			};
 		// search by the phoneNumber
 		cursor = mContext.getContentResolver().query(
 				Phone.CONTENT_URI,
@@ -105,9 +104,29 @@ public class ConversationListAdapter extends ArrayAdapter<String> {
 	}
 	
 	// decodes the photoURI from the contacts shit
-	public Bitmap getPhoto(String photoURI) {
-		Bitmap photo = BitmapFactory.decodeFile(photoURI);
-		return photo;
+	public Bitmap getContactPhoto(InputStream photoInputStream) {
+	    Bitmap photo = BitmapFactory.decodeStream(photoInputStream);
+	    return photo;
 	}
+	
+	 public InputStream openPhoto(String photoURI) {
+	     Cursor cursor = mContext.getContentResolver().query(Uri.parse(photoURI),
+	          new String[] {Contacts.Photo.PHOTO}, null, null, null);
+	     if (cursor == null) {
+	         return null;
+	     }
+	     try {
+	         if (cursor.moveToFirst()) {
+	             byte[] data = cursor.getBlob(0);
+	             if (data != null) {
+	                 return new ByteArrayInputStream(data);
+	             }
+	         }
+	     } finally {
+	         cursor.close();
+	     }
+	     return null;
+	 }
+
 
 }
