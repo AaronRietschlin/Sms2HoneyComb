@@ -173,6 +173,7 @@ public class MessageFragment extends ListFragment {
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
+				Log.d(TAG, "Send Button clicked");
 				final String to = toField.getText().toString().trim();
 				final String body = messageField.getText().toString().trim();
 				if (to.length() == 0) {

@@ -38,7 +38,8 @@
 	android:layout_alignParentLeft="true" 
 	android:id="@android:id/list"
 	android:layout_above="@+id/phone_send_layout"
-	android:stackFromBottom="true">
+	android:stackFromBottom="true"
+	android:transcriptMode="alwaysScroll">
 	</ListView>
 	<LinearLayout 
 		android:layout_height="wrap_content"
