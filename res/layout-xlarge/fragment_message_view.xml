@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- NOW USING FRAGMENT_MESSAGE_VIEW.xml -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" 
 	android:layout_width="fill_parent"
@@ -35,7 +38,8 @@
 	android:layout_below="@+id/phone_to_layout" 
 	android:layout_alignParentLeft="true" 
 	android:id="@android:id/list"
-	android:layout_above="@+id/phone_send_layout">
+	android:layout_above="@+id/phone_send_layout"
+	android:stackFromBottom="true">
 	</ListView>
 	<LinearLayout 
 		android:layout_height="wrap_content"

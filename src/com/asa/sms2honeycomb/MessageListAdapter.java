@@ -41,40 +41,55 @@ public class MessageListAdapter extends ArrayAdapter<String> {
 		mListView = list;
 	}
 
+	static class ViewHolder {
+		TextView nameTv;
+		TextView messageTv;
+		TextView timeTv;
+		QuickContactBadge contactImage;
+	}
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View v = convertView;// super.getView(position, convertView,
-								// parent);
 		MessageItem item = mMessages.get(position);
+		ViewHolder holder;
 
-		inflater = (LayoutInflater) mContext
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		if (convertView == null) {
-			v = inflater.inflate(R.layout.message_list_item, null);
+			inflater = (LayoutInflater) mContext
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.message_list_item, null);
+
+			holder = new ViewHolder();
+			holder.nameTv = (TextView) convertView
+					.findViewById(R.id.message_list_name);
+			holder.messageTv = (TextView) convertView
+					.findViewById(R.id.message_list_body);
+			holder.timeTv = (TextView) convertView
+					.findViewById(R.id.message_list_time);
+			holder.contactImage = (QuickContactBadge) convertView
+					.findViewById(R.id.contactBadgeMessageList);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
 		}
-		TextView nameTv = (TextView) v.findViewById(R.id.message_list_name);
-		TextView messageTv = (TextView) v.findViewById(R.id.message_list_body);
-		messageTv.setText(item.getMessageBody());
-		TextView timeTv = (TextView) v.findViewById(R.id.message_list_time);
-		timeTv.setText(item.getMessageTime());
-		QuickContactBadge contactImage = (QuickContactBadge) v
-				.findViewById(R.id.contactBadgeMessageList);
+		holder.messageTv.setText(item.getMessageBody());
+		holder.timeTv.setText(item.getMessageTime());
 
 		switch (item.getMessageType()) {
 		case Preferences.RECEIVED:
-			nameTv.setText(getContactInfo(item.getMessageAddress()).get(0));
-			contactImage
+			holder.nameTv.setText(getContactInfo(item.getMessageAddress()).get(
+					0));
+			holder.contactImage
 					.setImageBitmap(getContactPhoto(openPhoto(getContactInfo(
 							item.getMessageAddress()).get(1))));
 			break;
 		case Preferences.SENT:
-			nameTv.setText("Me");
-			contactImage
-			.setImageBitmap(getContactPhoto(openPhoto(getContactInfo(
-					item.getMessageAddress()).get(1))));
+			holder.nameTv.setText("Me");
+			holder.contactImage
+					.setImageBitmap(getContactPhoto(openPhoto(getContactInfo(
+							item.getMessageAddress()).get(1))));
 			break;
 		}
-		return v;
+		return convertView;
 	}
 
 	@Override
@@ -142,6 +157,13 @@ public class MessageListAdapter extends ArrayAdapter<String> {
 
 	// decodes the photoURI from the contacts shit and gives an inputstream
 	public InputStream openPhoto(String photoURI) {
+		if (photoURI == null) {
+			return null;
+		} else {
+			if (photoURI.length() == 0) {
+				return null;
+			}
+		}
 		Cursor cursor = mContext.getContentResolver().query(
 				Uri.parse(photoURI), new String[] { Contacts.Photo.PHOTO },
 				null, null, null);

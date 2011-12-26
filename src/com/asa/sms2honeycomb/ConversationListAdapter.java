@@ -55,12 +55,12 @@ public class ConversationListAdapter extends ArrayAdapter<String> {
 
 		String name = getContactInfo(conversationNumber).get(0);
 		String photoURI = getContactInfo(conversationNumber).get(1);
-
-		nameTv.setText(name);
-		numberTv.setText(conversationNumber);
-		contactImage.setImageBitmap(getContactPhoto(openPhoto(photoURI
-				.toString())));
-
+		if (photoURI != null && photoURI.length() > 0) {
+			nameTv.setText(name);
+			numberTv.setText(conversationNumber);
+			contactImage.setImageBitmap(getContactPhoto(openPhoto(photoURI
+					.toString())));
+		}
 		return v;
 	}
 
