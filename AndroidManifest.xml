@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.asa.sms2honeycomb"
+      package="com.asa.texttotab"
       android:versionCode="1"
       android:versionName="1.0">
     <uses-sdk android:minSdkVersion="8"
@@ -63,11 +63,11 @@
 		    <action android:name="android.intent.action.USER_PRESENT" />
 		  </intent-filter>
 		</receiver>
-		<receiver android:name=".IncomingPushReceiver"><intent-filter>
+		<receiver android:name="com.asa.texttotab.IncomingPushReceiver"><intent-filter>
 				<action android:name="com.asa.sms2honeycomb.PUSH_RECEIVED"></action>
 			</intent-filter></receiver>
 			
-		<activity android:label="Settings" android:name=".SettingsActivity"></activity>
+		<activity android:label="Settings" android:name="com.asa.texttotab.SettingsActivity"></activity>
 
     </application>
 </manifest>
