@@ -1,8 +1,9 @@
-SMS2Honeycomb
+Text To Tab
 Developer(s):
 	Aaron Rietschlin
 	Parker Williams
-	William Aponte
 	
 About: 
-	This application forwards text messages from your phone to your Honeycomb-based tablet. It uses a single application that can be installed on both the phone and the tablet.
+	This application forwards text messages from your phone to your 3.0+ based tablet. It uses a single application that can be installed on both the phone and the tablet.
+	
+	The application uses http://www.parse.com as a backend in order to send the text message from the phone to the tablet.
