@@ -19,7 +19,7 @@ public class UpdateService extends Service {
 	public void onCreate() {
 	    super.onCreate();
 	    
-		String intentString = "com.asa.sms2honeycomb.UPDATE_LIST";
+		String intentString = "com.asa.texttotab.UPDATE_LIST";
 		Intent updateIntent = new Intent();
 		updateIntent.setAction(intentString);
 		Bundle bundle = new Bundle();

@@ -114,7 +114,7 @@ public class IncomingPushReceiver extends BroadcastReceiver {
 						// TODO update the listadapter to display the new
 						// message via an intent/ service?
 
-						String intentString = "com.asa.sms2honeycomb.UPDATE_LIST";
+						String intentString = "com.asa.texttotab.UPDATE_LIST";
 						Intent updateIntent = new Intent();
 						updateIntent.setAction(intentString);
 						mContext.sendBroadcast(updateIntent);

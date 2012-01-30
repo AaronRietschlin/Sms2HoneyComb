@@ -1,73 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.asa.texttotab"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="8"
-    	android:targetSdkVersion="11" />
+    package="com.asa.texttotab"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="11" />
+
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.READ_CONTACTS" />
-	
-	<supports-screes
-    	android:smallScreens="true"
-    	android:normalScreens="true"
-    	android:largeScreens="true"
-    	android:anyDensity="true" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <application android:label="@string/app_name"
-    	android:hardwareAccelerated="true" android:icon="@drawable/ic_launcher_texttotab">
-        <activity android:name=".SMS2HoneycombLauncher">
- 			<intent-filter>
- 				<action android:name="android.intent.action.MAIN" />
- 				<category android:name="android.intent.category.LAUNCHER" />
- 			</intent-filter>
- 		</activity>
-        <activity android:name=".SMS2HoneycombActivity"
-                  android:label="@string/app_name">
-        </activity>
-        <!--  TODO: Delete this activity -->
-        <activity android:name=".tablet.MainHoneycombActivity"
-                  android:label="@string/app_name">
-        </activity>
-        <activity android:label="@string/app_name" android:name=".phone.MainPhoneActivity" android:windowSoftInputMode="adjustResize">
-        </activity>
-        <activity android:label="@string/app_name" android:name=".phone.LauncherActivity">
-        </activity>
-        <activity android:label="@string/app_name" android:name=".phone.LoginActivity">
-        </activity>
-        <activity android:name=".phone.RegisterActivity"
-                  android:label="@string/app_name">
-        </activity>
-        <activity android:label="@string/app_name" android:name=".tablet.LauncherActivity">
-        </activity>
-        <activity android:label="@string/app_name" android:name=".tablet.LoginActivityTab" android:windowSoftInputMode="adjustResize">
-        </activity>
-        <activity android:label="@string/app_name" android:name=".tablet.RegisterActivityTab">
-        </activity>
-        
-        <receiver android:name=".IncomingSmsReceiver">
-			<intent-filter>
-				<action android:name="android.provider.Telephony.SMS_RECEIVED"/>
-			</intent-filter>
-		</receiver>
+    <supports-screes
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" />
 
-		<service android:name="com.parse.PushService" />
-		<receiver android:name="com.parse.ParseBroadcastReceiver">
-		  <intent-filter>
-		    <action android:name="android.intent.action.BOOT_COMPLETED" />
-		    <action android:name="android.intent.action.USER_PRESENT" />
-		  </intent-filter>
-		</receiver>
-		<receiver android:name="com.asa.texttotab.IncomingPushReceiver"><intent-filter>
-				<action android:name="com.asa.sms2honeycomb.PUSH_RECEIVED"></action>
-			</intent-filter></receiver>
-			
-		<activity android:label="Settings" android:name="com.asa.texttotab.SettingsActivity"></activity>
+    <application
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_launcher_texttotab"
+        android:label="@string/app_name" >
+        <activity android:name=".SMS2HoneycombLauncher" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SMS2HoneycombActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <!-- TODO: Delete this activity -->
+        <activity
+            android:name=".tablet.MainHoneycombActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".phone.MainPhoneActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
+        <activity
+            android:name=".phone.LauncherActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".phone.LoginActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".phone.RegisterActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".tablet.LauncherActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".tablet.LoginActivityTab"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".tablet.RegisterActivityTab"
+            android:label="@string/app_name" >
+        </activity>
+
+        <receiver android:name=".IncomingSmsReceiver" >
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.parse.PushService" />
+
+        <receiver android:name="com.parse.ParseBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.asa.texttotab.IncomingPushReceiver" >
+            <intent-filter>
+                <action android:name="com.asa.texttotab.PUSH_RECEIVED" >
+                </action>
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.asa.texttotab.SettingsActivity"
+            android:label="Settings" >
+        </activity>
     </application>
+
 </manifest>

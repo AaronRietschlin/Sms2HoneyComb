@@ -103,7 +103,7 @@ public class MessageFragment extends ListFragment {
 		// the address is the same as the one being received
 
 		getActivity().registerReceiver(broadcastReceiver,
-				new IntentFilter("com.asa.sms2honeycomb.UPDATE_LIST"));
+				new IntentFilter("com.asa.texttotab.UPDATE_LIST"));
 	}
 
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {

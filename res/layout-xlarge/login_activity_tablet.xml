@@ -1,35 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="match_parent"
-	android:layout_height="match_parent">
-	<EditText android:id="@+id/login_password_field_tablet"
-		android:layout_height="wrap_content" android:singleLine="true"
-		android:hint="@string/login_password_text" android:layout_width="350dp"
-		android:layout_below="@+id/login_username_field_tablet"
-		android:layout_alignLeft="@+id/login_username_field_tablet"
-		android:layout_marginTop="26dp" android:inputType="textPassword"></EditText>
-	<Button android:id="@+id/login_button_tablet"
-		android:layout_height="wrap_content" android:layout_width="wrap_content"
-		android:text="@string/button_login" android:layout_below="@+id/login_password_field_tablet"
-		android:layout_alignLeft="@+id/login_password_field_tablet"
-		android:layout_marginTop="22dp" android:layout_alignRight="@+id/login_password_field_tablet"></Button>
-	<Button android:background="@null" android:id="@+id/login_create_account_btn_tab"
-		android:layout_height="wrap_content" android:layout_width="wrap_content"
-		android:text="@string/button_register" android:layout_below="@+id/login_button_tablet"
-		android:layout_alignLeft="@+id/login_button_tablet"></Button>
-	<Button android:background="@null" android:id="@+id/forgot_password_button_tablet"
-		android:layout_height="wrap_content" android:layout_width="wrap_content"
-		android:text="@string/login_forgot_password" android:layout_below="@+id/login_button_tablet"
-		android:layout_alignRight="@+id/login_button_tablet"></Button>
-	<EditText android:id="@+id/login_username_field_tablet"
-		android:layout_height="wrap_content" android:singleLine="true"
-		android:hint="@string/login_username_text" android:layout_width="350dp"
-		android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
-		android:layout_marginTop="261dp">
-		<requestFocus></requestFocus>
-	</EditText>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-</RelativeLayout>
-<!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center" >
+
+        <EditText
+            android:id="@+id/login_password_field_tablet"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/login_username_field_tablet"
+            android:layout_below="@+id/login_username_field_tablet"
+            android:layout_marginTop="26dp"
+            android:hint="@string/login_password_text"
+            android:imeOptions="actionSend"
+            android:inputType="textPassword"
+            android:singleLine="true" >
+        </EditText>
+
+        <Button
+            android:id="@+id/login_button_tablet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/login_password_field_tablet"
+            android:layout_alignRight="@+id/login_password_field_tablet"
+            android:layout_below="@+id/login_password_field_tablet"
+            android:layout_marginTop="22dp"
+            android:text="@string/button_login" >
+        </Button>
+
+        <Button
+            android:id="@+id/login_create_account_btn_tab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/login_button_tablet"
+            android:layout_below="@+id/login_button_tablet"
+            android:background="@null"
+            android:text="@string/button_register" >
+        </Button>
+
+        <Button
+            android:id="@+id/forgot_password_button_tablet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/login_button_tablet"
+            android:layout_below="@+id/login_button_tablet"
+            android:background="@null"
+            android:text="@string/login_forgot_password" >
+        </Button>
+
+        <EditText
+            android:id="@+id/login_username_field_tablet"
+            android:layout_height="wrap_content"
+            android:layout_width="251dp"
+            android:layout_alignParentTop="true"
+            android:hint="@string/login_username_text"
+            android:singleLine="true" >
+        </EditText>
+    </RelativeLayout>
+    <!--
+     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
 	android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"> 
-	</LinearLayout> -->
+	</LinearLayout>
+
+
+
+
+
+    -->
+
+</ScrollView>

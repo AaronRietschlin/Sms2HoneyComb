@@ -88,5 +88,5 @@ public class Preferences {
 	/*
 	 * This is the intent the the IncommingPushReceiver is Listening for.
 	 */
-	public static String PUSH_RECEIVED= "com.asa.sms2honeycomb.PUSH_RECEIVED";
+	public static String PUSH_RECEIVED= "com.asa.texttotab.PUSH_RECEIVED";
 }

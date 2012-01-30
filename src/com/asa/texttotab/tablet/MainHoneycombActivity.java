@@ -156,7 +156,7 @@ public class MainHoneycombActivity extends Activity {
 			mIntent.putExtras(extras);
 			startActivity(mIntent);
 			return true;
-		// TODO testing
+			// TODO testing
 		case R.id.menu_query_all:
 			QueryParseAsyncTask task = new QueryParseAsyncTask(0,
 					Util.getUsernameString());
@@ -166,7 +166,7 @@ public class MainHoneycombActivity extends Activity {
 
 		return (super.onOptionsItemSelected(item));
 	}
-	
+
 	// TODO delete this for TESTING
 	public class QueryParseAsyncTask extends
 			AsyncTask<Void, Void, ArrayList<MessageItem>> {
@@ -201,30 +201,31 @@ public class MainHoneycombActivity extends Activity {
 					for (ParseObject messageObject : objects) {
 						// TODO: Add the rest of the db items.
 						MessageItem messageItem = new MessageItem();
-						
+
 						messageItem.setMessageBody(messageObject
 								.getString(Preferences.PARSE_SMS_BODY));
-						
+
 						messageItem.setMessageUsername(messageObject
 								.getString(username));
-						
+
 						messageItem.setMessageAddress(messageObject
 								.getString(Preferences.PARSE_SMS_ADDRESS));
-						
+
 						messageItem.setMessageTime(messageObject.createdAt()
 								.toLocaleString());
-						
+
 						messageItem.setMessageType(messageObject
 								.getInt(Preferences.PARSE_SMS_TYPE));
-						
+
 						messageItem.setMessageOnDevice(messageObject
-								
-								.getInt(Preferences.PARSE_SMS_ONDEVICE));
+
+						.getInt(Preferences.PARSE_SMS_ONDEVICE));
 						messageResults.add(messageItem);
-						
+
 						String str = messageObject.toString();
-						
-						Log.d("MainHoneyCombActivity." + TAG, "TextToTab - " + str);
+
+						Log.d("MainHoneyCombActivity." + TAG, "TextToTab - "
+								+ str);
 
 						dbAdapter.insertMessageItem(messageItem);
 					}

@@ -6,13 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
-import com.asa.texttotab.R;
 import com.asa.texttotab.Preferences;
+import com.asa.texttotab.R;
 import com.asa.texttotab.Util.LoginUtil;
 import com.asa.texttotab.Util.Util;
 import com.parse.LogInCallback;
@@ -36,12 +40,13 @@ public class LoginActivityTab extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_activity_tablet);
 
-		if(ParseUser.getCurrentUser() != null){
-			mIntent = new Intent(LoginActivityTab.this, MainHoneycombActivity.class);
+		if (ParseUser.getCurrentUser() != null) {
+			mIntent = new Intent(LoginActivityTab.this,
+					MainHoneycombActivity.class);
 			startActivity(mIntent);
 			finish();
 		}
-		
+
 		createAccountButton = (Button) findViewById(R.id.login_create_account_btn_tab);
 		loginButton = (Button) findViewById(R.id.login_button_tablet);
 		usernameField = (EditText) findViewById(R.id.login_username_field_tablet);
@@ -99,6 +104,18 @@ public class LoginActivityTab extends Activity {
 			usernameField.setText("TestName");
 			passwordField.setText("12345");
 		}
+
+		passwordField.setOnEditorActionListener(new OnEditorActionListener() {
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_SEND) {
+					loginButton.performClick();
+					return true;
+				}
+				return false;
+			}
+		});
+
 	}
 
 	private void loginUser(String usernameText, String passwordText) {
@@ -125,6 +142,5 @@ public class LoginActivityTab extends Activity {
 					}
 				});
 	}
-	
-	
+
 }
