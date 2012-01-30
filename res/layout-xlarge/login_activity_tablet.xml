@@ -6,8 +6,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_gravity="center" >
+        android:layout_gravity="center"
+        android:gravity="center" >
 
         <EditText
             android:id="@+id/login_password_field_tablet"
@@ -55,8 +55,8 @@
 
         <EditText
             android:id="@+id/login_username_field_tablet"
-            android:layout_height="wrap_content"
             android:layout_width="251dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:hint="@string/login_username_text"
             android:singleLine="true" >
@@ -65,12 +65,7 @@
     <!--
      <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
 	android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"> 
-	</LinearLayout>
-
-
-
-
-
+	</LinearLayout>
     -->
 
 </ScrollView>
